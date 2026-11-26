@@ -12,3 +12,7 @@ Read the constitution, product, architecture, curriculum workflow and decision l
 Task statuses are `todo`, `doing`, `blocked`, `review`, `done` and `deferred`. Use `done` only with real, linked verification. Keep evidence free of child identifiers and sensitive information. Religious approval and physical playtest require real human evidence. Identify owner reports and emulator evidence accurately.
 
 Before moving to the next specification, report completed tasks, blockers, tests and next steps and wait for owner review. Follow the constitution for religious content approval.
+
+## Mission Control and curriculum
+
+Generate the standalone dashboard with `python3 scripts/generate_dashboard.py` and open `docs/mission-control/index.html`. Refresh the structure-only inventory from local canonical packs with `python3 scripts/content_inventory.py` when authoring updates arrive. Review the sanitized export and keep the draft payloads local. [Published dashboard](https://abdallah-gaber.github.io/noor-game/) · [Deployment and publication allowlist workflow](docs/mission-control/deployment.md)

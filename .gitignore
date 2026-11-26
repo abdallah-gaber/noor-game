@@ -78,3 +78,8 @@ GoogleService-Info.plist
 *.aab
 *.ipa
 *.dSYM/
+
+# Local curriculum authoring inputs. Publish the sanitized inventory only.
+/docs/curriculum/drafts/
+/docs/curriculum/planning/
+/noor-season-one/
