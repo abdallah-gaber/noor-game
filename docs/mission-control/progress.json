@@ -68,9 +68,9 @@
         {
           "id": "002-01",
           "title": "Implement four world cards and lesson paths",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Acceptance scenarios and visual direction recorded. Implementing the four-world map and reusable path.",
           "priority": "P0"
         },
         {
