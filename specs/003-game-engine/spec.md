@@ -15,3 +15,7 @@ No timers, lives or penalties. Explain answers in simple Arabic with reviewed co
 ## Authorized checkpoint
 
 Deliver only 003-01 in this execution. It owns the two scored question definitions, evaluator, one-question feedback, developer preview and regression checks for progress isolation. Every preview attempt is transient. Lesson integration, review, persistent attempts and completion rules are planned for 003-04. Tasks 003-02 onward await explicit authorization.
+
+## Season One compatibility
+
+Future sessions use stable variant IDs linked to knowledge units. Record the pack and objective compatibility revisions alongside attempts. Plan for lessons, mixed eligible sets and replay beyond the linear path. Keep question difficulty separate from mastery. Variant selection and persisted attempts belong to 003-04. Adaptive review, pack updates, knowledge treasures and What's New belong to later phases. The 003-01 evaluator remains usable across these contexts.

@@ -1,0 +1,137 @@
+{
+  "season": "1.0",
+  "status": "planning",
+  "targets": {
+    "days": 30,
+    "dailyMinutes": [
+      15,
+      30
+    ],
+    "lessons": 60,
+    "variants": 600,
+    "knowledgeUnits": 180
+  },
+  "worlds": [
+    {
+      "id": "iman",
+      "title": "الإيمان",
+      "lessons": 12,
+      "variants": 120,
+      "units": [
+        [
+          "معرفة الله والتوحيد",
+          3
+        ],
+        [
+          "الشهادتان",
+          2
+        ],
+        [
+          "أركان الإيمان",
+          4
+        ],
+        [
+          "أسماء الله والدعاء والتوكل",
+          3
+        ]
+      ],
+      "knowledgeUnits": 36
+    },
+    {
+      "id": "ibadah",
+      "title": "العبادة",
+      "lessons": 20,
+      "variants": 200,
+      "units": [
+        [
+          "أركان الإسلام",
+          2
+        ],
+        [
+          "الطهارة والوضوء",
+          5
+        ],
+        [
+          "الصلاة وصفتها",
+          7
+        ],
+        [
+          "الصيام",
+          2
+        ],
+        [
+          "الزكاة والصدقة",
+          2
+        ],
+        [
+          "الحج والعمرة",
+          2
+        ]
+      ],
+      "knowledgeUnits": 60
+    },
+    {
+      "id": "seerah",
+      "title": "السيرة",
+      "lessons": 14,
+      "variants": 140,
+      "units": [
+        [
+          "النسب والمولد والطفولة",
+          3
+        ],
+        [
+          "الشباب والبعثة",
+          3
+        ],
+        [
+          "الدعوة والهجرة",
+          4
+        ],
+        [
+          "المدينة والأخلاق",
+          4
+        ]
+      ],
+      "knowledgeUnits": 42
+    },
+    {
+      "id": "exemplars",
+      "title": "القدوات",
+      "lessons": 14,
+      "variants": 140,
+      "units": [
+        [
+          "الخلفاء الراشدون",
+          4
+        ],
+        [
+          "العشرة المبشرون",
+          4
+        ],
+        [
+          "أمهات المؤمنين وصغار الصحابة",
+          2
+        ],
+        [
+          "التابعون",
+          1
+        ],
+        [
+          "الأئمة الأربعة",
+          3
+        ]
+      ],
+      "knowledgeUnits": 42
+    }
+  ],
+  "pilot": {
+    "approvedLessons": 4,
+    "minimumPerWorld": 1
+  },
+  "provisionalOutline": {
+    "lessons": 12,
+    "questionIdeas": 79,
+    "status": "provisionally_accepted_in_principle"
+  }
+}

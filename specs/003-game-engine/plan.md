@@ -7,3 +7,5 @@
 5. Verify all mechanics across sizes and states. Capture runtime evidence, build both platforms, push remaining task commits and open one PR against main for owner review.
 
 This execution ends after 003-01. [Task breakdown](tasks.md) · [Architecture](../../docs/architecture.md)
+
+For 003-04, persist pack and objective revision, stable variant and knowledge IDs, and the resolved order. Accept eligible sets as session input so SPEC-004 can build mixed quizzes and adaptive review without changing mechanic evaluation.
