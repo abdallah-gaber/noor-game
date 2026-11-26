@@ -23,14 +23,18 @@ class QuestionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected = selectedId;
     final correct = selected == null ? null : question.evaluate(selected);
+    final instruction = question.kind == QuestionKind.trueFalse
+        ? 'اختر صح أو خطأ'
+        : 'اختر إجابة واحدة';
+    final passage = [
+      instruction,
+      question.prompt,
+      ...options.map((option) => option.label),
+    ].join('. ');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          question.kind == QuestionKind.trueFalse
-              ? 'اختر صح أو خطأ'
-              : 'اختر إجابة واحدة',
-        ),
+        Text(instruction),
         Semantics(
           header: true,
           child: Text(
@@ -96,7 +100,7 @@ class QuestionView extends StatelessWidget {
           ),
         SpeechControl(
           text: correct == null
-              ? question.prompt
+              ? passage
               : '${question.prompt} ${question.explanation}',
         ),
       ],

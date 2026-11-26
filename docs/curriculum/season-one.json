@@ -133,5 +133,13 @@
     "lessons": 12,
     "questionIdeas": 79,
     "status": "provisionally_accepted_in_principle"
-  }
+  },
+  "authoredDraftReview": {
+    "status": "provisionally_accepted_in_principle",
+    "note": "The owner provisionally accepted the authored draft packs, subject to corrections and final claim-level source verification."
+  },
+  "coverageGaps": [
+    "Matching and ordering have no authored records. Address both in SPEC-004."
+  ],
+  "priorityPath": "Prayer readiness is the next curriculum design priority."
 }

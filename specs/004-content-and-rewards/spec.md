@@ -10,3 +10,5 @@
 | 004-06 | Parent Mode shows progress and verified source context. |
 
 Curriculum production is a separate track. See the [curriculum roadmap](../../docs/curriculum/roadmap.md). P1 deferral requires a documented reason and owner review.
+
+Prioritize a prayer-readiness learning path. The canon has no matching or ordering draft records. Fill both coverage gaps through the authoring and review track. The owner’s provisional acceptance of existing drafts is subject to corrections and final source verification.

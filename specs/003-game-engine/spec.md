@@ -12,9 +12,9 @@
 
 No timers, lives or penalties. Explain answers in simple Arabic with reviewed content. Keep first-attempt accuracy separate from later success. A zero-scored session reports an absent accuracy value and can complete once its required activities are done. Retry sequence and persistence details belong to 003-04. XP, stars, achievements and parent-facing results belong to SPEC-004. P1 deferral requires a documented reason and owner review.
 
-## Authorized checkpoint
+## Review follow-up
 
-Deliver only 003-01 in this execution. It owns the two scored question definitions, evaluator, one-question feedback, developer preview and regression checks for progress isolation. Every preview attempt is transient. Lesson integration, review, persistent attempts and completion rules are planned for 003-04. Tasks 003-02 onward await explicit authorization.
+Use stable variant IDs and explicit knowledge-unit links in all challenge definitions. Reject duplicate visible answers where they make a scored activity ambiguous. Offer a single preference-aware speech control per activity for instructions, prompts, options and feedback. Required challenges gate completion. Preserve first-attempt results, completion and replay independently in the appropriate preview or approved scope.
 
 ## Season One compatibility
 

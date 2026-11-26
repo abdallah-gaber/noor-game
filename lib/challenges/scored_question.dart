@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'challenge_definition.dart';
+
 enum QuestionKind { multipleChoice, trueFalse }
 
 class AnswerOption {
@@ -16,9 +18,9 @@ class AnswerOption {
   };
 }
 
-class ScoredQuestion {
+class ScoredQuestion implements ChallengeDefinition {
   ScoredQuestion._({
-    required this.id,
+    required this.identity,
     required this.kind,
     required this.prompt,
     required this.explanation,
@@ -32,17 +34,23 @@ class ScoredQuestion {
     AnswerOption('false', 'خطأ'),
   ];
 
-  final String id;
+  final ChallengeIdentity identity;
+  @override
+  String get id => identity.id;
+  @override
+  List<String> get knowledgeIds => identity.knowledgeIds;
+  @override
+  bool get isScored => true;
+
   final QuestionKind kind;
+  @override
   final String prompt;
   final String explanation;
   final List<AnswerOption> options;
   final String correctOptionId;
 
   factory ScoredQuestion.fromJson(Map<String, Object?> json) {
-    if (json['schema'] is! int || json['schema'] != schema) {
-      throw const FormatException('Unsupported question schema');
-    }
+    final identity = ChallengeIdentity.fromJson(json);
     final kind = switch (json['type']) {
       'multipleChoice' => QuestionKind.multipleChoice,
       'trueFalse' => QuestionKind.trueFalse,
@@ -65,25 +73,29 @@ class ScoredQuestion {
             throw const FormatException('Expected an option object');
           }
           return AnswerOption(
-            _id(entry['id']),
-            _text(entry['label']),
+            challengeId(entry['id']),
+            challengeText(entry['label']),
             illustration: entry.containsKey('illustration')
-                ? _id(entry['illustration'])
+                ? challengeId(entry['illustration'])
                 : null,
           );
         }),
       );
     }
     final ids = options.map((option) => option.id).toSet();
-    final correctId = _id(json['correctOptionId']);
+    final labels = options.map((option) => visibleLabel(option.label)).toSet();
+    if (labels.length != options.length) {
+      throw const FormatException('Duplicate visible answer label');
+    }
+    final correctId = challengeId(json['correctOptionId']);
     if (ids.length != options.length || !ids.contains(correctId)) {
       throw const FormatException('Duplicate option or invalid correct answer');
     }
     return ScoredQuestion._(
-      id: _id(json['id']),
+      identity: identity,
       kind: kind,
-      prompt: _text(json['prompt']),
-      explanation: _text(json['explanation']),
+      prompt: challengeText(json['prompt']),
+      explanation: challengeText(json['explanation']),
       options: options,
       correctOptionId: correctId,
     );
@@ -92,6 +104,7 @@ class ScoredQuestion {
   Map<String, Object> toJson() => {
     'schema': schema,
     'id': id,
+    'knowledgeIds': knowledgeIds,
     'type': kind.name,
     'prompt': prompt,
     'explanation': explanation,
@@ -108,20 +121,5 @@ class ScoredQuestion {
   bool? evaluate(String optionId) {
     if (!options.any((option) => option.id == optionId)) return null;
     return optionId == correctOptionId;
-  }
-
-  static String _text(Object? value) {
-    if (value is! String || value.trim().isEmpty) {
-      throw const FormatException('Expected non-empty text');
-    }
-    return value.trim();
-  }
-
-  static String _id(Object? value) {
-    final id = _text(value);
-    if (!RegExp(r'^[a-zA-Z0-9][a-zA-Z0-9_-]*$').hasMatch(id)) {
-      throw const FormatException('Invalid stable identifier');
-    }
-    return id;
   }
 }

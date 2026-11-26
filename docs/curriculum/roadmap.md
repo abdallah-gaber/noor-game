@@ -8,3 +8,5 @@ The owner provisionally accepted the initial 12-lesson outline for authoring. Th
 2. Review the playable pilot first. Organize the wider season as independently versioned packs. Keep source verification, approval, validation, integration and release QA visible as separate evidence.
 3. Expand mixed quizzes and adaptive review with new variants keyed to stable knowledge units. Add optional verified knowledge treasures and rights-cleared established memorization aids when appropriate.
 4. Record content releases and player-facing updates in [the release log](releases.json).
+
+The owner provisionally accepted the four authored draft packs (60 lessons, 180 knowledge units and 600 challenge records), subject to corrections and final source verification. Record-level approvals and integration remain separate. Matching and ordering have no authored variants. Address both in SPEC-004 and prioritize the prayer-readiness learning path. The authoring track supplies revised material.

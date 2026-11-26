@@ -60,7 +60,7 @@ for folder, names in {
         "mascot-expressions.webp", "speech-fallback.webp", "release-world.webp",
     ),
     "spec-003": (
-        "003-01-questions.md", "phone-choice.webp", "phone-choice-feedback.webp",
+        "003-01-questions.md", "003-02-flashcards.md", "phone-choice.webp", "phone-choice-feedback.webp",
         "phone-true-false.webp", "phone-true-false-feedback.webp", "tablet-choice.webp",
         "tablet-choice-feedback.webp", "tablet-true-false.webp", "tablet-true-false-feedback.webp",
     ),
@@ -206,6 +206,12 @@ class Dashboard:
             f'The owner provisionally accepted {baseline["lessons"]} lesson outlines. '
             f'Their {baseline["questionIdeas"]} question ideas are a planning baseline.</p>'
         )
+        review = self.plan.get("authoredDraftReview")
+        if review:
+            text += f'<p>{escape(review["note"])}</p>'
+        for line in [*self.plan.get("coverageGaps", []), self.plan.get("priorityPath")]:
+            if line:
+                text += f'<p>{escape(line)}</p>'
         for world in self.plan["worlds"]:
             text += f'<details><summary><b dir="rtl">{escape(world["title"])}</b><small>{world["lessons"]} target lessons</small></summary>'
             text += table(["Planned unit", "Lesson target"], world["units"]) + "</details>"

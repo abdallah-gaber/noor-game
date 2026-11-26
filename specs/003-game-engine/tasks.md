@@ -8,4 +8,4 @@
 | 003-04 | Integrate game sessions, feedback, retries, randomization, scoring and atomic completion | Implemented mechanics |
 | 003-05 | Verify regression, builds, offline behavior, accessibility and runtime evidence | 003-04 |
 
-Use [Mission Control data](../../docs/mission-control/progress.json) for live status. Owner authorization is required before starting 003-02.
+Use [Mission Control data](../../docs/mission-control/progress.json) for live status.

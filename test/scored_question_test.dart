@@ -8,6 +8,7 @@ const _choice = <String, Object?>{
   'schema': 1,
   'type': 'multipleChoice',
   'id': 'shapes',
+  'knowledgeIds': ['geometry.triangle'],
   'prompt': 'اختر المثلث.',
   'explanation': 'للمثلث ثلاث زوايا.',
   'correctOptionId': 'triangle',
@@ -71,6 +72,17 @@ void main() {
   test('rejects unsupported and inconsistent definitions', () {
     for (final changes in <Map<String, Object?>>[
       {'schema': 2},
+      {
+        'knowledgeIds': ['geometry.triangle', 'geometry.triangle'],
+      },
+      {'knowledgeIds': []},
+      {
+        'options': [
+          {'id': 'triangle', 'label': 'الشكل  الأول'},
+          {'id': 'square', 'label': 'الشكل الأول'},
+        ],
+      },
+
       {'type': 'matching'},
       {'prompt': ' '},
       {'explanation': ''},

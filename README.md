@@ -20,4 +20,4 @@ The Android and iOS app open to a four-world Arabic adventure map. Debug runs in
 
 ## Mission Control V2
 
-Regenerate the standalone dashboard with `python3 scripts/generate_dashboard.py`, then open `docs/mission-control/index.html`. The [stable Pages dashboard](https://abdallah-gaber.github.io/noor-game/) tracks main. The [Season One preview](https://abdallah-gaber.github.io/noor-game/previews/season-one/) tracks the review branch. See [publication and inventory instructions](docs/mission-control/deployment.md).
+Regenerate the standalone dashboard with `python3 scripts/generate_dashboard.py`, then open `docs/mission-control/index.html`. The [stable Pages dashboard](https://abdallah-gaber.github.io/noor-game/) tracks main. The [Season One preview](https://abdallah-gaber.github.io/noor-game/previews/season-one/) tracks the verified SPEC-003 branch. See [publication and inventory instructions](docs/mission-control/deployment.md).

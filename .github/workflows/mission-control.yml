@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - docs/season-one-mission-control
+      - feat/spec-003-game-engine
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.repository == 'abdallah-gaber/noor-game' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/docs/season-one-mission-control')
+    if: github.repository == 'abdallah-gaber/noor-game' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/spec-003-game-engine')
     runs-on: ubuntu-latest
     outputs:
       main_sha: ${{ steps.snapshot.outputs.main_sha }}
@@ -34,12 +34,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          refs=$(git ls-remote origin refs/heads/main refs/heads/docs/season-one-mission-control)
+          refs=$(git ls-remote origin refs/heads/main refs/heads/feat/spec-003-game-engine)
           main_sha=$(awk '$2 == "refs/heads/main" {print $1}' <<< "$refs")
-          preview_sha=$(awk '$2 == "refs/heads/docs/season-one-mission-control" {print $1}' <<< "$refs")
+          preview_sha=$(awk '$2 == "refs/heads/feat/spec-003-game-engine" {print $1}' <<< "$refs")
           case "$GITHUB_REF" in
             refs/heads/main) event_tip="$main_sha" ;;
-            refs/heads/docs/season-one-mission-control) event_tip="$preview_sha" ;;
+            refs/heads/feat/spec-003-game-engine) event_tip="$preview_sha" ;;
           esac
           if [[ "$GITHUB_SHA" != "$event_tip" ]]; then
             echo "Skipping an event superseded on its source branch."
@@ -75,9 +75,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          refs=$(git ls-remote https://github.com/abdallah-gaber/noor-game.git refs/heads/main refs/heads/docs/season-one-mission-control)
+          refs=$(git ls-remote https://github.com/abdallah-gaber/noor-game.git refs/heads/main refs/heads/feat/spec-003-game-engine)
           main_tip=$(awk '$2 == "refs/heads/main" {print $1}' <<< "$refs")
-          preview_tip=$(awk '$2 == "refs/heads/docs/season-one-mission-control" {print $1}' <<< "$refs")
+          preview_tip=$(awk '$2 == "refs/heads/feat/spec-003-game-engine" {print $1}' <<< "$refs")
           if [[ "$MAIN_SHA" == "$main_tip" && "$PREVIEW_SHA" == "$preview_tip" ]]; then
             printf 'current=true\n' >> "$GITHUB_OUTPUT"
           else

@@ -150,9 +150,11 @@
         {
           "id": "003-02",
           "title": "Implement flashcards with unscored recall",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-02-flashcards.md"
+          ],
+          "note": "62 tests passed. Unscored reveal and recall, stable knowledge links, accessible Arabic passages and duplicate-label validation verified.",
           "priority": "P0"
         },
         {
@@ -200,7 +202,7 @@
           "title": "Coordinate pilot content and Season One production",
           "status": "todo",
           "evidence": [],
-          "note": "Coordinate the separate authoring track. Pilot minimum is four approved lessons; Season One figures are production targets.",
+          "note": "Draft packs provisionally accepted subject to corrections and final source verification. Prioritize prayer readiness and author matching and ordering variants.",
           "priority": "P0"
         },
         {

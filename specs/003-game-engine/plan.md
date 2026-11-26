@@ -6,6 +6,6 @@
 4. Add immutable session snapshots, persisted order and attempts, scoring and bounded review. Integrate challenge-based completion and idempotent atomic lesson updates. Resume compatible sessions from stable IDs and stored option order. Preserve completion history and disregard incompatible in-flight drafts.
 5. Verify all mechanics across sizes and states. Capture runtime evidence, build both platforms, push remaining task commits and open one PR against main for owner review.
 
-This execution ends after 003-01. [Task breakdown](tasks.md) · [Architecture](../../docs/architecture.md)
+[Task breakdown](tasks.md) · [Architecture](../../docs/architecture.md)
 
 For 003-04, persist pack and objective revision, stable variant and knowledge IDs, and the resolved order. Accept eligible sets as session input so SPEC-004 can build mixed quizzes and adaptive review without changing mechanic evaluation.
