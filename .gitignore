@@ -46,3 +46,35 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local tool configuration
+.fvm/
+.codex/
+.agents/
+.aws/
+.direnv/
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Credentials and signing material
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.mobileprovision
+*.provisionprofile
+key.properties
+secrets.properties
+google-services.json
+GoogleService-Info.plist
+
+# Packaged application artifacts
+*.apk
+*.aab
+*.ipa
+*.dSYM/
