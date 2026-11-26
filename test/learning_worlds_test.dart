@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/app/noor_app.dart';
 import 'package:noor/content/curriculum.dart';
+import 'package:noor/progress/progress_store.dart';
+
+import 'progress_test_support.dart';
 
 void main() {
   test('preview IDs are stable, unique and resolve in the owning world', () {
@@ -11,7 +14,7 @@ void main() {
     expect(catalog.version, 'preview-1');
     for (final world in WorldId.values) {
       expect(WorldId.fromId(world.id), world);
-      final unit = catalog.units[world]!;
+      final unit = catalog.unitsFor(world).single;
       expect(ids.add(unit.id), isTrue);
       for (final lesson in unit.lessons) {
         expect(ids.add(lesson.id), isTrue);
@@ -25,7 +28,7 @@ void main() {
   });
 
   test('path status uses completion, prerequisites and current selection', () {
-    final lessons = loadCurriculum().units[WorldId.iman]!.lessons;
+    final lessons = loadCurriculum().unitsFor(WorldId.iman).single.lessons;
     expect(
       lessons.map(
         (lesson) =>
@@ -126,6 +129,13 @@ Future<void> _start(
     enablePreview: enablePreview,
   );
   addTearDown(router.dispose);
-  await tester.pumpWidget(ProviderScope(child: NoorApp(router: router)));
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        progressStoreProvider.overrideWithValue(MemoryProgressStore()),
+      ],
+      child: NoorApp(router: router),
+    ),
+  );
   await tester.pumpAndSettle();
 }

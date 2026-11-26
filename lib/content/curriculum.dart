@@ -30,15 +30,27 @@ enum LessonState {
   final String label;
 }
 
+enum LessonPicture { sky, palette, shapes, trail }
+
+class LessonStep {
+  const LessonStep(this.title, this.text, this.picture);
+
+  final String title;
+  final String text;
+  final LessonPicture picture;
+}
+
 class LearningLesson {
   const LearningLesson({
     required this.id,
     required this.title,
+    required this.steps,
     this.prerequisiteId,
   });
 
   final String id;
   final String title;
+  final List<LessonStep> steps;
   final String? prerequisiteId;
 
   LessonState state({required Set<String> completed, String? currentId}) {
@@ -66,15 +78,25 @@ class LearningUnit {
 }
 
 class Curriculum {
-  const Curriculum({required this.version, this.units = const {}});
+  const Curriculum({
+    required this.version,
+    this.isPreview = false,
+    this.units = const {},
+    this.previewCompletions = const {},
+  });
 
   final String version;
-  final Map<WorldId, LearningUnit> units;
-  bool get isPreview => units.isNotEmpty;
+  final bool isPreview;
+  final Map<WorldId, List<LearningUnit>> units;
+  final Set<String> previewCompletions;
+
+  List<LearningUnit> unitsFor(WorldId world) => units[world] ?? const [];
 
   LearningLesson? lesson(WorldId world, String? lessonId) {
-    for (final lesson in units[world]?.lessons ?? const <LearningLesson>[]) {
-      if (lesson.id == lessonId) return lesson;
+    for (final unit in unitsFor(world)) {
+      for (final lesson in unit.lessons) {
+        if (lesson.id == lessonId) return lesson;
+      }
     }
     return null;
   }
@@ -83,34 +105,100 @@ class Curriculum {
 Curriculum loadCurriculum({bool enablePreview = true}) {
   if (!kDebugMode || !enablePreview) return const Curriculum(version: '0');
 
-  final units = <WorldId, LearningUnit>{};
-  for (final world in WorldId.values) {
-    final prefix = world.id;
-    units[world] = LearningUnit(
-      id: '$prefix-trail',
-      world: world,
-      title: 'درب الاكتشاف',
-      lessons: [
-        LearningLesson(id: '$prefix-first', title: 'أولى الخطوات'),
-        LearningLesson(
-          id: '$prefix-colors',
-          title: 'ألوانٌ حولنا',
-          prerequisiteId: '$prefix-first',
-        ),
-        LearningLesson(
-          id: '$prefix-shapes',
-          title: 'لعبة الأشكال',
-          prerequisiteId: '$prefix-first',
-        ),
-        LearningLesson(
-          id: '$prefix-end',
-          title: 'نهاية الدرب',
-          prerequisiteId: '$prefix-colors',
-        ),
-      ],
-    );
-  }
-  return Curriculum(version: 'preview-1', units: Map.unmodifiable(units));
+  return Curriculum(
+    version: 'preview-1',
+    isPreview: true,
+    previewCompletions: Set.unmodifiable(
+      WorldId.values.map((world) => '${world.id}-first'),
+    ),
+    units: Map.unmodifiable({
+      for (final world in WorldId.values)
+        world: List<LearningUnit>.unmodifiable([_fixtureUnit(world)]),
+    }),
+  );
+}
+
+LearningUnit _fixtureUnit(WorldId world) {
+  final prefix = world.id;
+  return LearningUnit(
+    id: '$prefix-trail',
+    world: world,
+    title: 'درب الاكتشاف',
+    lessons: List.unmodifiable([
+      LearningLesson(
+        id: '$prefix-first',
+        title: 'أولى الخطوات',
+        steps: const [
+          LessonStep(
+            'لِنبدأ!',
+            'تأمّل السماء. ماذا ترى فيها؟',
+            LessonPicture.sky,
+          ),
+          LessonStep(
+            'وقتُ الملاحظة',
+            'انظر حولك واختر شيئًا تحبّ لونه.',
+            LessonPicture.palette,
+          ),
+        ],
+      ),
+      LearningLesson(
+        id: '$prefix-colors',
+        title: 'ألوانٌ حولنا',
+        prerequisiteId: '$prefix-first',
+        steps: const [
+          LessonStep(
+            'لونُ السماء',
+            'قد ترى لونًا أزرق عندما تنظر إلى السماء.',
+            LessonPicture.sky,
+          ),
+          LessonStep(
+            'لِنبحث عن لون',
+            'ابحث حولك عن شيء أزرق.',
+            LessonPicture.palette,
+          ),
+          LessonStep(
+            'ألوانٌ أخرى',
+            'اختر لونًا آخر واذكر شيئًا بلونه.',
+            LessonPicture.palette,
+          ),
+        ],
+      ),
+      LearningLesson(
+        id: '$prefix-shapes',
+        title: 'لعبة الأشكال',
+        prerequisiteId: '$prefix-first',
+        steps: const [
+          LessonStep(
+            'أشكالٌ حولنا',
+            'تأمّل صورة المثلّث.',
+            LessonPicture.shapes,
+          ),
+          LessonStep(
+            'أين المثلّث؟',
+            'ابحث حولك عن شكل له ثلاث زوايا.',
+            LessonPicture.shapes,
+          ),
+        ],
+      ),
+      LearningLesson(
+        id: '$prefix-end',
+        title: 'نهاية الدرب',
+        prerequisiteId: '$prefix-colors',
+        steps: const [
+          LessonStep(
+            'تذكّر رحلتك',
+            'تذكّر لونًا أو شكلًا لاحظتَه اليوم.',
+            LessonPicture.trail,
+          ),
+          LessonStep(
+            'أكمل رحلتك',
+            'اختر شيئًا جديدًا تتأمّله في المرّة القادمة.',
+            LessonPicture.sky,
+          ),
+        ],
+      ),
+    ]),
+  );
 }
 
 const previewLabel = 'معاينة تجريبية للمطوّر';

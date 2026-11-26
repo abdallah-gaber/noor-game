@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
+import '../lesson/lesson_screen.dart';
+import '../progress/progress_store.dart';
 import '../settings/settings_screen.dart';
 import '../worlds/world_screen.dart';
 
@@ -42,20 +45,36 @@ GoRouter createNoorRouter({
             routes: [
               GoRoute(
                 path: 'lessons/:lessonId',
-                redirect: (context, state) {
+                redirect: (context, state) async {
                   final world = WorldId.fromId(state.pathParameters['worldId']);
                   if (world == null) return '/';
+                  final path = '/worlds/${world.id}';
                   final lesson = curriculum.lesson(
                     world,
                     state.pathParameters['lessonId'],
                   );
-                  final lessonState = lesson?.state(
-                    completed: {'${world.id}-first'},
+                  if (lesson == null || lesson.steps.isEmpty) return path;
+
+                  final container = ProviderScope.containerOf(
+                    context,
+                    listen: false,
                   );
-                  return lessonState == null ||
-                          lessonState == LessonState.locked
-                      ? '/worlds/${world.id}'
-                      : null;
+                  try {
+                    final progress = await container.read(
+                      progressProvider.future,
+                    );
+                    return lesson.state(
+                              completed: progress.completedFor(
+                                curriculum,
+                                world,
+                              ),
+                            ) ==
+                            LessonState.locked
+                        ? path
+                        : null;
+                  } catch (_) {
+                    return path;
+                  }
                 },
                 builder: (context, state) {
                   final world = WorldId.fromId(
@@ -65,9 +84,11 @@ GoRouter createNoorRouter({
                     world,
                     state.pathParameters['lessonId'],
                   )!;
-                  return Scaffold(
-                    appBar: NoorAppBar(lesson.title),
-                    body: const NoorPage(child: Text(previewLabel)),
+                  return LessonScreen(
+                    key: ValueKey(lesson.id),
+                    world: world,
+                    lesson: lesson,
+                    curriculum: curriculum,
                   );
                 },
               ),

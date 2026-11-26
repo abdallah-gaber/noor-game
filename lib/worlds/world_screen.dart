@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
+import '../progress/progress_store.dart';
 import 'world_art.dart';
 
-class WorldScreen extends StatelessWidget {
+class WorldScreen extends ConsumerWidget {
   const WorldScreen({super.key, required this.world, required this.curriculum});
 
   final WorldId world;
   final Curriculum curriculum;
 
   @override
-  Widget build(BuildContext context) {
-    final unit = curriculum.units[world];
-    final completed = {'${world.id}-first'};
-    final current = '${world.id}-colors';
+  Widget build(BuildContext context, WidgetRef ref) {
+    final units = curriculum.unitsFor(world);
+    final progress = units.isEmpty ? null : ref.watch(progressProvider);
     return Scaffold(
       appBar: NoorAppBar(world.title),
       body: NoorPage(
@@ -24,18 +25,38 @@ class WorldScreen extends StatelessWidget {
           builder: (context, constraints) {
             final landscape = constraints.maxWidth >= 760;
             final view = _WorldBanner(world);
-            final path = unit == null
-                ? const Padding(
-                    padding: EdgeInsetsDirectional.only(top: 8),
-                    child: Text('الدروس قيد الإعداد.'),
-                  )
-                : LearningPath(
-                    unit: unit,
-                    completed: completed,
-                    currentId: current,
-                    onOpen: (id) =>
-                        context.push('/worlds/${world.id}/lessons/$id'),
-                  );
+            final path =
+                progress?.when(
+                  skipLoadingOnRefresh: false,
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(
+                      semanticsLabel: 'جارٍ التحميل',
+                    ),
+                  ),
+                  error: (error, stackTrace) => FilledButton(
+                    onPressed: () => ref.invalidate(progressProvider),
+                    child: const Text('تعذّر فتح الدرب. حاول مرة أخرى.'),
+                  ),
+                  data: (journey) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (curriculum.isPreview)
+                        Text(previewLabel, style: TextStyle(color: world.ink)),
+                      for (final unit in units)
+                        LearningPath(
+                          unit: unit,
+                          completed: journey.completedFor(curriculum, world),
+                          currentId: journey.currentFor(curriculum, unit),
+                          onOpen: (id) =>
+                              context.push('/worlds/${world.id}/lessons/$id'),
+                        ),
+                    ],
+                  ),
+                ) ??
+                const Padding(
+                  padding: EdgeInsetsDirectional.only(top: 8),
+                  child: Text('الدروس قيد الإعداد.'),
+                );
             return landscape
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +111,6 @@ class LearningPath extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(previewLabel, style: TextStyle(color: world.ink)),
         Semantics(
           header: true,
           child: Text(

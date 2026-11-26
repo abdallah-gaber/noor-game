@@ -85,9 +85,14 @@
         {
           "id": "002-02",
           "title": "Implement lesson player and resume",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-02-player.md",
+            "docs/qa/spec-002/lesson-player.webp",
+            "docs/qa/spec-002/path-unlocked.webp",
+            "docs/decisions/004-lesson-progress.md"
+          ],
+          "note": "Versioned lesson player, SQLite schema upgrade, resume, completion and unlocking verified. Existing settings survived migration.",
           "priority": "P0"
         },
         {
