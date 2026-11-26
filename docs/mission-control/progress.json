@@ -1,0 +1,238 @@
+{
+  "project": "Noor / نور",
+  "version": "0.1.0",
+  "phases": [
+    {
+      "id": "001",
+      "name": "Foundation",
+      "spec": "specs/001-foundation/spec.md",
+      "plan": "specs/001-foundation/plan.md",
+      "tasks": [
+        {
+          "id": "001-01",
+          "title": "Bootstrap Flutter and pin installed SDK",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "001-02",
+          "title": "Build responsive RTL design system",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "001-03",
+          "title": "Implement navigation and local storage",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "001-04",
+          "title": "Verify tablet and phone layouts",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "id": "002",
+      "name": "Learning worlds",
+      "spec": "specs/002-learning-worlds/spec.md",
+      "plan": "specs/002-learning-worlds/plan.md",
+      "tasks": [
+        {
+          "id": "002-01",
+          "title": "Implement four world cards and lesson paths",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "002-02",
+          "title": "Implement lesson player and resume",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "002-03",
+          "title": "Implement Noor mascot states and speech controls",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "002-04",
+          "title": "Verify navigation and accessibility",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "id": "003",
+      "name": "Game engine",
+      "spec": "specs/003-game-engine/spec.md",
+      "plan": "specs/003-game-engine/plan.md",
+      "tasks": [
+        {
+          "id": "003-01",
+          "title": "Implement multiple choice and true/false",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "003-02",
+          "title": "Implement flashcards with unscored recall",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "003-03",
+          "title": "Implement tap-to-match and tap-to-order",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P1"
+        },
+        {
+          "id": "003-04",
+          "title": "Implement feedback, retries and randomized options",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "003-05",
+          "title": "Verify all mechanics with tests",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "id": "004",
+      "name": "Content and rewards",
+      "spec": "specs/004-content-and-rewards/spec.md",
+      "plan": "specs/004-content-and-rewards/plan.md",
+      "tasks": [
+        {
+          "id": "004-01",
+          "title": "Validate versioned curriculum and source references",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "004-02",
+          "title": "Author 12 draft starter lessons",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "004-03",
+          "title": "Obtain explicit human content approval before child access",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "004-04",
+          "title": "Implement stars, XP and progress",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "004-05",
+          "title": "Implement review queue and daily challenge",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P1"
+        },
+        {
+          "id": "004-06",
+          "title": "Implement basic parent mode",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "id": "005",
+      "name": "Release and playtest",
+      "spec": "specs/005-release-and-playtest/spec.md",
+      "plan": "specs/005-release-and-playtest/plan.md",
+      "tasks": [
+        {
+          "id": "005-01",
+          "title": "Run format, analysis and automated tests",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "005-02",
+          "title": "Capture actual tablet and phone screenshots",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "005-03",
+          "title": "Verify offline audio and fallback on device",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "005-04",
+          "title": "Run supervised child playtest and record observations",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "005-05",
+          "title": "Resolve release blockers and regenerate tracker",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
+    }
+  ]
+}

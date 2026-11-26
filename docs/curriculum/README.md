@@ -1,0 +1,4 @@
+# Curriculum workflow
+1. Draft Arabic fact, explanation, distractors and source locators. 2. Verify source text and authenticity/context; mark differences clearly. 3. Human reviewer checks religious accuracy and child comprehension. 4. Approve specific content hash. 5. Validate and publish only approved items. Do not let an AI agent self-approve.
+Suggested source starting points (not verified citations for any lesson): Quran, Sahih al-Bukhari, Sahih Muslim, reliable fiqh and seerah references. Historical claims need appropriate sourcing; disputed dates should not be treated as uniquely correct answers.
+Content record fields: id, worldId, lessonId, type, promptAr, explanationAr, options, correctOptionIds, sourceRefs, reviewStatus, approvalHash, reviewer, reviewedAt. Sources: id, title, locator, URL if available, notes. No actual content authored or approved in this bootstrap.

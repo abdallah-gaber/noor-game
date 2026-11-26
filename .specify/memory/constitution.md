@@ -1,0 +1,6 @@
+# Constitution — Noor / نور
+- Child-first: Arabic simplified MSA, age 6–8; short, encouraging, audio-supported lessons. No punitive streaks, ads, purchases, analytics, accounts or leaderboards.
+- Tablet-first, responsive phone; RTL, accessible touch targets, no forced orientation; support both orientations where feasible. No music; optional non-musical effects and speech. No depictions of prophets or companions; Noor is an original stylized lantern.
+- Religious integrity: every claim and question has traceable references; distinguish Qur’an, authenticated hadith and historical/fiqh scholarship. Common fundamentals first; disputed matters labeled with attributed views, never graded as universally wrong. No invented references. Draft material inaccessible in child mode until explicit human approval; qualified review for uncertain matters. Parent can inspect sources.
+- Offline-first, local single profile, no child personal data in repository/evidence. TTS availability must be tested; never download silently; graceful fallback.
+- SDD: specify, plan, tasks, implement, verify, review. No completion without evidence. Generated dashboard derives from progress JSON, never edit HTML directly. Record decisions and blockers. Stop for approval on material scope or religious decisions.

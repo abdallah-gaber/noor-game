@@ -1,0 +1,2 @@
+# Noor — Weekend SDD bootstrap
+This is a planning package, not a Flutter application. Open docs/mission-control/index.html locally. Run `python3 scripts/generate_dashboard.py` from repo root after changing progress.json. No dependencies needed. Copy package into an empty project folder, initialize Git if desired, then provide CODEX_START.md to Codex. Do not overwrite existing project files. Specs are starter requirements to refine before implementation. All implementation tasks begin todo. No real screenshots or content approval yet.
