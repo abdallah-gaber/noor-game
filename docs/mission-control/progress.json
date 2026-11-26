@@ -11,33 +11,50 @@
         {
           "id": "001-01",
           "title": "Bootstrap Flutter and pin installed SDK",
-          "status": "doing",
-          "evidence": [],
-          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-001/results.md",
+            ".fvmrc"
+          ],
+          "note": "Pinned Flutter 3.47.8 / Dart 3.13.7. Locked dependencies and Android release build passed from a clean archive. iOS simulator build passed.",
           "priority": "P0"
         },
         {
           "id": "001-02",
           "title": "Build responsive RTL design system",
-          "status": "doing",
-          "evidence": [],
-          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-001/results.md",
+            "test/foundation_test.dart"
+          ],
+          "note": "Arabic RTL, responsive breakpoints, labeled touch targets and Noor’s reduced-motion greeting passed automated checks.",
           "priority": "P0"
         },
         {
           "id": "001-03",
           "title": "Implement navigation and local storage",
-          "status": "doing",
-          "evidence": [],
-          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-001/results.md",
+            "docs/decisions/001-local-storage.md",
+            "docs/decisions/002-platform-speech.md"
+          ],
+          "note": "Navigation and settings error recovery passed tests. Both Android emulators preserved independent SQLite preferences across process restart.",
           "priority": "P0"
         },
         {
           "id": "001-04",
           "title": "Verify tablet and phone layouts",
-          "status": "doing",
-          "evidence": [],
-          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
+          "status": "blocked",
+          "evidence": [
+            "docs/qa/spec-001/results.md",
+            "docs/qa/spec-001/pixel-3-home.png",
+            "docs/qa/spec-001/pixel-3-settings.png",
+            "docs/qa/spec-001/tablet-landscape-home.png",
+            "docs/qa/spec-001/tablet-landscape-settings.png",
+            "docs/qa/spec-001/tablet-portrait-home.png"
+          ],
+          "note": "Viewport matrix and Android phone/tablet emulator checks passed. Physical testing awaits the owner’s tablet first, then the child’s low-end Android tablet.",
           "priority": "P0"
         }
       ]
