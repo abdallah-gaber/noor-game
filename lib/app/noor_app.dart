@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../challenges/challenge_preview.dart';
+import '../challenges/debug_catalog.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';

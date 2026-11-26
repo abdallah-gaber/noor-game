@@ -69,35 +69,7 @@ class QuestionView extends StatelessWidget {
           },
         ),
         if (correct != null)
-          Semantics(
-            liveRegion: true,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Row(
-                children: [
-                  NoorLantern(
-                    mood: correct ? NoorMood.celebrating : NoorMood.encouraging,
-                    size: 76,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          correct
-                              ? 'أحسنت! إجابة صحيحة'
-                              : 'إجابة غير صحيحة. لنتعلّم معًا.',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(question.explanation),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          AnswerFeedback(correct: correct, explanation: question.explanation),
         SpeechControl(
           text: correct == null
               ? passage
@@ -157,4 +129,46 @@ class _AnswerCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class AnswerFeedback extends StatelessWidget {
+  const AnswerFeedback({
+    super.key,
+    required this.correct,
+    required this.explanation,
+  });
+
+  final bool correct;
+  final String explanation;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    liveRegion: true,
+    child: Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Row(
+        children: [
+          NoorLantern(
+            mood: correct ? NoorMood.celebrating : NoorMood.encouraging,
+            size: 76,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  correct
+                      ? 'أحسنت! إجابة صحيحة'
+                      : 'إجابة غير صحيحة. لنتعلّم معًا.',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(explanation),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

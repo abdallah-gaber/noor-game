@@ -60,7 +60,7 @@ for folder, names in {
         "mascot-expressions.webp", "speech-fallback.webp", "release-world.webp",
     ),
     "spec-003": (
-        "003-01-questions.md", "003-02-flashcards.md", "phone-choice.webp", "phone-choice-feedback.webp",
+        "003-01-questions.md", "003-03-arrangements.md", "003-02-flashcards.md", "phone-choice.webp", "phone-choice-feedback.webp",
         "phone-true-false.webp", "phone-true-false-feedback.webp", "tablet-choice.webp",
         "tablet-choice-feedback.webp", "tablet-true-false.webp", "tablet-true-false-feedback.webp",
     ),

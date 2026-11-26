@@ -7,6 +7,19 @@ enum QuestionKind { multipleChoice, trueFalse }
 class AnswerOption {
   const AnswerOption(this.id, this.label, {this.illustration});
 
+  factory AnswerOption.fromJson(Object? input) {
+    if (input is! Map<String, Object?>) {
+      throw const FormatException('Expected an option object');
+    }
+    return AnswerOption(
+      challengeId(input['id']),
+      challengeText(input['label']),
+      illustration: input.containsKey('illustration')
+          ? challengeId(input['illustration'])
+          : null,
+    );
+  }
+
   final String id;
   final String label;
   final String? illustration;
@@ -67,29 +80,12 @@ class ScoredQuestion implements ChallengeDefinition {
       if (entries is! List || entries.length < 2 || entries.length > 4) {
         throw const FormatException('Expected two to four choices');
       }
-      options = List.unmodifiable(
-        entries.map((entry) {
-          if (entry is! Map<String, Object?>) {
-            throw const FormatException('Expected an option object');
-          }
-          return AnswerOption(
-            challengeId(entry['id']),
-            challengeText(entry['label']),
-            illustration: entry.containsKey('illustration')
-                ? challengeId(entry['illustration'])
-                : null,
-          );
-        }),
-      );
+      options = List.unmodifiable(entries.map(AnswerOption.fromJson));
     }
-    final ids = options.map((option) => option.id).toSet();
-    final labels = options.map((option) => visibleLabel(option.label)).toSet();
-    if (labels.length != options.length) {
-      throw const FormatException('Duplicate visible answer label');
-    }
+    validateOptions(options);
     final correctId = challengeId(json['correctOptionId']);
-    if (ids.length != options.length || !ids.contains(correctId)) {
-      throw const FormatException('Duplicate option or invalid correct answer');
+    if (!options.any((option) => option.id == correctId)) {
+      throw const FormatException('Invalid correct answer');
     }
     return ScoredQuestion._(
       identity: identity,
@@ -121,5 +117,15 @@ class ScoredQuestion implements ChallengeDefinition {
   bool? evaluate(String optionId) {
     if (!options.any((option) => option.id == optionId)) return null;
     return optionId == correctOptionId;
+  }
+}
+
+void validateOptions(List<AnswerOption> options) {
+  if (options.map((option) => option.id).toSet().length != options.length) {
+    throw const FormatException('Duplicate option ID');
+  }
+  if (options.map((option) => visibleLabel(option.label)).toSet().length !=
+      options.length) {
+    throw const FormatException('Duplicate visible answer label');
   }
 }

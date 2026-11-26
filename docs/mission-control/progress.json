@@ -160,9 +160,11 @@
         {
           "id": "003-03",
           "title": "Implement tap-to-match and tap-to-order",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-03-arrangements.md"
+          ],
+          "note": "66 tests passed. Data-driven matching and ordering, correction, answer validation and large-text layout verified.",
           "priority": "P1"
         },
         {

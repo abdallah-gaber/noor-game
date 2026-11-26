@@ -4,51 +4,13 @@ import 'package:flutter/material.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
-import 'challenge_definition.dart';
+import 'arrangement.dart';
+import 'arrangement_view.dart';
+import 'debug_catalog.dart';
 import 'flashcard.dart';
 import 'flashcard_view.dart';
 import 'question_view.dart';
 import 'scored_question.dart';
-
-const challengePreviewIds = [
-  'shapes-choice',
-  'shapes-true-false',
-  'shapes-flashcard',
-];
-
-final debugChallenges = <String, ChallengeDefinition>{
-  challengePreviewIds[0]: ScoredQuestion.fromJson({
-    'schema': 1,
-    'id': challengePreviewIds[0],
-    'type': 'multipleChoice',
-    'knowledgeIds': ['preview.geometry.triangle'],
-    'prompt': 'أيّ شكل له ثلاث زوايا؟',
-    'explanation': 'المثلّث له ثلاث زوايا.',
-    'correctOptionId': 'triangle',
-    'options': [
-      {'id': 'circle', 'label': 'دائرة', 'illustration': 'circle'},
-      {'id': 'triangle', 'label': 'مثلّث', 'illustration': 'triangle'},
-      {'id': 'square', 'label': 'مربّع', 'illustration': 'square'},
-    ],
-  }),
-  challengePreviewIds[1]: ScoredQuestion.fromJson({
-    'schema': 1,
-    'id': challengePreviewIds[1],
-    'type': 'trueFalse',
-    'knowledgeIds': ['preview.geometry.square'],
-    'prompt': 'للمربّع أربع زوايا.',
-    'explanation': 'نعم، للمربّع أربع زوايا.',
-    'correctOptionId': 'true',
-  }),
-  challengePreviewIds[2]: Flashcard.fromJson({
-    'schema': 1,
-    'type': 'flashcard',
-    'id': challengePreviewIds[2],
-    'knowledgeIds': ['preview.geometry.circle'],
-    'prompt': 'ما اسم الشكل المستدير؟',
-    'answer': 'دائرة.',
-  }),
-};
 
 class ChallengePreview extends StatefulWidget {
   const ChallengePreview({super.key, required this.id});
@@ -64,6 +26,9 @@ class _ChallengePreviewState extends State<ChallengePreview> {
   late final _order = (_definition as ScoredQuestion).presentationOrder(
     Random(),
   );
+  late final _arrangementOptions = (_definition as Arrangement)
+      .presentationOrder(Random());
+  List<String>? _arranged;
   String? _selectedId;
   bool _revealed = false;
   Recall? _recall;
@@ -99,6 +64,12 @@ class _ChallengePreviewState extends State<ChallengePreview> {
               recall: _recall,
               onReveal: () => setState(() => _revealed = true),
               onRecall: (recall) => setState(() => _recall ??= recall),
+            ),
+            final Arrangement question => ArrangementView(
+              question: question,
+              options: _arrangementOptions,
+              answer: _arranged,
+              onAnswer: (answer) => setState(() => _arranged ??= answer),
             ),
             _ => const SizedBox.shrink(),
           },
