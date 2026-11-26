@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../design_system/noor_theme.dart';
+import '../worlds/world_art.dart';
 import 'noor_lantern.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,37 +14,64 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width =
+        MediaQuery.sizeOf(context).width -
+        MediaQuery.paddingOf(context).horizontal;
+    final columns = NoorWidth.of(width) == NoorWidth.compact ? 1 : 2;
     return Scaffold(
-      appBar: const NoorAppBar('نور'),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final insets = MediaQuery.paddingOf(context);
-          final width = NoorWidth.of(constraints.maxWidth - insets.horizontal);
-          final settings = _HomeActions(showPreview: showPreview);
-
-          return NoorPage(
-            maxWidth: width == NoorWidth.expanded ? 1040 : 620,
-            child: width == NoorWidth.expanded
-                ? Row(
-                    key: const ValueKey(NoorWidth.expanded),
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Expanded(flex: 3, child: _WelcomePanel()),
-                      const SizedBox(width: 24),
-                      Expanded(flex: 2, child: settings),
-                    ],
-                  )
-                : Column(
-                    key: ValueKey(width),
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const _WelcomePanel(),
-                      const SizedBox(height: 16),
-                      settings,
-                    ],
-                  ),
-          );
-        },
+      appBar: NoorAppBar(
+        'نور',
+        actions: [
+          IconButton(
+            tooltip: 'الإعدادات',
+            style: IconButton.styleFrom(minimumSize: const Size.square(48)),
+            onPressed: () => context.push('/settings'),
+            icon: const Icon(Icons.tune_rounded),
+          ),
+        ],
+      ),
+      body: NoorPage(
+        maxWidth: 1060,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _WelcomePanel(),
+            const SizedBox(height: 22),
+            Semantics(
+              header: true,
+              child: Text(
+                'اختر عالمًا',
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+            const SizedBox(height: 12),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                const gap = 14.0;
+                final cardWidth =
+                    (constraints.maxWidth - (columns - 1) * gap) / columns;
+                return Wrap(
+                  key: ValueKey('world-columns-$columns'),
+                  runSpacing: gap,
+                  spacing: gap,
+                  children: [
+                    for (final world in WorldId.values)
+                      SizedBox(width: cardWidth, child: _WorldTile(world)),
+                  ],
+                );
+              },
+            ),
+            if (showPreview)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton(
+                  onPressed: () => context.push('/preview'),
+                  child: const Text('معاينة المطوّر'),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -80,47 +109,72 @@ class _WelcomePanelState extends State<_WelcomePanel>
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final lantern = NoorLantern(happy: _happy);
+    final lantern = Center(
+      child: SizedBox.square(dimension: 120, child: NoorLantern(happy: _happy)),
+    );
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: sage,
-        borderRadius: BorderRadius.circular(32),
+        color: const Color(0xFF174A41),
+        borderRadius: BorderRadius.circular(28),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
+        padding: const EdgeInsetsDirectional.fromSTEB(22, 16, 14, 16),
+        child: Row(
           children: [
-            reduceMotion
-                ? lantern
-                : AnimatedBuilder(
-                    animation: _motion,
-                    child: lantern,
-                    builder: (context, child) {
-                      final phase = _motion.value;
-                      final lift = phase * (1 - phase) * 24;
-                      return Transform.translate(
-                        offset: Offset(0, -lift),
-                        child: child,
-                      );
-                    },
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      'أهلًا! أنا نور',
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFFFFF6D9),
+                          ),
+                    ),
                   ),
-            const SizedBox(height: 12),
-            Semantics(
-              header: true,
-              child: Text(
-                'أهلًا! أنا نور',
-                textAlign: TextAlign.center,
-                style: text.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: ink,
-                ),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: _greet,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFDB8A),
+                      foregroundColor: ink,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                    ),
+                    child: const Text(
+                      'أهلًا يا نور!',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 18),
-            FilledButton(onPressed: _greet, child: const Text('أهلًا يا نور!')),
+            const SizedBox(width: 8),
+            Flexible(
+              flex: 2,
+              child: reduceMotion
+                  ? lantern
+                  : AnimatedBuilder(
+                      animation: _motion,
+                      child: lantern,
+                      builder: (context, child) {
+                        final phase = _motion.value;
+                        return Transform.translate(
+                          offset: Offset(0, -phase * (1 - phase) * 24),
+                          child: child,
+                        );
+                      },
+                    ),
+            ),
           ],
         ),
       ),
@@ -128,49 +182,51 @@ class _WelcomePanelState extends State<_WelcomePanel>
   }
 }
 
-class _HomeActions extends StatelessWidget {
-  const _HomeActions({required this.showPreview});
+class _WorldTile extends StatelessWidget {
+  const _WorldTile(this.world);
 
-  final bool showPreview;
+  final WorldId world;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Material(
-          color: paper,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-            side: const BorderSide(color: outline),
-          ),
-          child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            contentPadding: const EdgeInsetsDirectional.fromSTEB(18, 8, 16, 8),
-            leading: const CircleAvatar(
-              backgroundColor: sage,
-              foregroundColor: ink,
-              child: Icon(Icons.tune_rounded),
-            ),
-            title: const Text(
-              'الإعدادات',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 17),
-            onTap: () => context.push('/settings'),
+    return Semantics(
+      button: true,
+      child: Material(
+        color: world.wash,
+        borderRadius: BorderRadius.circular(22),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.push('/worlds/${world.id}'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 112, child: WorldArt(world)),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 10, 14, 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        world.title,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: world.ink,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 17,
+                      color: world.ink,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-        if (showPreview)
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              onPressed: () => context.push('/preview'),
-              child: const Text('معاينة المطوّر'),
-            ),
-          ),
-      ],
+      ),
     );
   }
 }

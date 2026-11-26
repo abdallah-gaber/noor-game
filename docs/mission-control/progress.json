@@ -68,9 +68,18 @@
         {
           "id": "002-01",
           "title": "Implement four world cards and lesson paths",
-          "status": "doing",
-          "evidence": [],
-          "note": "Acceptance scenarios and visual direction recorded. Implementing the four-world map and reusable path.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-01-worlds.md",
+            "docs/qa/spec-002/mobile-home.webp",
+            "docs/qa/spec-002/tablet-landscape-home.webp",
+            "docs/qa/spec-002/tablet-portrait-home.webp",
+            "docs/qa/spec-002/world-exemplars.webp",
+            "docs/qa/spec-002/world-ibadah.webp",
+            "docs/qa/spec-002/world-iman.webp",
+            "docs/qa/spec-002/world-seerah.webp"
+          ],
+          "note": "Four illustrated worlds and reusable path states verified by tests and the offline Android tablet emulator. Debug fixtures are gated.",
           "priority": "P0"
         },
         {
