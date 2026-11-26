@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
+import '../home/noor_lantern.dart';
 import '../progress/progress_store.dart';
 import 'world_art.dart';
 
@@ -24,7 +25,16 @@ class WorldScreen extends ConsumerWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final landscape = constraints.maxWidth >= 760;
-            final view = _WorldBanner(world);
+            final view = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _WorldBanner(world, showCompanion: !landscape),
+                if (landscape)
+                  const Center(
+                    child: NoorLantern(mood: NoorMood.curious, size: 124),
+                  ),
+              ],
+            );
             final path =
                 progress?.when(
                   skipLoadingOnRefresh: false,
@@ -78,15 +88,30 @@ class WorldScreen extends ConsumerWidget {
 }
 
 class _WorldBanner extends StatelessWidget {
-  const _WorldBanner(this.world);
+  const _WorldBanner(this.world, {required this.showCompanion});
 
   final WorldId world;
+  final bool showCompanion;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
-      child: SizedBox(height: 146, child: WorldArt(world)),
+      child: SizedBox(
+        height: 146,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            WorldArt(world),
+            if (showCompanion)
+              const PositionedDirectional(
+                end: 12,
+                bottom: 0,
+                child: NoorLantern(mood: NoorMood.curious, size: 98),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

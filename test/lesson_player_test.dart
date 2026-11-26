@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/app/noor_app.dart';
 import 'package:noor/content/curriculum.dart';
+import 'package:noor/home/noor_lantern.dart';
 import 'package:noor/progress/lesson_progress.dart';
 import 'package:noor/progress/progress_store.dart';
 
@@ -52,6 +53,7 @@ void main() {
       expect(find.text('ألوانٌ أخرى'), findsOneWidget);
       await _tap(tester, 'أنهِ الدرس');
       expect(find.text('أحسنت!'), findsOneWidget);
+      expect(find.bySemanticsLabel(NoorMood.celebrating.label), findsOneWidget);
       await _tap(tester, 'إلى الدرب');
       expect(find.bySemanticsLabel('ألوانٌ حولنا، مكتمل'), findsOneWidget);
       expect(find.bySemanticsLabel('نهاية الدرب، متاح'), findsOneWidget);

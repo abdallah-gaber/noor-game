@@ -84,98 +84,72 @@ class _WelcomePanel extends StatefulWidget {
   State<_WelcomePanel> createState() => _WelcomePanelState();
 }
 
-class _WelcomePanelState extends State<_WelcomePanel>
-    with SingleTickerProviderStateMixin {
-  late final _motion = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 300),
-  );
-  bool _happy = false;
-
-  @override
-  void dispose() {
-    _motion.dispose();
-    super.dispose();
-  }
-
-  void _greet() {
-    setState(() => _happy = true);
-    if (MediaQuery.disableAnimationsOf(context)) {
-      _motion.reset();
-    } else {
-      _motion.forward(from: 0);
-    }
-  }
+class _WelcomePanelState extends State<_WelcomePanel> {
+  int _greetings = 0;
 
   @override
   Widget build(BuildContext context) {
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final lantern = Center(
-      child: SizedBox.square(dimension: 120, child: NoorLantern(happy: _happy)),
-    );
-
     return DecoratedBox(
       decoration: BoxDecoration(
         color: const Color(0xFF174A41),
         borderRadius: BorderRadius.circular(28),
       ),
-      child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(22, 16, 14, 16),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Semantics(
-                    header: true,
-                    child: Text(
-                      'أهلًا! أنا نور',
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFFFFF6D9),
-                          ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  FilledButton(
-                    onPressed: _greet,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFDB8A),
-                      foregroundColor: ink,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 540),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(22, 16, 14, 16),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          'أهلًا! أنا نور',
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFFFFF6D9),
+                              ),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      'أهلًا يا نور!',
-                      textAlign: TextAlign.center,
+                      const SizedBox(height: 8),
+                      FilledButton(
+                        onPressed: () => setState(() => _greetings++),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFDB8A),
+                          foregroundColor: ink,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: const Text(
+                          'أهلًا يا نور!',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  flex: 2,
+                  child: Center(
+                    child: NoorReaction(
+                      mood: _greetings == 0 ? NoorMood.idle : NoorMood.happy,
+                      size: 120,
+                      trigger: _greetings,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Flexible(
-              flex: 2,
-              child: reduceMotion
-                  ? lantern
-                  : AnimatedBuilder(
-                      animation: _motion,
-                      child: lantern,
-                      builder: (context, child) {
-                        final phase = _motion.value;
-                        return Transform.translate(
-                          offset: Offset(0, -phase * (1 - phase) * 24),
-                          child: child,
-                        );
-                      },
-                    ),
-            ),
-          ],
+          ),
         ),
       ),
     );

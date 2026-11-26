@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/curriculum.dart';
-import '../design_system/noor_layout.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
+import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
 import '../progress/progress_store.dart';
 import '../settings/settings_screen.dart';
@@ -97,15 +97,7 @@ GoRouter createNoorRouter({
           GoRoute(
             path: 'preview',
             redirect: (context, state) => showPreview ? null : '/',
-            builder: (context, state) => const Scaffold(
-              appBar: NoorAppBar('معاينة المطوّر'),
-              body: NoorPage(
-                maxWidth: 560,
-                child: Text(
-                  'محتوى تجريبي للمطوّر فقط: هذه عيّنة لواجهة التطبيق.',
-                ),
-              ),
-            ),
+            builder: (context, state) => const PreviewScreen(),
           ),
         ],
       ),

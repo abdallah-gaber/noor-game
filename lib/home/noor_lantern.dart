@@ -1,29 +1,114 @@
 import 'package:flutter/material.dart';
 
-class NoorLantern extends StatelessWidget {
-  const NoorLantern({super.key, required this.happy});
+enum NoorMood {
+  idle('نور يبتسم'),
+  happy('نور سعيد'),
+  curious('نور فضولي'),
+  thinking('نور يفكّر'),
+  encouraging('نور يشجّعك'),
+  celebrating('نور يحتفل');
 
-  final bool happy;
+  const NoorMood(this.label);
+
+  final String label;
+}
+
+class NoorLantern extends StatelessWidget {
+  const NoorLantern({super.key, required this.mood, this.size = 176});
+
+  final NoorMood mood;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       image: true,
-      label: happy ? 'نور سعيد' : 'نور يبتسم',
+      label: mood.label,
+      textDirection: TextDirection.rtl,
       child: RepaintBoundary(
         child: CustomPaint(
-          size: const Size.square(176),
-          painter: _LanternPainter(happy),
+          size: Size.square(size),
+          painter: _LanternPainter(mood),
         ),
       ),
     );
   }
 }
 
-class _LanternPainter extends CustomPainter {
-  const _LanternPainter(this.happy);
+class NoorReaction extends StatefulWidget {
+  const NoorReaction({
+    super.key,
+    required this.mood,
+    required this.size,
+    this.trigger = 0,
+    this.playOnEntry = false,
+  });
 
-  final bool happy;
+  final NoorMood mood;
+  final double size;
+  final int trigger;
+  final bool playOnEntry;
+
+  @override
+  State<NoorReaction> createState() => _NoorReactionState();
+}
+
+class _NoorReactionState extends State<NoorReaction>
+    with SingleTickerProviderStateMixin {
+  late final _motion = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 300),
+  );
+  bool _allowed = false;
+  bool _entered = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final active = TickerMode.valuesOf(context).enabled;
+    _allowed = !reduceMotion && active;
+    if (!_allowed && _motion.value != 0) _motion.reset();
+    if (!_entered && widget.playOnEntry && _allowed) _motion.forward(from: 0);
+    _entered = true;
+  }
+
+  @override
+  void didUpdateWidget(NoorReaction oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_allowed && oldWidget.trigger != widget.trigger) {
+      _motion.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _motion.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lantern = NoorLantern(mood: widget.mood, size: widget.size);
+    if (!_allowed) return lantern;
+    return AnimatedBuilder(
+      animation: _motion,
+      child: lantern,
+      builder: (context, child) {
+        final phase = _motion.value;
+        return Transform.translate(
+          offset: Offset(0, -phase * (1 - phase) * 24),
+          child: child,
+        );
+      },
+    );
+  }
+}
+
+class _LanternPainter extends CustomPainter {
+  const _LanternPainter(this.mood);
+
+  final NoorMood mood;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -94,39 +179,93 @@ class _LanternPainter extends CustomPainter {
         Rect.fromCenter(center: Offset(x, 111), width: 12, height: 6),
         paint..color = const Color(0xFFF79A72),
       );
+      final leftEye = x < 88;
       paint.color = face;
-      if (happy) {
-        canvas.drawPath(
+      final closed =
+          mood == NoorMood.happy ||
+          mood == NoorMood.celebrating ||
+          (mood == NoorMood.encouraging && leftEye);
+      if (closed) {
+        _line(
+          canvas,
+          paint,
           Path()
             ..moveTo(x - 5, 101)
             ..quadraticBezierTo(x, 92, x + 5, 101),
-          paint
-            ..style = PaintingStyle.stroke
-            ..strokeCap = StrokeCap.round
-            ..strokeWidth = 2.8,
         );
-        paint.style = PaintingStyle.fill;
       } else {
+        final horizontal = mood == NoorMood.thinking ? x + 3 : x;
+        final vertical = mood == NoorMood.thinking ? 96.0 : 99.0;
+        final tall = mood == NoorMood.curious;
         canvas.drawOval(
-          Rect.fromCenter(center: Offset(x, 99), width: 5, height: 8),
+          Rect.fromCenter(
+            center: Offset(horizontal, vertical),
+            width: tall ? 7 : 5,
+            height: tall ? 11 : 8,
+          ),
           paint,
+        );
+      }
+      if ((mood == NoorMood.curious && !leftEye) ||
+          (mood == NoorMood.thinking && leftEye)) {
+        _line(
+          canvas,
+          paint,
+          Path()
+            ..moveTo(x - 5, 90)
+            ..quadraticBezierTo(x, 85, x + 5, 89),
         );
       }
     }
 
-    final smileWidth = happy ? 10.0 : 7.0;
-    canvas.drawPath(
-      Path()
-        ..moveTo(88 - smileWidth, 109)
-        ..quadraticBezierTo(88, happy ? 129 : 122, 88 + smileWidth, 109),
-      paint
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round
-        ..strokeWidth = 3,
-    );
+    paint.color = face;
+    switch (mood) {
+      case NoorMood.curious:
+        canvas.drawOval(const Rect.fromLTWH(84, 110, 8, 9), paint);
+      case NoorMood.thinking:
+        _line(
+          canvas,
+          paint,
+          Path()
+            ..moveTo(84, 115)
+            ..quadraticBezierTo(90, 110, 95, 114),
+        );
+      case NoorMood.celebrating:
+        canvas.drawPath(
+          Path()
+            ..moveTo(76, 108)
+            ..quadraticBezierTo(88, 113, 100, 108)
+            ..quadraticBezierTo(88, 134, 76, 108)
+            ..close(),
+          paint,
+        );
+      case NoorMood.idle:
+      case NoorMood.happy:
+      case NoorMood.encouraging:
+        final width = mood == NoorMood.idle ? 7.0 : 10.0;
+        final depth = mood == NoorMood.happy ? 130.0 : 122.0;
+        _line(
+          canvas,
+          paint,
+          Path()
+            ..moveTo(88 - width, 109)
+            ..quadraticBezierTo(88, depth, 88 + width, 109),
+        );
+    }
     canvas.restore();
   }
 
+  void _line(Canvas canvas, Paint paint, Path path) {
+    canvas.drawPath(
+      path,
+      paint
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = 2.8,
+    );
+    paint.style = PaintingStyle.fill;
+  }
+
   @override
-  bool shouldRepaint(_LanternPainter oldDelegate) => oldDelegate.happy != happy;
+  bool shouldRepaint(_LanternPainter oldDelegate) => oldDelegate.mood != mood;
 }

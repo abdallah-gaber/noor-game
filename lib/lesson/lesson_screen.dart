@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../audio/speech_control.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
+import '../home/noor_lantern.dart';
 import '../progress/progress_store.dart';
 import '../worlds/world_art.dart';
 
@@ -121,6 +123,11 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           title: _finished ? 'أحسنت!' : step.title,
           text: _finished ? 'أكملتَ هذا الدرس.' : step.text,
           icon: _finished ? Icons.flag_rounded : _pictureIcon(step.picture),
+          mood: _finished
+              ? NoorMood.celebrating
+              : index == 0
+              ? NoorMood.thinking
+              : NoorMood.encouraging,
         ),
         const SizedBox(height: 18),
         Wrap(
@@ -147,6 +154,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
             ],
           ],
         ),
+        if (!_finished) SpeechControl(text: step.text),
       ],
     );
   }
@@ -165,12 +173,14 @@ class _LessonPanel extends StatelessWidget {
     required this.title,
     required this.text,
     required this.icon,
+    required this.mood,
   });
 
   final WorldId world;
   final String title;
   final String text;
   final IconData icon;
+  final NoorMood mood;
 
   @override
   Widget build(BuildContext context) {
@@ -181,29 +191,69 @@ class _LessonPanel extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ExcludeSemantics(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final picture = ExcludeSemantics(
               child: CircleAvatar(
-                radius: 34,
+                radius: 30,
                 foregroundColor: world.ink,
                 backgroundColor: Colors.white,
-                child: Icon(icon, size: 38),
+                child: Icon(icon, size: 34),
               ),
-            ),
-            const SizedBox(height: 16),
-            Semantics(
-              header: true,
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.headlineMedium
-                    ?.copyWith(color: world.ink, fontWeight: FontWeight.w800),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(text, style: TextStyle(color: world.ink, fontSize: 21)),
-          ],
+            );
+            final lantern = mood == NoorMood.celebrating
+                ? const NoorReaction(
+                    mood: NoorMood.celebrating,
+                    size: 128,
+                    playOnEntry: true,
+                  )
+                : NoorLantern(mood: mood, size: 128);
+            final words = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Semantics(
+                  header: true,
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: world.ink,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(text, style: TextStyle(color: world.ink, fontSize: 21)),
+              ],
+            );
+
+            if (constraints.maxWidth >= 450) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [picture, const SizedBox(height: 16), words],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  lantern,
+                ],
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    picture,
+                    Flexible(child: lantern),
+                  ],
+                ),
+                words,
+              ],
+            );
+          },
         ),
       ),
     );
