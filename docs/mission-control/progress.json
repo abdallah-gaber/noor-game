@@ -11,33 +11,33 @@
         {
           "id": "001-01",
           "title": "Bootstrap Flutter and pin installed SDK",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
           "priority": "P0"
         },
         {
           "id": "001-02",
           "title": "Build responsive RTL design system",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
           "priority": "P0"
         },
         {
           "id": "001-03",
           "title": "Implement navigation and local storage",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
           "priority": "P0"
         },
         {
           "id": "001-04",
           "title": "Verify tablet and phone layouts",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Acceptance criteria and verification matrix recorded in SPEC-001.",
           "priority": "P0"
         }
       ]
