@@ -45,7 +45,7 @@
         {
           "id": "001-04",
           "title": "Verify tablet and phone layouts",
-          "status": "blocked",
+          "status": "done",
           "evidence": [
             "docs/qa/spec-001/results.md",
             "docs/qa/spec-001/pixel-3-home.png",
@@ -54,7 +54,7 @@
             "docs/qa/spec-001/tablet-landscape-settings.png",
             "docs/qa/spec-001/tablet-portrait-home.png"
           ],
-          "note": "Viewport matrix and Android phone/tablet emulator checks passed. Physical testing awaits the owner’s tablet first, then the child’s low-end Android tablet.",
+          "note": "Owner reported all ten physical tablet smoke checks passed and accepted SPEC-001. Emulator and viewport verification also passed. Low-end Android release verification is tracked in 005-06.",
           "priority": "P0"
         }
       ]
@@ -239,6 +239,14 @@
           "status": "todo",
           "evidence": [],
           "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "005-06",
+          "title": "Verify release on the child’s physical low-end Android tablet",
+          "status": "todo",
+          "evidence": [],
+          "note": "Owner moved this physical release gate from SPEC-001. Record anonymized offline, layout and responsiveness observations.",
           "priority": "P0"
         },
         {

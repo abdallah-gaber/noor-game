@@ -1,13 +1,13 @@
 # SPEC-001 verification — 2026-11-26
 
-Implementation revision `f9cac19`. Scope and task order were recorded at `f5aaad9`. Mobile runners, SDK pins and dependency decisions were committed at `40ef9ba`.
+Implementation revision `fbd8914`. Scope and task order were recorded at `232e34f`. Mobile runners, SDK pins and dependency decisions were committed at `a80b231`.
 
 ## Build and automated checks
 
 | Check | Command | Result |
 |---|---|---|
 | Installed SDK | `flutter --version --machine` | Flutter 3.47.8 stable, framework `737ba8f885dc774b53b442759999a312c9461e4e`, Dart 3.13.7 |
-| Locked dependency resolution from a clean archive of `f9cac19` | `flutter pub get --offline --enforce-lockfile` | Passed. Riverpod 3.5.0, GoRouter 18.1.4, sqflite 2.4.2 |
+| Locked dependency resolution from a clean archive of `fbd8914` | `flutter pub get --offline --enforce-lockfile` | Passed. Riverpod 3.5.0, GoRouter 18.1.4, sqflite 2.4.2 |
 | Formatting | `dart format --output=none --set-exit-if-changed lib test` | Passed, 10 files, zero changes |
 | Static analysis | `flutter analyze --no-pub` | Passed, no issues |
 | Acceptance tests | `flutter test --no-pub --reporter expanded` | 21 passed, including 12 viewport and text-scale combinations |
@@ -32,6 +32,21 @@ Both installs started with speech off and effects off. Toggling speech, then eff
 
 Viewport dimensions above describe the full display before safe insets. The tablet was in airplane mode with Wi-Fi disabled before first launch. `dumpsys connectivity` reported `Active default network: none`. Startup, navigation, mascot interaction, SQLite writes, restart and rotation were exercised in that state.
 
-## Physical QA blocker
+## Owner-reported physical tablet smoke test
 
-Only emulators were available. Physical testing and low-end hardware performance remain unverified. When hardware is available, exercise offline startup, both orientations, touch responsiveness and settings persistence first on the owner’s tablet and then on the child’s low-end Android tablet. Keep the P0 task open and pause at SPEC-001 for owner review.
+The project owner personally tested SPEC-001 on a physical tablet and accepted the foundation. The following ten results are the owner’s report.
+
+| Check | Result |
+|---|---|
+| Application launches without crashes | Pass |
+| Landscape layout | Pass |
+| Portrait layout | Pass |
+| Arabic text and RTL layout | Pass |
+| Smooth Noor mascot animations | Pass |
+| Large, comfortable touch targets | Pass |
+| Responsive navigation | Pass |
+| Audio preferences persist after restarting | Pass |
+| Application launches in airplane mode | Pass |
+| Application resumes after backgrounding | Pass |
+
+Device model, OS, viewport, photos and performance measurements were not supplied. The emulator captures above retain their original labels. Verification on the child’s low-end Android tablet is a [SPEC-005 release gate](../../../specs/005-release-and-playtest/spec.md).
