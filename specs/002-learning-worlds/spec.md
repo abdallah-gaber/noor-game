@@ -1,10 +1,16 @@
 # SPEC-002 — Learning worlds
 
-## Requirements and acceptance
-- Implement four world cards and lesson paths. Acceptance: demonstrated behavior or review artifact linked to task 002-01; no unverified completion.
-- Implement lesson player and resume. Acceptance: demonstrated behavior or review artifact linked to task 002-02; no unverified completion.
-- Implement Noor mascot states and speech controls. Acceptance: demonstrated behavior or review artifact linked to task 002-03; no unverified completion.
-- Verify navigation and accessibility. Acceptance: demonstrated behavior or review artifact linked to task 002-04; no unverified completion.
+| Task | Given | When | Then | Evidence |
+|---|---|---|---|---|
+| 002-01 | The Arabic home on tablet or phone | A learner explores the home | All four worlds have distinct palettes, artwork and accessible titles. Tablets show a two-column map and compact phones scroll through one column | Widget reachability and direction assertions, tablet and phone captures |
+| 002-01 | A debug-only, non-religious fixture path | A learner opens a world | The path identifies completed, locked, available and current lessons with words and icons. Locked lessons cannot be opened. Unknown world or lesson IDs recover safely | State and route tests, per-world captures |
+| 002-01 | A profile or release build without approved curriculum | A learner opens any world or attempts a direct lesson URL | The public world is visible with an Arabic availability message, and fixture problems and facts stay inaccessible | Router policy tests and Android release smoke |
+| 002-02 | A versioned fixture catalog with stable world, unit and lesson IDs | A learner opens a fixture lesson and moves through its pages | The same player presents short Arabic steps independent of challenge mechanics, can move back and forward, and reports completion to the path | Unit and widget tests, player capture |
+| 002-02 | A partly read or finished lesson | The app goes back, restarts and opens the lesson again | The saved step is restored. Completion persists, unlocks eligible lessons and remains complete when replayed. A curriculum version change resets the current step while preserving stable completion IDs | Save/migration coverage and Android SQLite restart smoke |
+| 002-03 | A learner enters a relevant screen, opens a lesson, reads, or completes it | Noor responds to the state | Idle, happy, curious, thinking, encouraging and celebrating are visually distinct and consistent. Motion is finite, serves a user action, respects reduced motion and stops with inactive routes | Expression golden, widget tests and app captures |
+| 002-03 | Speech is disabled, an offline Arabic voice exists, or such a voice is unavailable | The learner requests reading | Playback requires a deliberate tap and an enabled preference. An unavailable/offline-unverified voice leaves readable text and a localized status. Stop and navigation cancel playback. No voice downloads, network synthesis or music | Speech tests, platform builds and offline fallback evidence |
+| 002-04 | Phone/tablet layouts and large text | Users interact with map, path, lesson and settings and use back navigation | Interactive targets are at least 48 logical px, labels describe state, content remains reachable and RTL stays correct at 1.0/1.3/2.0 text scale. No orientation lock is applied | Unit/widget/golden suite, release APK, iOS simulator build and QA captures |
 
-## Gates
-Follow constitution and product/architecture docs. Record concrete acceptance scenarios before coding; tests and real screenshots where applicable. P1 items may be deferred with reason, not counted done.
+## Scope and governance
+
+The public map has the four owner-confirmed world names. Lesson samples are non-religious interface fixtures in debug builds only. Public builds show the real world shells and a clear availability message until approved local curriculum is added. Lesson presentation and resume are in scope. Challenges, scoring, authored religious curriculum and release approval are later phases. Keep the child’s physical low-end Android verification in SPEC-005.

@@ -19,9 +19,10 @@ enum NoorWidth {
 }
 
 class NoorAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const NoorAppBar(this.title, {super.key});
+  const NoorAppBar(this.title, {super.key, this.actions});
 
   final String title;
+  final List<Widget>? actions;
 
   @override
   Size get preferredSize => const Size.fromHeight(64);
@@ -30,6 +31,8 @@ class NoorAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: preferredSize.height,
+      actions: actions,
+      actionsPadding: const EdgeInsetsDirectional.only(end: 12),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
     );
   }

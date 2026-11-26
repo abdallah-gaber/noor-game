@@ -1,18 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../design_system/noor_layout.dart';
+import '../content/curriculum.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
+import '../home/preview_screen.dart';
+import '../lesson/lesson_screen.dart';
+import '../progress/progress_store.dart';
 import '../settings/settings_screen.dart';
+import '../worlds/world_screen.dart';
 
 GoRouter createNoorRouter({
   String? initialLocation,
   bool enablePreview = true,
 }) {
   final showPreview = kDebugMode && enablePreview;
+  final curriculum = loadCurriculum(enablePreview: enablePreview);
 
   return GoRouter(
     initialLocation: initialLocation,
@@ -27,17 +33,71 @@ GoRouter createNoorRouter({
             builder: (context, state) => const SettingsScreen(),
           ),
           GoRoute(
+            path: 'worlds/:worldId',
+            redirect: (context, state) =>
+                WorldId.fromId(state.pathParameters['worldId']) == null
+                ? '/'
+                : null,
+            builder: (context, state) => WorldScreen(
+              world: WorldId.fromId(state.pathParameters['worldId'])!,
+              curriculum: curriculum,
+            ),
+            routes: [
+              GoRoute(
+                path: 'lessons/:lessonId',
+                redirect: (context, state) async {
+                  final world = WorldId.fromId(state.pathParameters['worldId']);
+                  if (world == null) return '/';
+                  final path = '/worlds/${world.id}';
+                  final lesson = curriculum.lesson(
+                    world,
+                    state.pathParameters['lessonId'],
+                  );
+                  if (lesson == null || lesson.steps.isEmpty) return path;
+
+                  final container = ProviderScope.containerOf(
+                    context,
+                    listen: false,
+                  );
+                  try {
+                    final progress = await container.read(
+                      progressProvider.future,
+                    );
+                    return lesson.state(
+                              completed: progress.completedFor(
+                                curriculum,
+                                world,
+                              ),
+                            ) ==
+                            LessonState.locked
+                        ? path
+                        : null;
+                  } catch (_) {
+                    return path;
+                  }
+                },
+                builder: (context, state) {
+                  final world = WorldId.fromId(
+                    state.pathParameters['worldId'],
+                  )!;
+                  final lesson = curriculum.lesson(
+                    world,
+                    state.pathParameters['lessonId'],
+                  )!;
+                  return LessonScreen(
+                    key: ValueKey(lesson.id),
+                    world: world,
+                    lesson: lesson,
+                    curriculum: curriculum,
+                  );
+                },
+              ),
+            ],
+          ),
+          GoRoute(
             path: 'preview',
             redirect: (context, state) => showPreview ? null : '/',
-            builder: (context, state) => const Scaffold(
-              appBar: NoorAppBar('معاينة المطوّر'),
-              body: NoorPage(
-                maxWidth: 560,
-                child: Text(
-                  'محتوى تجريبي للمطوّر فقط: هذه عيّنة لواجهة التطبيق.',
-                ),
-              ),
-            ),
+            builder: (context, state) => const PreviewScreen(),
           ),
         ],
       ),

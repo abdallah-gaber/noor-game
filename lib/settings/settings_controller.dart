@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../storage/noor_database.dart';
 import 'settings_store.dart';
 
 final settingsStoreProvider = Provider<SettingsStore>(
-  (ref) => SqliteSettingsStore(),
+  (ref) => SqliteSettingsStore(ref.watch(noorDatabaseProvider)),
 );
 
 typedef SettingsState = ({AudioPreferences preferences, bool saving});

@@ -68,33 +68,56 @@
         {
           "id": "002-01",
           "title": "Implement four world cards and lesson paths",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-01-worlds.md",
+            "docs/qa/spec-002/mobile-home.webp",
+            "docs/qa/spec-002/tablet-landscape-home.webp",
+            "docs/qa/spec-002/tablet-portrait-home.webp",
+            "docs/qa/spec-002/world-exemplars.webp",
+            "docs/qa/spec-002/world-ibadah.webp",
+            "docs/qa/spec-002/world-iman.webp",
+            "docs/qa/spec-002/world-seerah.webp"
+          ],
+          "note": "Four illustrated worlds and reusable path states verified by tests and the offline Android tablet emulator. Debug fixtures are gated.",
           "priority": "P0"
         },
         {
           "id": "002-02",
           "title": "Implement lesson player and resume",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-02-player.md",
+            "docs/qa/spec-002/lesson-player.webp",
+            "docs/qa/spec-002/path-unlocked.webp",
+            "docs/decisions/004-lesson-progress.md"
+          ],
+          "note": "Versioned lesson player, SQLite schema upgrade, resume, completion and unlocking verified. Existing settings survived migration.",
           "priority": "P0"
         },
         {
           "id": "002-03",
           "title": "Implement Noor mascot states and speech controls",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-03-noor-and-speech.md",
+            "docs/qa/spec-002/mascot-expressions.webp",
+            "docs/qa/spec-002/speech-fallback.webp",
+            "docs/decisions/005-offline-speech-implementation.md"
+          ],
+          "note": "Six contextual moods, finite motion and on-demand speech controls verified. Offline emulator exercised the Arabic text fallback.",
           "priority": "P0"
         },
         {
           "id": "002-04",
           "title": "Verify navigation and accessibility",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-04-verification.md",
+            "docs/qa/spec-002/lesson-celebration.webp",
+            "docs/qa/spec-002/release-world.webp"
+          ],
+          "note": "52 tests passed. Android release and iOS simulator builds passed. Verified Android public fixture gate and captured final offline emulator evidence.",
           "priority": "P0"
         }
       ]

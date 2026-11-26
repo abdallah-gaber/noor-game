@@ -39,9 +39,13 @@ void main() {
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
         await _start(tester);
 
-        expect(find.byKey(ValueKey(layout)), findsOneWidget);
+        final expectedColumns = layout == NoorWidth.compact ? 1 : 2;
+        expect(
+          find.byKey(ValueKey('world-columns-$expectedColumns')),
+          findsOneWidget,
+        );
         final greeting = find.widgetWithText(FilledButton, _greeting);
-        final settings = find.widgetWithText(ListTile, _settingsLink);
+        final settings = find.byTooltip(_settingsLink);
         final context = tester.element(greeting);
         expect(Directionality.of(context), TextDirection.rtl);
         expect(Localizations.localeOf(context), const Locale('ar'));
@@ -49,17 +53,6 @@ void main() {
           MediaQuery.textScalerOf(context).scale(10),
           closeTo(10 * scale, 0.01),
         );
-        if (layout == NoorWidth.expanded) {
-          expect(
-            tester.getCenter(greeting).dx,
-            greaterThan(tester.getCenter(settings).dx),
-          );
-        } else {
-          expect(
-            tester.getBottomLeft(greeting).dy,
-            lessThan(tester.getTopLeft(settings).dy),
-          );
-        }
 
         _expectTouchTarget(tester, greeting);
         _expectTouchTarget(tester, settings);
@@ -92,8 +85,8 @@ void main() {
     addTearDown(tester.view.resetPadding);
     await _start(tester);
 
-    final settings = find.widgetWithText(ListTile, _settingsLink);
-    expect(find.byKey(const ValueKey(NoorWidth.medium)), findsOneWidget);
+    final settings = find.byTooltip(_settingsLink);
+    expect(find.byKey(const ValueKey('world-columns-2')), findsOneWidget);
     final bounds = tester.getRect(settings);
     expect(bounds.left, greaterThanOrEqualTo(24));
     expect(bounds.right, lessThanOrEqualTo(832));
@@ -187,7 +180,9 @@ void main() {
     tester,
   ) async {
     await _start(tester);
-    await tester.tap(find.text('معاينة المطوّر'));
+    final preview = find.text('معاينة المطوّر');
+    await tester.ensureVisible(preview);
+    await tester.tap(preview);
     await tester.pumpAndSettle();
     expect(find.textContaining('محتوى تجريبي للمطوّر فقط'), findsOneWidget);
     await tester.tap(find.byType(BackButton));

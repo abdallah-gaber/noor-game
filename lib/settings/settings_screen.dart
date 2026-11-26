@@ -54,9 +54,7 @@ class SettingsScreen extends ConsumerWidget {
                     ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'تُحفَظ هذه الاختيارات على جهازك. سيُتاح تشغيل الصوت لاحقًا.',
-              ),
+              const Text('تحتاج القراءة إلى صوت عربي متاح دون إنترنت.'),
               const SizedBox(height: 18),
               Material(
                 color: paper,
@@ -81,6 +79,7 @@ class SettingsScreen extends ConsumerWidget {
                       const Divider(indent: 20, endIndent: 20, height: 1),
                       SwitchListTile(
                         title: const Text('المؤثّرات الصوتية'),
+                        subtitle: const Text('للمراحل القادمة'),
                         value: state.preferences.effects,
                         onChanged: state.saving
                             ? null
