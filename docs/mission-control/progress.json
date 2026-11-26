@@ -115,9 +115,10 @@
           "evidence": [
             "docs/qa/spec-002/002-04-verification.md",
             "docs/qa/spec-002/lesson-celebration.webp",
-            "docs/qa/spec-002/release-world.webp"
+            "docs/qa/spec-002/release-world.webp",
+            "docs/decisions/006-spec-002-acceptance.md"
           ],
-          "note": "52 tests passed. Android release and iOS simulator builds passed. Verified Android public fixture gate and captured final offline emulator evidence.",
+          "note": "52 tests passed. Android release and iOS simulator builds passed. Verified Android public fixture gate and captured final offline emulator evidence. Owner accepted the targeted technical review. PR #1 merged with task commits preserved.",
           "priority": "P0"
         }
       ]
@@ -253,7 +254,7 @@
           "title": "Verify offline audio and fallback on device",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Verify usable offline Arabic speech on supported physical devices and separately exercise fallback. Consider reviewed bundled narration where local voices are unavailable.",
           "priority": "P0"
         },
         {
