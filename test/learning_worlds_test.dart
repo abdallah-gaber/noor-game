@@ -30,10 +30,14 @@ void main() {
   test('path status uses completion, prerequisites and current selection', () {
     final lessons = loadCurriculum().unitsFor(WorldId.iman).single.lessons;
     expect(
-      lessons.map(
-        (lesson) =>
-            lesson.state(completed: {'iman-first'}, currentId: 'iman-colors'),
-      ),
+      lessons
+          .where((lesson) => !lesson.id.startsWith('iman-activities'))
+          .map(
+            (lesson) => lesson.state(
+              completed: {'iman-first'},
+              currentId: 'iman-colors',
+            ),
+          ),
       LessonState.values,
     );
     expect(

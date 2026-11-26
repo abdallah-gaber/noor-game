@@ -12,12 +12,14 @@ class QuestionView extends StatelessWidget {
     required this.options,
     required this.selectedId,
     required this.onAnswer,
+    this.enabled = true,
   });
 
   final ScoredQuestion question;
   final List<AnswerOption> options;
   final String? selectedId;
   final ValueChanged<String> onAnswer;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class QuestionView extends StatelessWidget {
                     child: _AnswerCard(
                       option: option,
                       selected: selected == option.id,
-                      enabled: selected == null,
+                      enabled: enabled && selected == null,
                       onTap: () => onAnswer(option.id),
                     ),
                   ),

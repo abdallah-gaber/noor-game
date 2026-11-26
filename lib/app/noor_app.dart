@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
+import '../challenges/game_screen.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
@@ -94,6 +95,41 @@ GoRouter createNoorRouter({
                     curriculum: curriculum,
                   );
                 },
+                routes: [
+                  GoRoute(
+                    path: 'play',
+                    redirect: (context, state) {
+                      final world = WorldId.fromId(
+                        state.pathParameters['worldId'],
+                      );
+                      final lessonId = state.pathParameters['lessonId'];
+                      if (world != null &&
+                          curriculum
+                                  .lesson(world, lessonId)
+                                  ?.challenges
+                                  .isNotEmpty ==
+                              true) {
+                        return null;
+                      }
+                      return '/worlds/${state.pathParameters['worldId']}/lessons/$lessonId';
+                    },
+                    builder: (context, state) {
+                      final world = WorldId.fromId(
+                        state.pathParameters['worldId'],
+                      )!;
+                      final lesson = curriculum.lesson(
+                        world,
+                        state.pathParameters['lessonId'],
+                      )!;
+                      return GameScreen(
+                        key: ValueKey(lesson.id),
+                        world: world,
+                        lesson: lesson,
+                        curriculum: curriculum,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

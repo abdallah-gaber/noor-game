@@ -15,7 +15,7 @@ class NoorDatabase {
       final path = await getDatabasesPath();
       return await openDatabase(
         '$path/noor.db',
-        version: 3,
+        version: 4,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE audio_preferences (
@@ -26,17 +26,21 @@ class NoorDatabase {
             ''');
           await _createProgress(db, ProgressScope.approved);
           await _createProgress(db, ProgressScope.preview);
+          await _createGames(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion == 2) {
-            // All schema 2 records were written by the SPEC-002 debug catalog.
-            await db.execute(
-              'ALTER TABLE lesson_progress RENAME TO preview_lesson_progress',
-            );
-          } else {
-            await _createProgress(db, ProgressScope.preview);
+          if (oldVersion < 3) {
+            if (oldVersion == 2) {
+              // All schema 2 records were written by the SPEC-002 debug catalog.
+              await db.execute(
+                'ALTER TABLE lesson_progress RENAME TO preview_lesson_progress',
+              );
+            } else {
+              await _createProgress(db, ProgressScope.preview);
+            }
+            await _createProgress(db, ProgressScope.approved);
           }
-          await _createProgress(db, ProgressScope.approved);
+          if (oldVersion < 4) await _createGames(db);
         },
       );
     } catch (_) {
@@ -54,6 +58,17 @@ class NoorDatabase {
       step_index INTEGER NOT NULL CHECK (step_index >= 0),
       completed INTEGER NOT NULL CHECK (completed IN (0, 1)),
       updated_at INTEGER NOT NULL
+    )
+    ''');
+  Future<void> _createGames(Database db) => db.execute('''
+    CREATE TABLE game_sessions (
+      scope TEXT NOT NULL,
+      id TEXT NOT NULL,
+      lesson_id TEXT NOT NULL,
+      compatibility TEXT NOT NULL,
+      revision INTEGER NOT NULL,
+      snapshot TEXT NOT NULL,
+      PRIMARY KEY (scope, id)
     )
     ''');
 }

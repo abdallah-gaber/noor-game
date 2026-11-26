@@ -100,6 +100,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     final world = widget.world;
     final step = lesson.steps[index];
     final last = index == lesson.steps.length - 1;
+    final hasChallenges = lesson.challenges.isNotEmpty;
     final localizations = MaterialLocalizations.of(context);
     final current = localizations.formatDecimal(index + 1);
     final total = localizations.formatDecimal(lesson.steps.length);
@@ -148,8 +149,16 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               FilledButton(
                 onPressed: _saving
                     ? null
+                    : last && hasChallenges
+                    ? () => context.push(
+                        '/worlds/${world.id}/lessons/${lesson.id}/play',
+                      )
                     : () => _save(last ? 0 : index + 1, completed: last),
-                child: Text(last ? 'أنهِ الدرس' : 'التالي'),
+                child: Text(
+                  last
+                      ? (hasChallenges ? 'إلى التحدّيات' : 'أنهِ الدرس')
+                      : 'التالي',
+                ),
               ),
               if (index > 0)
                 TextButton(

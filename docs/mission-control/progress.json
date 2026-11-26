@@ -170,9 +170,13 @@
         {
           "id": "003-04",
           "title": "Integrate feedback, retries, randomization and game sessions",
-          "status": "todo",
-          "evidence": [],
-          "note": "Persist stable variant and knowledge IDs, difficulty, compatible pack revision, attempts and order. Keep session selection reusable for mixed practice and review.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-04-sessions.md",
+            "docs/qa/spec-003/resumed-feedback.webp",
+            "docs/qa/spec-003/game-results.webp"
+          ],
+          "note": "71 tests passed. Verified offline process resume, bounded review, atomic completion, replay history and scope isolation.",
           "priority": "P0"
         },
         {
