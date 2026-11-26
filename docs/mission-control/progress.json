@@ -132,9 +132,9 @@
         {
           "id": "003-01",
           "title": "Implement multiple choice and true/false",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "",
+          "note": "Implementing two scored mechanics, a debug preview and progress-scope regression.",
           "priority": "P0"
         },
         {
@@ -155,7 +155,7 @@
         },
         {
           "id": "003-04",
-          "title": "Implement feedback, retries and randomized options",
+          "title": "Integrate feedback, retries, randomization and game sessions",
           "status": "todo",
           "evidence": [],
           "note": "",
