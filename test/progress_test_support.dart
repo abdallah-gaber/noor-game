@@ -5,15 +5,21 @@ class MemoryProgressStore implements ProgressStore {
   MemoryProgressStore([this.value = const JourneyProgress()]);
 
   JourneyProgress value;
+  JourneyProgress approved = const JourneyProgress();
   bool failSave = false;
 
   @override
-  Future<JourneyProgress> load() async => value;
+  Future<JourneyProgress> load(ProgressScope scope) async =>
+      scope == ProgressScope.preview ? value : approved;
 
   @override
-  Future<LessonProgress> save(LessonProgress record) async {
+  Future<LessonProgress> save(
+    ProgressScope scope,
+    LessonProgress record,
+  ) async {
     if (failSave) throw StateError('Progress write failed');
-    final existing = value.records[record.lessonId];
+    final snapshot = await load(scope);
+    final existing = snapshot.records[record.lessonId];
     final saved = LessonProgress(
       world: record.world,
       lessonId: record.lessonId,
@@ -22,7 +28,11 @@ class MemoryProgressStore implements ProgressStore {
       completed: record.completed || (existing?.completed ?? false),
       updatedAt: record.updatedAt,
     );
-    value = value.withRecord(saved);
+    if (scope == ProgressScope.preview) {
+      value = snapshot.withRecord(saved);
+    } else {
+      approved = snapshot.withRecord(saved);
+    }
     return saved;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../progress/lesson_progress.dart';
+
 final noorDatabaseProvider = Provider<NoorDatabase>((ref) => NoorDatabase());
 
 class NoorDatabase {
@@ -13,7 +15,7 @@ class NoorDatabase {
       final path = await getDatabasesPath();
       return await openDatabase(
         '$path/noor.db',
-        version: 2,
+        version: 3,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE audio_preferences (
@@ -22,10 +24,19 @@ class NoorDatabase {
               effects INTEGER NOT NULL CHECK (effects IN (0, 1))
             )
             ''');
-          await _createLessonProgress(db);
+          await _createProgress(db, ProgressScope.approved);
+          await _createProgress(db, ProgressScope.preview);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion < 2) await _createLessonProgress(db);
+          if (oldVersion == 2) {
+            // All schema 2 records were written by the SPEC-002 debug catalog.
+            await db.execute(
+              'ALTER TABLE lesson_progress RENAME TO preview_lesson_progress',
+            );
+          } else {
+            await _createProgress(db, ProgressScope.preview);
+          }
+          await _createProgress(db, ProgressScope.approved);
         },
       );
     } catch (_) {
@@ -34,8 +45,9 @@ class NoorDatabase {
     }
   }
 
-  Future<void> _createLessonProgress(Database db) => db.execute('''
-    CREATE TABLE lesson_progress (
+  Future<void> _createProgress(Database db, ProgressScope scope) =>
+      db.execute('''
+    CREATE TABLE ${scope.table} (
       lesson_id TEXT PRIMARY KEY,
       world_id TEXT NOT NULL,
       content_version TEXT NOT NULL,

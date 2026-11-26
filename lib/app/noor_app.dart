@@ -4,11 +4,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../challenges/challenge_preview.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
 import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
+import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../settings/settings_screen.dart';
 import '../worlds/world_screen.dart';
@@ -61,7 +63,7 @@ GoRouter createNoorRouter({
                   );
                   try {
                     final progress = await container.read(
-                      progressProvider.future,
+                      progressProvider(curriculum.progressScope).future,
                     );
                     return lesson.state(
                               completed: progress.completedFor(
@@ -98,6 +100,19 @@ GoRouter createNoorRouter({
             path: 'preview',
             redirect: (context, state) => showPreview ? null : '/',
             builder: (context, state) => const PreviewScreen(),
+            routes: [
+              GoRoute(
+                path: 'challenges/:id',
+                redirect: (context, state) =>
+                    challengePreviewIds.contains(state.pathParameters['id'])
+                    ? null
+                    : '/preview',
+                builder: (context, state) {
+                  final id = state.pathParameters['id']!;
+                  return ChallengePreview(key: ValueKey(id), id: id);
+                },
+              ),
+            ],
           ),
         ],
       ),

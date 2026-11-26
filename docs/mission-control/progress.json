@@ -132,9 +132,19 @@
         {
           "id": "003-01",
           "title": "Implement multiple choice and true/false",
-          "status": "doing",
-          "evidence": [],
-          "note": "Implementing two scored mechanics, a debug preview and progress-scope regression.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-01-questions.md",
+            "docs/qa/spec-003/phone-choice-feedback.webp",
+            "docs/qa/spec-003/phone-choice.webp",
+            "docs/qa/spec-003/phone-true-false-feedback.webp",
+            "docs/qa/spec-003/phone-true-false.webp",
+            "docs/qa/spec-003/tablet-choice-feedback.webp",
+            "docs/qa/spec-003/tablet-choice.webp",
+            "docs/qa/spec-003/tablet-true-false-feedback.webp",
+            "docs/qa/spec-003/tablet-true-false.webp"
+          ],
+          "note": "59 tests passed. Both mechanics, offline tablet feedback, release gating and SQLite preview isolation were verified.",
           "priority": "P0"
         },
         {

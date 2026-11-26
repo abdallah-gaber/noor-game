@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../challenges/challenge_preview.dart';
 
 import '../design_system/noor_layout.dart';
 import 'noor_lantern.dart';
@@ -16,6 +19,21 @@ class PreviewScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('محتوى تجريبي للمطوّر فقط: هذه عيّنة لواجهة التطبيق.'),
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final (index, label) in [
+                  'اختيار من متعدد',
+                  'صح أو خطأ',
+                ].indexed)
+                  TextButton(
+                    onPressed: () => context.push(
+                      '/preview/challenges/${challengePreviewIds[index]}',
+                    ),
+                    child: Text(label),
+                  ),
+              ],
+            ),
             const SizedBox(height: 16),
             Wrap(
               spacing: 16,

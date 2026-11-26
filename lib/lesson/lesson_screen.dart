@@ -6,6 +6,7 @@ import '../audio/speech_control.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
+import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../worlds/world_art.dart';
 
@@ -34,7 +35,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     setState(() => _saving = true);
     try {
       await ref
-          .read(progressProvider.notifier)
+          .read(progressProvider(widget.curriculum.progressScope).notifier)
           .saveStep(
             world: widget.world,
             lesson: widget.lesson,
@@ -55,7 +56,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final progress = ref.watch(progressProvider);
+    final progress = ref.watch(
+      progressProvider(widget.curriculum.progressScope),
+    );
     final lesson = widget.lesson;
     return PopScope(
       canPop: !_saving,
@@ -68,7 +71,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           error: (error, stackTrace) => NoorPage(
             maxWidth: 640,
             child: FilledButton(
-              onPressed: () => ref.invalidate(progressProvider),
+              onPressed: () => ref.invalidate(
+                progressProvider(widget.curriculum.progressScope),
+              ),
               child: const Text('تعذّر فتح الدرس. حاول مرة أخرى.'),
             ),
           ),

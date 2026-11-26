@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
+import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import 'world_art.dart';
 
@@ -17,7 +18,9 @@ class WorldScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final units = curriculum.unitsFor(world);
-    final progress = units.isEmpty ? null : ref.watch(progressProvider);
+    final progress = units.isEmpty
+        ? null
+        : ref.watch(progressProvider(curriculum.progressScope));
     return Scaffold(
       appBar: NoorAppBar(world.title),
       body: NoorPage(
@@ -44,7 +47,9 @@ class WorldScreen extends ConsumerWidget {
                     ),
                   ),
                   error: (error, stackTrace) => FilledButton(
-                    onPressed: () => ref.invalidate(progressProvider),
+                    onPressed: () => ref.invalidate(
+                      progressProvider(curriculum.progressScope),
+                    ),
                     child: const Text('تعذّر فتح الدرب. حاول مرة أخرى.'),
                   ),
                   data: (journey) => Column(

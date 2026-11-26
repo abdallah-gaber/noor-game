@@ -10,14 +10,15 @@ final progressStoreProvider = Provider<ProgressStore>(
 );
 
 final progressProvider =
-    AsyncNotifierProvider<ProgressController, JourneyProgress>(
-      ProgressController.new,
-      retry: (count, error) => null,
-    );
+    AsyncNotifierProvider.family<
+      ProgressController,
+      JourneyProgress,
+      ProgressScope
+    >(ProgressController.new, retry: (count, error) => null);
 
 abstract interface class ProgressStore {
-  Future<JourneyProgress> load();
-  Future<LessonProgress> save(LessonProgress record);
+  Future<JourneyProgress> load(ProgressScope scope);
+  Future<LessonProgress> save(ProgressScope scope, LessonProgress record);
 }
 
 class SqliteProgressStore implements ProgressStore {
@@ -26,9 +27,9 @@ class SqliteProgressStore implements ProgressStore {
   final NoorDatabase _database;
 
   @override
-  Future<JourneyProgress> load() async {
+  Future<JourneyProgress> load(ProgressScope scope) async {
     final db = await _database.open();
-    final rows = await db.query('lesson_progress');
+    final rows = await db.query(scope.table);
     return JourneyProgress(
       Map.unmodifiable({
         for (final row in rows)
@@ -46,11 +47,14 @@ class SqliteProgressStore implements ProgressStore {
   }
 
   @override
-  Future<LessonProgress> save(LessonProgress record) async {
+  Future<LessonProgress> save(
+    ProgressScope scope,
+    LessonProgress record,
+  ) async {
     final db = await _database.open();
     return db.transaction((transaction) async {
       final previous = await transaction.query(
-        'lesson_progress',
+        scope.table,
         columns: ['completed'],
         where: 'lesson_id = ?',
         whereArgs: [record.lessonId],
@@ -65,7 +69,7 @@ class SqliteProgressStore implements ProgressStore {
             record.completed || (previous.firstOrNull?['completed'] == 1),
         updatedAt: record.updatedAt,
       );
-      await transaction.insert('lesson_progress', {
+      await transaction.insert(scope.table, {
         'lesson_id': saved.lessonId,
         'world_id': saved.world.id,
         'content_version': saved.contentVersion,
@@ -79,8 +83,13 @@ class SqliteProgressStore implements ProgressStore {
 }
 
 class ProgressController extends AsyncNotifier<JourneyProgress> {
+  ProgressController(this.scope);
+
+  final ProgressScope scope;
+
   @override
-  Future<JourneyProgress> build() => ref.watch(progressStoreProvider).load();
+  Future<JourneyProgress> build() =>
+      ref.watch(progressStoreProvider).load(scope);
 
   Future<void> saveStep({
     required WorldId world,
@@ -92,6 +101,7 @@ class ProgressController extends AsyncNotifier<JourneyProgress> {
     final saved = await ref
         .read(progressStoreProvider)
         .save(
+          scope,
           LessonProgress(
             world: world,
             lessonId: lesson.id,
