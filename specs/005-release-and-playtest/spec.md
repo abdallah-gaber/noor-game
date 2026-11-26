@@ -11,3 +11,7 @@
 
 ## Gates
 Follow constitution and product/architecture docs. Record concrete acceptance scenarios before coding; tests and real screenshots where applicable. P1 items may be deferred with reason, not counted done.
+
+## Pilot and pack release
+
+The weekend candidate must include at least four individually approved, validated and integrated lessons, one per world. Verify compatible pack updates preserve earned progress, display What's New and keep replay and mixed practice available where implemented. Supervised testing of Season One should measure optional engagement before claiming thirty days of play. Confirm the release remains music-free and that any memorization aids or narration have recorded rights and review evidence.
