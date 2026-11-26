@@ -111,9 +111,13 @@
         {
           "id": "002-04",
           "title": "Verify navigation and accessibility",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-002/002-04-verification.md",
+            "docs/qa/spec-002/lesson-celebration.webp",
+            "docs/qa/spec-002/release-world.webp"
+          ],
+          "note": "52 tests passed. Android release and iOS simulator builds passed. Verified Android public fixture gate and captured final offline emulator evidence.",
           "priority": "P0"
         }
       ]
