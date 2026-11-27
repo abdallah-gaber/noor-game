@@ -159,7 +159,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   void _effect(PilotEffect effect) {
-    if (widget.curriculum.isDraftPilot) {
+    if (!widget.curriculum.isPreview || widget.curriculum.isDraftPilot) {
       ref.read(pilotEffectsProvider).play(effect);
     }
   }
@@ -259,7 +259,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             options: session.optionsFor(question),
             answer: answer,
             enabled: !_busy,
-            enablePilotEffects: widget.curriculum.isDraftPilot,
+            enablePilotEffects:
+                !widget.curriculum.isPreview || widget.curriculum.isDraftPilot,
             onAnswer: (ids) => _save(session.submit(ids)),
           ),
           final Flashcard card => FlashcardView(

@@ -26,7 +26,7 @@ class PilotEffects {
     try {
       await PlatformSpeech.channel.invokeMethod<void>('effect', effect.name);
     } on MissingPluginException {
-      // The pilot effect backend is Android-only.
+      // This platform has no effects player.
     } on PlatformException {
       // Audio is optional and must not block play.
     }

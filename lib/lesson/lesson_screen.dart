@@ -59,7 +59,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   }
 
   void _effect(PilotEffect effect) {
-    if (widget.curriculum.isDraftPilot) {
+    if (!widget.curriculum.isPreview || widget.curriculum.isDraftPilot) {
       ref.read(pilotEffectsProvider).play(effect);
     }
   }

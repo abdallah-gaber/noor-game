@@ -83,9 +83,6 @@ class SettingsScreen extends ConsumerWidget {
                       const Divider(indent: 20, endIndent: 20, height: 1),
                       SwitchListTile(
                         title: const Text('المؤثّرات الصوتية'),
-                        subtitle: isPilot
-                            ? null
-                            : const Text('للمراحل القادمة'),
                         value: state.preferences.effects,
                         onChanged: state.saving
                             ? null
@@ -105,19 +102,19 @@ class SettingsScreen extends ConsumerWidget {
                   text: 'مرحبًا، أنا نور.',
                   showVoiceSetup: true,
                 ),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton.icon(
-                    onPressed: state.preferences.effects
-                        ? () => ref
-                              .read(pilotEffectsProvider)
-                              .play(PilotEffect.correct)
-                        : null,
-                    icon: const Icon(Icons.volume_up_rounded),
-                    label: const Text('جرّب المؤثّر الصوتي'),
-                  ),
-                ),
               ],
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  onPressed: state.preferences.effects
+                      ? () => ref
+                            .read(pilotEffectsProvider)
+                            .play(PilotEffect.correct)
+                      : null,
+                  icon: const Icon(Icons.volume_up_rounded),
+                  label: const Text('جرّب المؤثّر الصوتي'),
+                ),
+              ),
             ],
           ),
         ),

@@ -301,9 +301,9 @@
         {
           "id": "005-03",
           "title": "Verify readable Arabic and optional effects on device",
-          "status": "todo",
-          "evidence": [],
-          "note": "Verify readable Arabic and optional non-musical effects on the devices. System TTS and bundled narration are future enhancements.",
+          "status": "review",
+          "evidence": ["docs/qa/spec-005/005-03-effects.md"],
+          "note": "Production cues, offline native playback, saved opt-out and readable Arabic verified. Physical speaker comfort remains for owner listening.",
           "priority": "P0"
         },
         {

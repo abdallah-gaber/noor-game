@@ -25,6 +25,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/
     - assets/curriculum/index.json
     - assets/curriculum/approvals.json
     - assets/curriculum/packs/starter.iman.json

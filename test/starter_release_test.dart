@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/app/noor_app.dart';
+import 'package:noor/audio/speech_service.dart';
 import 'package:noor/challenges/arrangement.dart';
 import 'package:noor/challenges/flashcard.dart';
 import 'package:noor/challenges/game_session.dart';
@@ -23,6 +24,8 @@ import 'package:noor/progress/reward_store.dart';
 import 'package:noor/review/review_history.dart';
 import 'package:noor/review/review_selection.dart';
 import 'package:noor/review/review_store.dart';
+import 'package:noor/settings/settings_controller.dart';
+import 'package:noor/settings/settings_store.dart';
 import 'package:noor/storage/noor_database.dart';
 
 import 'progress_test_support.dart';
@@ -74,6 +77,15 @@ void main() {
       final review = _ApprovedReview(rounds);
       final curriculum = catalog.toCurriculum();
       final exercised = <Object>{};
+      final effects = <String>[];
+      final messenger = tester.binding.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(PlatformSpeech.channel, (call) async {
+        if (call.method == 'effect') effects.add(call.arguments as String);
+        return null;
+      });
+      addTearDown(
+        () => messenger.setMockMethodCallHandler(PlatformSpeech.channel, null),
+      );
 
       Future<void> launch(String location) async {
         final router = createNoorRouter(
@@ -86,6 +98,7 @@ void main() {
           ProviderScope(
             key: ValueKey(router),
             overrides: [
+              settingsProvider.overrideWith(_EnabledAudioSettings.new),
               progressStoreProvider.overrideWithValue(progress),
               gameStoreProvider.overrideWithValue(rounds),
               rewardsProvider(ProgressScope.approved)
@@ -161,6 +174,7 @@ void main() {
         ArrangementKind.matching,
         ArrangementKind.ordering,
       });
+      expect(effects, containsAll(['tap', 'correct', 'complete']));
       expect(rounds.rewards().xp, 20);
       expect(progress.value.records, isEmpty);
 
@@ -202,6 +216,12 @@ Future<void> _tap(
   await tester.ensureVisible(target);
   await tester.tap(target);
   await tester.pumpAndSettle();
+}
+
+class _EnabledAudioSettings extends SettingsController {
+  @override
+  Future<SettingsState> build() async =>
+      (preferences: const AudioPreferences(), saving: false);
 }
 
 class _ApprovedRounds implements GameStore {
