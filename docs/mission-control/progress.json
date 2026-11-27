@@ -132,41 +132,76 @@
         {
           "id": "003-01",
           "title": "Implement multiple choice and true/false",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-01-questions.md",
+            "docs/qa/spec-003/phone-choice-feedback.webp",
+            "docs/qa/spec-003/phone-choice.webp",
+            "docs/qa/spec-003/phone-true-false-feedback.webp",
+            "docs/qa/spec-003/phone-true-false.webp",
+            "docs/qa/spec-003/tablet-choice-feedback.webp",
+            "docs/qa/spec-003/tablet-choice.webp",
+            "docs/qa/spec-003/tablet-true-false-feedback.webp",
+            "docs/qa/spec-003/tablet-true-false.webp"
+          ],
+          "note": "59 tests passed. Both mechanics, offline tablet feedback, release gating and SQLite preview isolation were verified.",
           "priority": "P0"
         },
         {
           "id": "003-02",
           "title": "Implement flashcards with unscored recall",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-02-flashcards.md"
+          ],
+          "note": "62 tests passed. Unscored reveal and recall, stable knowledge links, accessible Arabic passages and duplicate-label validation verified.",
           "priority": "P0"
         },
         {
           "id": "003-03",
           "title": "Implement tap-to-match and tap-to-order",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-03-arrangements.md"
+          ],
+          "note": "66 tests passed. Data-driven matching and ordering, correction, answer validation and large-text layout verified.",
           "priority": "P1"
         },
         {
           "id": "003-04",
-          "title": "Implement feedback, retries and randomized options",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "title": "Integrate feedback, retries, randomization and game sessions",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-04-sessions.md",
+            "docs/qa/spec-003/resumed-feedback.webp",
+            "docs/qa/spec-003/game-results.webp"
+          ],
+          "note": "71 tests passed. Verified offline process resume, bounded review, atomic completion, replay history and scope isolation.",
           "priority": "P0"
         },
         {
           "id": "003-05",
           "title": "Verify all mechanics with tests",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-05-verification.md",
+            "docs/qa/spec-003/phone-flashcard-recall.webp",
+            "docs/qa/spec-003/phone-flashcard.webp",
+            "docs/qa/spec-003/phone-game-results.webp",
+            "docs/qa/spec-003/phone-matching-feedback.webp",
+            "docs/qa/spec-003/phone-matching.webp",
+            "docs/qa/spec-003/phone-ordering-feedback.webp",
+            "docs/qa/spec-003/phone-ordering.webp",
+            "docs/qa/spec-003/tablet-flashcard-recall.webp",
+            "docs/qa/spec-003/tablet-flashcard.webp",
+            "docs/qa/spec-003/tablet-matching-feedback.webp",
+            "docs/qa/spec-003/tablet-matching.webp",
+            "docs/qa/spec-003/tablet-ordering-feedback.webp",
+            "docs/qa/spec-003/tablet-ordering.webp",
+            "docs/qa/spec-003/tablet-portrait-ordering.webp",
+            "docs/qa/spec-003/tablet-speech-fallback.webp"
+          ],
+          "note": "78 Flutter and 5 dashboard tests passed. Android and iOS builds passed. Both Android emulator release gates, offline tablet fallback and final captures verified.",
           "priority": "P0"
         }
       ]
@@ -182,15 +217,15 @@
           "title": "Validate versioned curriculum and source references",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Validate independent offline packs and knowledge-to-variant links. Preserve compatible progress and expose What’s New.",
           "priority": "P0"
         },
         {
           "id": "004-02",
-          "title": "Author 12 draft starter lessons",
+          "title": "Coordinate pilot content and Season One production",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Draft packs provisionally accepted subject to corrections and final source verification. Prioritize prayer readiness and author matching and ordering variants.",
           "priority": "P0"
         },
         {
@@ -198,7 +233,7 @@
           "title": "Obtain explicit human content approval before child access",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Track record-level final hash approval separately from provisional outline acceptance, validation and integration.",
           "priority": "P0"
         },
         {
@@ -206,15 +241,15 @@
           "title": "Implement stars, XP and progress",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Track mastery by stable knowledge ID and keep earned history through compatible updates.",
           "priority": "P0"
         },
         {
           "id": "004-05",
-          "title": "Implement review queue and daily challenge",
+          "title": "Implement mixed practice and adaptive spaced review",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Plan mixed quizzes, free practice and 1/3/7/14-day adaptive review with earlier review after errors.",
           "priority": "P1"
         },
         {
@@ -278,7 +313,7 @@
           "title": "Resolve release blockers and regenerate tracker",
           "status": "todo",
           "evidence": [],
-          "note": "",
+          "note": "Confirm playable pilot coverage, pack upgrade continuity and the release content gates.",
           "priority": "P0"
         }
       ]

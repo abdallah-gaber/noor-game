@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import '../challenges/challenge_definition.dart';
+import '../challenges/debug_catalog.dart';
+
 enum WorldId {
   iman('iman', 'عالم الإيمان'),
   ibadah('ibadah', 'عالم العبادة'),
@@ -46,11 +49,13 @@ class LearningLesson {
     required this.title,
     required this.steps,
     this.prerequisiteId,
+    this.challenges = const [],
   });
 
   final String id;
   final String title;
   final List<LessonStep> steps;
+  final List<ChallengeDefinition> challenges;
   final String? prerequisiteId;
 
   LessonState state({required Set<String> completed, String? currentId}) {
@@ -180,6 +185,29 @@ LearningUnit _fixtureUnit(WorldId world) {
           ),
         ],
       ),
+      if (world == WorldId.iman)
+        LearningLesson(
+          id: '$prefix-activities',
+          title: 'تحدّيات الأشكال',
+          prerequisiteId: '$prefix-first',
+          steps: const [
+            LessonStep(
+              'لِنستعدّ',
+              'تأمّل الأشكال وعدّ زواياها.',
+              LessonPicture.shapes,
+            ),
+          ],
+          challenges: List.unmodifiable(debugChallenges.values),
+        ),
+      if (world == WorldId.iman)
+        LearningLesson(
+          id: '$prefix-activities-next',
+          title: 'خطوة بعد التحدّيات',
+          prerequisiteId: '$prefix-activities',
+          steps: const [
+            LessonStep('أكمل الدرب', 'اختر شكلًا وارسمه.', LessonPicture.trail),
+          ],
+        ),
       LearningLesson(
         id: '$prefix-end',
         title: 'نهاية الدرب',

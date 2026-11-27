@@ -1,5 +1,19 @@
 import '../content/curriculum.dart';
 
+enum ProgressScope {
+  approved('lesson_progress'),
+  preview('preview_lesson_progress');
+
+  const ProgressScope(this.table);
+
+  final String table;
+}
+
+extension CurriculumProgressScope on Curriculum {
+  ProgressScope get progressScope =>
+      isPreview ? ProgressScope.preview : ProgressScope.approved;
+}
+
 class LessonProgress {
   const LessonProgress({
     required this.world,

@@ -6,6 +6,7 @@ import '../audio/speech_control.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
+import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../worlds/world_art.dart';
 
@@ -34,7 +35,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     setState(() => _saving = true);
     try {
       await ref
-          .read(progressProvider.notifier)
+          .read(progressProvider(widget.curriculum.progressScope).notifier)
           .saveStep(
             world: widget.world,
             lesson: widget.lesson,
@@ -55,7 +56,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final progress = ref.watch(progressProvider);
+    final progress = ref.watch(
+      progressProvider(widget.curriculum.progressScope),
+    );
     final lesson = widget.lesson;
     return PopScope(
       canPop: !_saving,
@@ -68,7 +71,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           error: (error, stackTrace) => NoorPage(
             maxWidth: 640,
             child: FilledButton(
-              onPressed: () => ref.invalidate(progressProvider),
+              onPressed: () => ref.invalidate(
+                progressProvider(widget.curriculum.progressScope),
+              ),
               child: const Text('تعذّر فتح الدرس. حاول مرة أخرى.'),
             ),
           ),
@@ -95,6 +100,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     final world = widget.world;
     final step = lesson.steps[index];
     final last = index == lesson.steps.length - 1;
+    final hasChallenges = lesson.challenges.isNotEmpty;
     final localizations = MaterialLocalizations.of(context);
     final current = localizations.formatDecimal(index + 1);
     final total = localizations.formatDecimal(lesson.steps.length);
@@ -143,8 +149,16 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               FilledButton(
                 onPressed: _saving
                     ? null
+                    : last && hasChallenges
+                    ? () => context.push(
+                        '/worlds/${world.id}/lessons/${lesson.id}/play',
+                      )
                     : () => _save(last ? 0 : index + 1, completed: last),
-                child: Text(last ? 'أنهِ الدرس' : 'التالي'),
+                child: Text(
+                  last
+                      ? (hasChallenges ? 'إلى التحدّيات' : 'أنهِ الدرس')
+                      : 'التالي',
+                ),
               ),
               if (index > 0)
                 TextButton(

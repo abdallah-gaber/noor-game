@@ -1,0 +1,610 @@
+{
+  "catalogs": 4,
+  "difficulty": {
+    "application": 58,
+    "recognition": 240,
+    "understanding": 302
+  },
+  "inputDigest": "47cd656a15610a2c1e322d44f0476cea74eebec14b45044c267db7696de70df1",
+  "mechanics": {
+    "flashcard": 168,
+    "multiple_choice": 252,
+    "true_false": 180
+  },
+  "sources": {
+    "historical_edition_review_pending": 7,
+    "locator_review_pending": 121
+  },
+  "stages": {
+    "knowledgeUnits": {
+      "draft": 180,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    },
+    "lessons": {
+      "draft": 60,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    },
+    "mnemonics": {
+      "draft": 0,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    },
+    "objectives": {
+      "draft": 180,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    },
+    "treasures": {
+      "draft": 0,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    },
+    "variants": {
+      "draft": 600,
+      "finalApproval": 0,
+      "integrated": 0,
+      "ownerReviewed": 0,
+      "releaseVerified": 0,
+      "sourceVerified": 0,
+      "validated": 0
+    }
+  },
+  "totals": {
+    "knowledgeUnits": 180,
+    "lessons": 60,
+    "mnemonics": 0,
+    "objectives": 180,
+    "treasures": 0,
+    "variants": 600
+  },
+  "worlds": {
+    "exemplars": {
+      "exemplars.caliphs": {
+        "P01": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P02": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P03": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P04": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "exemplars.companions": {
+        "P09": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P10": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "exemplars.imams": {
+        "P12": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P13": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P14": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "exemplars.successors": {
+        "P11": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "exemplars.ten": {
+        "P05": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P06": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P07": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "P08": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      }
+    },
+    "ibadah": {
+      "ibadah.charity": {
+        "W17": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W18": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "ibadah.fasting": {
+        "W15": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W16": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "ibadah.pilgrimage": {
+        "W19": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W20": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "ibadah.pillars": {
+        "W01": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W02": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "ibadah.prayer": {
+        "W08": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W09": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W10": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W11": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W12": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W13": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W14": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "ibadah.purity": {
+        "W03": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W04": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W05": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W06": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "W07": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      }
+    },
+    "iman": {
+      "iman.daily-faith": {
+        "I10": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I11": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I12": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "iman.faith": {
+        "I06": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I07": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I08": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I09": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "iman.shahada": {
+        "I04": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I05": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "iman.tawhid": {
+        "I01": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I02": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "I03": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      }
+    },
+    "seerah": {
+      "seerah.madinah-character": {
+        "S11": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S12": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S13": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S14": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "seerah.mission-migration": {
+        "S07": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S08": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S09": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S10": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "seerah.origins": {
+        "S01": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S02": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S03": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      },
+      "seerah.youth-revelation": {
+        "S04": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S05": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        },
+        "S06": {
+          "knowledgeUnits": 3,
+          "lessons": 1,
+          "mnemonics": 0,
+          "objectives": 3,
+          "treasures": 0,
+          "variants": 10
+        }
+      }
+    }
+  }
+}
