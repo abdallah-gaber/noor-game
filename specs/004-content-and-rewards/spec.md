@@ -61,3 +61,9 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - Resume an unfinished adaptive or daily round from durable preview attempts and its saved variant order. A daily round stays available for the local date. A compatible edit preserves the saved sequence.
 - Choose from available lessons using stable knowledge IDs, previously missed variants, separate first and eventual correctness, and recent first-pass performance. Prefer due or weak knowledge, then vary mechanics and avoid identical prompts within a round.
 - Persist the selected spacing intervals from 1, 3, 7 and 14 days, with at least one enabled. The default enables all four. Early optional practice carries no penalty or extra payout.
+
+## 004-06 Parent Mode acceptance
+
+- An explicit preview-only Parent Mode entry shows actual saved world and lesson progress, recent activity and knowledge results. Pre-seeded fixture unlocks do not inflate completion.
+- Separate first-attempt, recent first-pass and eventual correctness. Describe strengths and review needs using recent evidence, and offer recommended practice from the adaptive schedule.
+- Show readable draft source titles, locators and available addresses in context, with an unverified label. Synthetic fixtures contain no religious sources. The view works offline with no account and stays behind the adult review gate for authored drafts.

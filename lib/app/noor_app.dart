@@ -15,6 +15,7 @@ import '../home/adult_review_screen.dart';
 import '../home/home_screen.dart';
 import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
+import '../parent/parent_screen.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../review/review_screen.dart';
@@ -80,7 +81,7 @@ GoRouter createNoorRouter({
         builder: (context, state) => HomeScreen(
           showPreview: showPreview && pilot == null,
           pilotWorlds: pilot?.units.keys,
-          showReview: showPreview && curriculum.isPreview,
+          showPreviewTools: showPreview && curriculum.isPreview,
         ),
         routes: [
           if (showPreview && curriculum.isPreview)
@@ -98,6 +99,11 @@ GoRouter createNoorRouter({
                     ),
                   ),
               ],
+            ),
+          if (showPreview && curriculum.isPreview)
+            GoRoute(
+              path: 'parent',
+              builder: (_, _) => ParentScreen(curriculum: curriculum),
             ),
           GoRoute(
             path: 'settings',

@@ -266,9 +266,9 @@
         {
           "id": "004-06",
           "title": "Implement basic parent mode",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": ["docs/qa/spec-004/004-06-parent-mode.md"],
+          "note": "Read-only Arabic preview report shows world, lesson and knowledge progress, review needs, recent activity and selectable draft references. 19 focused tests passed.",
           "priority": "P0"
         }
       ]

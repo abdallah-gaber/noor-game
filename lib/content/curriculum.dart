@@ -43,6 +43,13 @@ class LessonStep {
   final LessonPicture picture;
 }
 
+typedef LearningSource = ({
+  String id,
+  String title,
+  String locator,
+  String? url,
+});
+
 class LearningLesson {
   const LearningLesson({
     required this.id,
@@ -52,12 +59,16 @@ class LearningLesson {
     this.prerequisiteIds = const [],
     this.contentRevision,
     this.challenges = const [],
+    this.knowledgeLabels = const {},
+    this.sources = const [],
   });
 
   final String id;
   final String title;
   final List<LessonStep> steps;
   final List<ChallengeDefinition> challenges;
+  final Map<String, String> knowledgeLabels;
+  final List<LearningSource> sources;
   final String? prerequisiteId;
   final List<String> prerequisiteIds;
   final String? contentRevision;
@@ -209,6 +220,13 @@ LearningUnit _fixtureUnit(WorldId world) {
             ),
           ],
           challenges: List.unmodifiable(debugChallenges.values),
+          knowledgeLabels: const {
+            'preview.geometry.triangle': 'المثلّث',
+            'preview.geometry.square': 'المربّع',
+            'preview.geometry.circle': 'الدائرة',
+            'preview.geometry.shapes': 'الأشكال والزوايا',
+            'preview.counting': 'ترتيب الأعداد',
+          },
         ),
       if (world == WorldId.iman)
         LearningLesson(

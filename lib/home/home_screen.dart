@@ -12,11 +12,11 @@ class HomeScreen extends StatelessWidget {
     super.key,
     required this.showPreview,
     this.pilotWorlds,
-    this.showReview = false,
+    this.showPreviewTools = false,
   });
 
   final bool showPreview;
-  final bool showReview;
+  final bool showPreviewTools;
   final Iterable<WorldId>? pilotWorlds;
 
   @override
@@ -79,14 +79,22 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
-            if (showReview)
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: TextButton.icon(
-                  onPressed: () => context.push('/review'),
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: const Text('المراجعة والتحدّي اليومي'),
-                ),
+            if (showPreviewTools)
+              Wrap(
+                spacing: 10,
+                runSpacing: 4,
+                children: [
+                  TextButton.icon(
+                    onPressed: () => context.push('/review'),
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: const Text('المراجعة والتحدّي اليومي'),
+                  ),
+                  TextButton.icon(
+                    onPressed: () => context.push('/parent'),
+                    icon: const Icon(Icons.family_restroom_rounded),
+                    label: const Text('وضع الوالدين'),
+                  ),
+                ],
               ),
             if (showPreview)
               Align(

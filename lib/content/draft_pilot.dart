@@ -21,12 +21,18 @@ Curriculum decodeDraftPilot(String input) {
     final title = challengeText(record['title']);
     final knowledge = _records(record['knowledge']);
     final sources = {
-      for (final source in _records(record['sources'])) source['id'],
+      for (final source in _records(record['sources']))
+        challengeText(source['id']): (
+          id: challengeText(source['id']),
+          title: source['title'] as String? ?? '',
+          locator: source['locator'] as String? ?? '',
+          url: source['url'] as String?,
+        ),
     };
     final variants = _records(record['variants']);
     for (final entry in [...knowledge, ...variants]) {
       final refs = entry['sourceRefs'];
-      if (refs is! List || refs.isEmpty || !refs.every(sources.contains)) {
+      if (refs is! List || refs.isEmpty || !refs.every(sources.containsKey)) {
         throw const FormatException('Unresolved draft source references');
       }
     }
@@ -68,6 +74,11 @@ Curriculum decodeDraftPilot(String input) {
                 ),
             ]),
             challenges: List.unmodifiable(challenges),
+            knowledgeLabels: Map.unmodifiable({
+              for (final entry in knowledge)
+                challengeId(entry['id']): challengeText(entry['textAr']),
+            }),
+            sources: List.unmodifiable(sources.values),
           ),
         ],
       ),

@@ -14,3 +14,5 @@ For the 004-03 draft checkpoint, guard the CONTENT-008 overlay with SHA-256 and 
 For 004-04, derive preview rewards and knowledge practice from durable game history, keyed by stable IDs with no separate payout write. Verify old snapshots, resume, scoped reads, better replay and capped awards. Show the result in the existing preview game results. Defer mastery-driven selection to 004-05.
 
 For 004-05, reuse the game renderer and durable attempt format with review-only keys. Learn from preview-scoped lesson and review history, preserve timestamps where known and leave earlier undated history usable. Persist interval preferences and keep review rounds out of lesson completion and Rewards.
+
+For 004-06, preserve source metadata in the private pilot adapter and reuse the preview progress and review history readers in a read-only Arabic parent view. Exercise synthetic and authored preview data, narrow and tablet layouts, and public route isolation.
