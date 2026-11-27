@@ -182,9 +182,26 @@
         {
           "id": "003-05",
           "title": "Verify all mechanics with tests",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-003/003-05-verification.md",
+            "docs/qa/spec-003/phone-flashcard-recall.webp",
+            "docs/qa/spec-003/phone-flashcard.webp",
+            "docs/qa/spec-003/phone-game-results.webp",
+            "docs/qa/spec-003/phone-matching-feedback.webp",
+            "docs/qa/spec-003/phone-matching.webp",
+            "docs/qa/spec-003/phone-ordering-feedback.webp",
+            "docs/qa/spec-003/phone-ordering.webp",
+            "docs/qa/spec-003/tablet-flashcard-recall.webp",
+            "docs/qa/spec-003/tablet-flashcard.webp",
+            "docs/qa/spec-003/tablet-matching-feedback.webp",
+            "docs/qa/spec-003/tablet-matching.webp",
+            "docs/qa/spec-003/tablet-ordering-feedback.webp",
+            "docs/qa/spec-003/tablet-ordering.webp",
+            "docs/qa/spec-003/tablet-portrait-ordering.webp",
+            "docs/qa/spec-003/tablet-speech-fallback.webp"
+          ],
+          "note": "78 Flutter and 5 dashboard tests passed. Android and iOS builds passed. Both Android emulator release gates, offline tablet fallback and final captures verified.",
           "priority": "P0"
         }
       ]

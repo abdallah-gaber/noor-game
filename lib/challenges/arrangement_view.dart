@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../audio/speech_control.dart';
+import '../design_system/noor_theme.dart';
 import 'arrangement.dart';
 import 'question_view.dart';
 import 'scored_question.dart';
@@ -158,7 +159,17 @@ class _ArrangementViewState extends State<ArrangementView> {
   }) => Semantics(
     selected: selected,
     child: OutlinedButton(
-      style: OutlinedButton.styleFrom(minimumSize: const Size(56, 52)),
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(56, 52),
+        foregroundColor: ink,
+        backgroundColor: selected ? sage : paper,
+        disabledForegroundColor: ink,
+        disabledBackgroundColor: selected ? sage : paper,
+        side: BorderSide(
+          color: selected ? ink : outline,
+          width: selected ? 2 : 1,
+        ),
+      ),
       onPressed: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
