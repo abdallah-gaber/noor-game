@@ -240,8 +240,11 @@
           "id": "004-03",
           "title": "Obtain explicit human content approval before child access",
           "status": "review",
-          "evidence": ["docs/qa/spec-004/004-03-corrected-draft.md"],
-          "note": "CONTENT-008 corrected draft checkpoint verified. Applied 134 draft and eight blueprint edits, added 21 pending sources and held one semantic conflict. Scientific, historical, rights and final record approval remain open.",
+          "evidence": [
+            "docs/qa/spec-004/004-03-corrected-draft.md",
+            "docs/qa/spec-004/004-03-content-009.md"
+          ],
+          "note": "CONTENT-009 applied and validated in private drafts. Pending scientific approval, historical editions, rights and exact record approval. No production integration.",
           "priority": "P0"
         },
         {

@@ -171,6 +171,14 @@ def handoff_inventory(handoff):
             "queueStatus": dict(Counter(row["status"] for row in queue)),
             "originalSourceEvidence": dict(Counter(row["status"] for row in review["sourceLedger"])),
         }
+        if followup := review.get("followup"):
+            result["handoff"]["contentPackages"] += 1
+            result["handoff"]["scientificReview"]["followup"] = {
+                "appliedDraftRecords": sum(row["kind"] != "blueprint" for row in followup["changedRecordDigests"]),
+                "appliedBlueprintRecords": sum(row["kind"] == "blueprint" for row in followup["changedRecordDigests"]),
+                "addedPendingSources": followup["addedPendingSources"],
+                "retainedObjectives": len(review["semanticResolutions"]),
+            }
         fingerprint = hashlib.sha256(digests)
         for name, value in sorted(review["patchDigests"].items()):
             fingerprint.update(name.encode())

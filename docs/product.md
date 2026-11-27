@@ -30,3 +30,5 @@ Prioritize authentic and well-established topics. Teach clear obligatory and rec
 A child can choose a world and complete a pilot lesson with little assistance. A parent can see learning progress and sources. Observe comfort and repeat engagement without collecting telemetry.
 
 The owner accepted the private pilot after physical-tablet testing. Future audio polish should make the optional effects more audible, joyful and distinct, with gentle retries, no clipping and no music. Richer question interactions and gameplay difficulty changes remain in the backlog.
+
+Prayer readiness is introductory preparation. Complete practical prayer instruction requires future documented practice content and review.

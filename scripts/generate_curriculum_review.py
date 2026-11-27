@@ -82,6 +82,8 @@ def render_review(handoff):
     path_body = arabic(path["titleAr"]) + "<ol>" + "".join(
         f'<li>{link(id, id + " · " + planned[id]["titleAr"])}</li>' for id in path["lessonIds"]
     ) + "</ol>"
+    if followup := scientific.get("followup"):
+        path_body += f'<p>{text(followup["prayerReadinessScope"])}</p>'
     path_body += "".join(arabic(activity) for activity in path["optionalOfflineActivitiesAr"])
     path_body += table(("Cross-lesson variant", "Lessons required for future mixed review"),
                        ((id, ", ".join(lessons)) for id, lessons in mixed.items()))
@@ -108,6 +110,11 @@ def render_review(handoff):
                 body += arabic(row[field])
         for url in row.get("evidenceUrls", []):
             body += f'<p dir="ltr">{text(url)}</p>'
+        if decision := row.get("followup"):
+            body += f'<p>CONTENT-009 · {text(decision["disposition"])}</p>'
+            body += arabic(decision["noteAr"])
+            for url in decision.get("evidenceUrls", []):
+                body += f'<p dir="ltr">{text(url)}</p>'
         for id, conflict in conflicts.items():
             if row["id"] in conflict["reasons"]:
                 body += f'<p>Withheld edit · {link(id)} · {text(conflict["reason"])}</p>'
@@ -235,7 +242,7 @@ details>details{{margin-inline-start:1rem}}[dir=rtl]{{text-align:right;font-size
 table{{border-collapse:collapse}}td,th{{text-align:start;border-bottom:1px solid #dae6df;padding:.4rem}}
 </style>
 <header><h1>Noor · Private curriculum review</h1>
-<p>{text("CONTENT-001–008" if scientific else "CONTENT-001–007")} · Structurally checked private drafts for adult review. Source verification, rights and final record approval are pending.</p>
+<p>{text("CONTENT-001 through " + scientific.get("package", "CONTENT-007"))} · Structurally checked private drafts for adult review. Source verification, rights and final record approval are pending.</p>
 {totals}<p>CONTENT-001 plans {inventory["handoff"]["plannedLessons"]} lessons and {inventory["handoff"]["plannedObjectives"]} objectives.</p>
 <nav aria-label="Review sections">{navigation}</nav>
 <form id="jump"><label for="record-id">Record ID</label> <input id="record-id" required> <button>Open</button>

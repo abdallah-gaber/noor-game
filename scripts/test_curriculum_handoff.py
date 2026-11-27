@@ -11,7 +11,8 @@ from content_inventory import handoff_inventory, inventory_json
 from curriculum_handoff import (AUDIT, BLUEPRINT, CORE, CURRICULUM, ENHANCEMENT,
                                 challenge, load_handoff, validate_path, validate_prerequisites)
 from generate_curriculum_review import render_review
-from curriculum_review_patch import PATCH_DIR, load_review_handoff
+from curriculum_review_patch import (FOLLOWUP_DIR, PATCH_DIR, apply_content_009, load_content_008,
+                                     load_review_handoff)
 
 
 class ReviewLinks(HTMLParser):
@@ -131,7 +132,7 @@ class CanonicalTests(unittest.TestCase):
 class CorrectedDraftTests(unittest.TestCase):
     def test_corrected_inputs_preserve_ids_and_queue_holds_semantic_conflict(self):
         baseline = load_handoff()
-        handoff, encoded = load_review_handoff()
+        handoff, encoded = load_content_008()
         review = handoff["scientificReview"]
         inventory = handoff_inventory(handoff)
         self.assertEqual(len(encoded), 8)
@@ -184,10 +185,52 @@ class CorrectedDraftTests(unittest.TestCase):
             delta["before"] = "wrong baseline value"
             corrections.write_text(json.dumps(patch))
             with self.assertRaisesRegex(ValueError, "Before-value conflict"):
-                load_review_handoff(curriculum)
+                load_content_008(curriculum)
             delta["before"] = before
             patch["summary"]["baselineBundleSha256"] = "0" * 64
             summary_file.write_text(json.dumps(patch["summary"]))
             corrections.write_text(json.dumps(patch))
             with self.assertRaisesRegex(ValueError, "baseline digest does not match"):
-                load_review_handoff(curriculum)
+                load_content_008(curriculum)
+
+
+@unittest.skipUnless((CURRICULUM / FOLLOWUP_DIR / "corrections.json").is_file(),
+                     "Private CONTENT-009 files are local only")
+class FollowupTests(unittest.TestCase):
+    def test_latest_handoff_keeps_scoring_and_pending_states(self):
+        old, encoded = load_content_008()
+        new, _ = load_review_handoff()
+        self.assertEqual(new["scientificReview"]["sourceLedger"], old["scientificReview"]["sourceLedger"])
+        self.assertEqual(new["variantDefinitions"]["S01.Q03"], old["variantDefinitions"]["S01.Q03"])
+        for id, definition in old["variantDefinitions"].items():
+            for field in ("type", "correctOptionId", "correctOrder", "items", "pairs"):
+                self.assertEqual(definition.get(field), new["variantDefinitions"][id].get(field))
+        self.assertEqual(new["variantDefinitions"]["W13.E01"]["sourceRefsByKnowledge"]["W13.K3"], ["B-757", "B-789"])
+        planned = next(row for row in new["blueprint"]["lessons"] if row["id"] == "W06")
+        drafted = next(row for pack in new["corePacks"] for row in pack["lessons"] if row["id"] == "W06")
+        self.assertEqual(planned["objectives"][2]["textAr"], drafted["objectives"][2]["textAr"])
+        inventory = handoff_inventory(new)
+        self.assertEqual(inventory["totals"], handoff_inventory(old)["totals"])
+        self.assertEqual(sum(inventory["sources"].values()), 205)
+        self.assertEqual(len(new["scientificReview"]["followup"]["changedRecordDigests"]), 25)
+        status = {row["id"]: row["status"] for row in new["correctionQueue"]}
+        self.assertEqual(status["CONTENT-007-10"], "retained_edition_pending")
+        self.assertEqual(status["NEW-13"], "open_release_gate")
+        self.assertEqual(sum(state != "applied_draft" for state in status.values()), 12)
+        for stage in ("sourceVerified", "ownerReviewed", "finalApproval", "integrated"):
+            self.assertFalse(any(row[stage] for row in inventory["stages"].values()))
+        html = ReviewLinks()
+        html.feed(render_review(new))
+        self.assertFalse(set(html.fragments) - set(html.ids))
+        self.assertNotRegex(inventory_json(inventory), r"[\u0600-\u06ff]")
+
+    def test_wrong_digest_and_before_value_fail_closed(self):
+        old, encoded = load_content_008()
+        folder = CURRICULUM / FOLLOWUP_DIR
+        patch = json.loads((folder / "corrections.json").read_bytes())
+        ledger = json.loads((folder / "source-ledger.json").read_bytes())
+        with self.assertRaisesRegex(ValueError, "baseline SHA-256 mismatch"):
+            apply_content_009(old, encoded, {**patch, "baselineBundleSha256": "0" * 64}, ledger)
+        patch["recordEdits"][0]["fields"]["sourceRefs"]["before"] = ["wrong"]
+        with self.assertRaisesRegex(ValueError, "Before-value conflict"):
+            apply_content_009(old, encoded, patch, ledger)

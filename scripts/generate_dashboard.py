@@ -300,6 +300,12 @@ class Dashboard:
                     ("New pending sources", review["addedPendingSources"]),
                     ("Repeated prompt groups (backlog)", review["repeatPromptGroups"]),
                 ])
+                if followup := review.get("followup"):
+                    approval += metrics([
+                        ("Follow-up draft edits", followup["appliedDraftRecords"]),
+                        ("Follow-up pending sources", followup["addedPendingSources"]),
+                        ("Retained learning objectives", followup["retainedObjectives"]),
+                    ])
                 approval += table(("Correction disposition", "Items"), review["queueStatus"].items())
                 approval += table(("Partial source evidence", "Original scoped sources"),
                                   review["originalSourceEvidence"].items())

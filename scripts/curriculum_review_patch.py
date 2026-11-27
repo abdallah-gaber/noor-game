@@ -11,13 +11,14 @@ from curriculum_handoff import (
 )
 
 PATCH_DIR = "drafts/noor-content-008"
+FOLLOWUP_DIR = "drafts/noor-content-009"
 PATCH_FILES = ("corrections.json", "source-ledger.json", "memorization-review.json",
                "summary.json", "duplicate-prompts.json")
 ALLOWED_FIELDS = {
     "objective": {"textAr"},
     "knowledge": {"textAr", "sourceRefs"},
     "variant": {"promptAr", "answerAr", "explanationAr", "sourceRefs", "knowledgeIds", "options"},
-    "enhancementVariant": {"promptAr", "sourceRefs", "sourceRefsByKnowledge", "items"},
+    "enhancementVariant": {"promptAr", "explanationAr", "sourceRefs", "sourceRefsByKnowledge", "items"},
     "memorization": {"textAr", "explanationAr", "sourceRefs"},
     "treasure": {"textAr", "sourceRefs"},
     "blueprint": {"titleAr", "unitId", "objectives"},
@@ -159,7 +160,16 @@ def duplicate_groups(records):
     ]
 
 
-def load_review_handoff(curriculum=CURRICULUM):
+def encode_authoring(documents):
+    encoded = {name: json_bytes(document) for name, document in documents.items()}
+    audit_path = f"drafts/{AUDIT}"
+    audit = documents[audit_path]
+    audit["inputSha256"] = {name: digest(encoded[f"drafts/{name}"]) for name in audit["inputSha256"]}
+    encoded[audit_path] = json_bytes(audit)
+    return encoded
+
+
+def load_content_008(curriculum=CURRICULUM):
     baseline = load_handoff(curriculum)
     package = curriculum / PATCH_DIR
     if not package.is_dir():
@@ -244,11 +254,7 @@ def load_review_handoff(curriculum=CURRICULUM):
 
     # Rebuild the technical digest manifest in the corrected copy. The original
     # audit remains available as evidence for the patch's preconditions.
-    encoded = {name: json_bytes(document) for name, document in documents.items()}
-    audit_path = f"drafts/{AUDIT}"
-    audit = documents[audit_path]
-    audit["inputSha256"] = {name: digest(encoded[f"drafts/{name}"]) for name in audit["inputSha256"]}
-    encoded[audit_path] = json_bytes(audit)
+    encoded = encode_authoring(documents)
     corrected = validate_handoff(documents, {name: digest(data) for name, data in encoded.items()})
     corrected["correctionQueue"] = rebuild_queue(baseline["correctionQueue"], corrected["correctionQueue"],
                                                 patch, conflicts, record_ids)
@@ -274,4 +280,147 @@ def load_review_handoff(curriculum=CURRICULUM):
         "semanticConflicts": conflicts,
         "unusedOriginalSources": [{"scope": scope, "sourceId": id} for scope, id in unused],
     }
+    return corrected, encoded
+
+
+def apply_content_009(baseline, encoded, patch, ledger):
+    require(patch["package"] == "CONTENT-009" and patch["status"] == "draft_proposal_only",
+            "Unsupported CONTENT-009 patch")
+    require(patch["baselineBundleSha256"] == digest(json_bytes(baseline)), "CONTENT-009 baseline SHA-256 mismatch")
+    previous = baseline["scientificReview"]
+    require(ledger == previous["sourceLedger"], "CONTENT-009 carried-forward source ledger differs")
+    documents = {name: json.loads(payload) for name, payload in encoded.items()}
+    records, groups = authoring_records(documents)
+    by_id = {id: key for key in records for id in [key[-1]] if key[1] != "blueprint"}
+    require(len(by_id) == sum(key[1] != "blueprint" for key in records), "Ambiguous authoring IDs")
+    operations = []
+    for edit in patch["recordEdits"]:
+        key = by_id.get(edit["id"])
+        require(key is not None and edit.get("scope", key[0]) == key[0], f"Missing or incorrect scope for {edit['id']}")
+        require(edit["id"] != "S01.Q03", "The flashcard must retain its current objective")
+        operations.append({"scope": key[0], "kind": key[1], "recordId": key[2], "fields": edit["fields"], "reasons": []})
+    edits = guarded_operations({"recordOperations": operations, "blueprintOperations": []}, records)
+    objectives = {
+        row["id"]: (lesson, row)
+        for lesson in documents[BLUEPRINT]["lessons"] for row in lesson["objectives"]
+    }
+    for (_, kind, id), fields, _ in edits:
+        if kind == "objective":
+            require(objectives[id][1]["textAr"] == fields["textAr"]["before"],
+                    f"Blueprint objective before-value differs for {id}")
+
+    original_sources = sources_by_id(groups)
+    additions = {}
+    for addition in patch["sourceAdditions"]:
+        scope = addition["scope"]
+        id = addition["id"]
+        fields = {"id", "locator", "url", "status"} if scope == "extras" else {
+            "id", "title", "locator", "url", "verificationStatus",
+        }
+        key = (scope, id)
+        require(scope in groups and key not in original_sources and key not in additions
+                and set(addition) == fields | {"scope"}
+                and addition.get("verificationStatus", addition.get("status")) == "locator_review_pending",
+                f"Invalid CONTENT-009 pending source {scope}/{id}")
+        new_source = {k: v for k, v in addition.items() if k != "scope"}
+        additions[key] = {"scope": scope, "sourceId": id, "record": new_source, "evidence": []}
+
+    changed = []
+    blueprint_before = {}
+    for key, fields, _ in edits:
+        scope, kind, id = key
+        row = records[key]
+        before = digest(json_bytes(row, canonical=True))
+        for field, delta in fields.items():
+            row[field] = delta["after"]
+        if kind == "objective":
+            lesson, objective = objectives[id]
+            blueprint_before.setdefault(lesson["id"], digest(json_bytes(lesson, canonical=True)))
+            objective["textAr"] = row["textAr"]
+        if "sourceRefsByKnowledge" in fields:
+            expected = {ref for links in row["sourceRefsByKnowledge"].values() for ref in links}
+            row["sourceRefs"] = list(dict.fromkeys([
+                *(ref for ref in row["sourceRefs"] if ref in expected),
+                *(ref for links in row["sourceRefsByKnowledge"].values() for ref in links),
+            ]))
+        changed.append({"scope": scope, "kind": kind, "recordId": id, "beforeSha256": before,
+                        "afterSha256": digest(json_bytes(row, canonical=True))})
+    for id, before in blueprint_before.items():
+        changed.append({"scope": "planning", "kind": "blueprint", "recordId": id, "beforeSha256": before,
+                        "afterSha256": digest(json_bytes(records["planning", "blueprint", id], canonical=True))})
+    for (scope, id), item in additions.items():
+        row = item["record"]
+        if isinstance(groups[scope], dict):
+            groups[scope][id] = {key: value for key, value in row.items() if key != "id"}
+        else:
+            groups[scope].append(row)
+
+    encoded = encode_authoring(documents)
+    corrected = validate_handoff(documents, {name: digest(data) for name, data in encoded.items()})
+    require(corrected["variantDefinitions"].keys() == baseline["variantDefinitions"].keys(),
+            "CONTENT-009 changed variant IDs")
+    require(corrected["variantDefinitions"]["S01.Q03"] == baseline["variantDefinitions"]["S01.Q03"],
+            "CONTENT-009 changed the retained flashcard")
+    previous_queue = {row["id"]: row for row in baseline["correctionQueue"]}
+    followup = {row["id"]: row for row in patch["queueDispositions"]}
+    require(len(followup) == len(patch["queueDispositions"]) and followup.keys() == {
+        id for id, row in previous_queue.items() if row["status"] != "applied_draft"
+    }, "CONTENT-009 must cover each open queue item")
+    refreshed = {row["id"]: row for row in corrected["correctionQueue"]}
+    for id, row in previous_queue.items():
+        if id not in followup:
+            continue
+        decision = followup[id]
+        status = {
+            "retain_existing": "retained_edition_pending",
+            "patch_ready": "applied_claim_pending" if id == "NEW-12" else "applied_draft",
+            "open_release_gate": "open_release_gate",
+        }.get(decision["disposition"])
+        require(status is not None and (id == "CONTENT-007-10") == (decision["disposition"] == "retain_existing"),
+                f"Invalid CONTENT-009 disposition for {id}")
+        previous_queue[id] = {**row, "ids": refreshed.get(id, row)["ids"],
+                              "status": status, "followup": decision}
+    corrected["correctionQueue"] = [*previous_queue.values(),
+                                   *(row for id, row in refreshed.items() if id not in previous_queue)]
+    corrected["scientificReview"] = {
+        **previous,
+        "package": patch["package"],
+        "sourceAdditions": [*previous["sourceAdditions"], *additions.values()],
+        "duplicatePromptsBacklog": duplicate_groups(records),
+        "semanticConflicts": [],
+        "semanticResolutions": [{"recordId": "S01.Q03", "queueId": "CONTENT-007-10",
+                                 "status": "retained_existing_objective"}],
+        "followup": {"baselineBundleSha256": patch["baselineBundleSha256"],
+                     "changedRecordDigests": changed, "addedPendingSources": len(additions),
+                     "prayerReadinessScope": "Introductory preparation; complete practical prayer instruction remains pending."},
+    }
+    # Recompute the provenance list against the current graph, keeping every original source.
+    knowledge_scopes = {id: scope for scope, kind, id in records if kind == "knowledge"}
+    used = {
+        (knowledge_scopes[knowledge], ref)
+        for row in records.values() for knowledge, refs in row.get("sourceRefsByKnowledge", {}).items()
+        for ref in refs
+    } | {
+        (scope, ref) for (scope, _, _), row in records.items() if not row.get("sourceRefsByKnowledge")
+        for ref in row.get("sourceRefs", [])
+    }
+    corrected["scientificReview"]["unusedOriginalSources"] = [
+        {"scope": row["scope"], "sourceId": row["sourceId"]} for row in ledger
+        if (row["scope"], row["sourceId"]) not in used
+    ]
+    return corrected, encoded
+
+
+def load_review_handoff(curriculum=CURRICULUM):
+    baseline, encoded = load_content_008(curriculum)
+    package = curriculum / FOLLOWUP_DIR
+    if not package.is_dir():
+        return baseline, encoded
+    corrections = (package / "corrections.json").read_bytes()
+    ledger = (package / "source-ledger.json").read_bytes()
+    corrected, encoded = apply_content_009(baseline, encoded, json.loads(corrections), json.loads(ledger))
+    corrected["scientificReview"]["patchDigests"].update({
+        "content-009/corrections.json": digest(corrections),
+        "content-009/source-ledger.json": digest(ledger),
+    })
     return corrected, encoded

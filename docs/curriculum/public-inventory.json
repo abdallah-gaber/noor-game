@@ -6,7 +6,7 @@
     "understanding": 324
   },
   "handoff": {
-    "contentPackages": 8,
+    "contentPackages": 9,
     "correctionQueue": {
       "authoredCorrection": 11,
       "citationAlignment": 3,
@@ -35,9 +35,15 @@
       "W14"
     ],
     "scientificReview": {
-      "addedPendingSources": 21,
+      "addedPendingSources": 24,
       "appliedBlueprintRecords": 8,
       "appliedDraftRecords": 134,
+      "followup": {
+        "addedPendingSources": 3,
+        "appliedBlueprintRecords": 1,
+        "appliedDraftRecords": 24,
+        "retainedObjectives": 1
+      },
       "memorizationExcerptsReviewed": 20,
       "originalSourceEvidence": {
         "needs_correction": 5,
@@ -45,21 +51,18 @@
         "pending_claim_level_verification": 127,
         "selected_claim_or_excerpt_checked": 48
       },
-      "package": "CONTENT-008",
+      "package": "CONTENT-009",
       "queueStatus": {
-        "applied_draft": 22,
-        "applied_edition_pending": 3,
-        "conflict_open": 1,
-        "open_editorial": 5,
-        "open_release_gate": 3,
-        "partial_open": 5,
-        "rights_candidate_open": 1
+        "applied_claim_pending": 1,
+        "applied_draft": 28,
+        "open_release_gate": 10,
+        "retained_edition_pending": 1
       },
       "repeatPromptGroups": 60,
       "unusedOriginalSources": 9
     }
   },
-  "inputDigest": "29e441b4e2b73018155696e528691026f6a7ec6a801fca65323491e9ef6fc993",
+  "inputDigest": "8bd87e66212cc22397069952f6be05a847fd5ef3e33cc336946fbe39e15eec9e",
   "mechanics": {
     "flashcard": 168,
     "matching": 12,
@@ -69,7 +72,7 @@
   },
   "sources": {
     "historical_edition_review_pending": 7,
-    "locator_review_pending": 195
+    "locator_review_pending": 198
   },
   "stages": {
     "knowledgeUnits": {
