@@ -96,7 +96,10 @@ for folder, names in {
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
     ),
-    "spec-004": ("004-01-curriculum-packs.md", "004-02-curriculum-handoff.md", "release-world.webp"),
+    "spec-004": (
+        "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
+        "004-03-corrected-draft.md", "release-world.webp",
+    ),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
 
@@ -291,6 +294,15 @@ class Dashboard:
         approval += "<p>Stage counts reflect recorded evidence. Provisional acceptance applies to the initial outline. Production requires per-record approval.</p>"
         if handoff := data.get("handoff"):
             approval += table(("Open queue category", "Items"), handoff["correctionQueue"].items())
+            if review := handoff.get("scientificReview"):
+                approval += metrics([
+                    ("Draft records corrected", review["appliedDraftRecords"]),
+                    ("New pending sources", review["addedPendingSources"]),
+                    ("Repeated prompt groups (backlog)", review["repeatPromptGroups"]),
+                ])
+                approval += table(("Correction disposition", "Items"), review["queueStatus"].items())
+                approval += table(("Partial source evidence", "Original scoped sources"),
+                                  review["originalSourceEvidence"].items())
         approval += table(("Source status", "Scoped source records"),
                           ((key.replace("_", " "), count(total)) for key, total in data["sources"].items()))
         extras = table(

@@ -18,6 +18,7 @@ EXTRAS = "noor-content-006/extras.json"
 ENHANCEMENT = "noor-content-007/enhancement.json"
 AUDIT = "noor-content-007/audit.json"
 BLUEPRINT = "planning/noor-content-001/blueprint.json"
+INPUT_FILES = (BLUEPRINT, *(f"drafts/{name}" for name in (*CORE, EXTRAS, ENHANCEMENT, AUDIT)))
 MECHANICS = {
     "multiple_choice": "multipleChoice", "true_false": "trueFalse",
     "flashcard": "flashcard", "matching": "matching", "ordering": "ordering",
@@ -172,10 +173,14 @@ def validate_prerequisites(lessons):
 
 
 def load_handoff(curriculum=CURRICULUM):
-    drafts = curriculum / "drafts"
-    audit = verify_inputs(drafts)
-    files = [BLUEPRINT, *(f"drafts/{name}" for name in (*CORE, EXTRAS, ENHANCEMENT, AUDIT))]
-    documents = {name: read_json(curriculum / name) for name in files}
+    verify_inputs(curriculum / "drafts")
+    documents = {name: read_json(curriculum / name) for name in INPUT_FILES}
+    digests = {name: hashlib.sha256((curriculum / name).read_bytes()).hexdigest() for name in INPUT_FILES}
+    return validate_handoff(documents, digests)
+
+
+def validate_handoff(documents, digests):
+    audit = documents[f"drafts/{AUDIT}"]
     blueprint = documents[BLUEPRINT]
     cores = [documents[f"drafts/{name}"] for name in CORE]
     extras = documents[f"drafts/{EXTRAS}"]
@@ -307,7 +312,6 @@ def load_handoff(curriculum=CURRICULUM):
         if pending:
             queue.append({"id": f"sources-{scope}", "kind": "sourceVerification",
                           "status": "open_release_gate", "sourceScope": scope, "ids": pending})
-    digests = {name: hashlib.sha256((curriculum / name).read_bytes()).hexdigest() for name in files}
     return {
         "schema": 1, "channel": "privateDraftReview", "inputDigests": digests,
         "blueprint": blueprint, "corePacks": cores, "extras": extras,

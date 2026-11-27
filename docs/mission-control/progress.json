@@ -239,9 +239,9 @@
         {
           "id": "004-03",
           "title": "Obtain explicit human content approval before child access",
-          "status": "todo",
-          "evidence": [],
-          "note": "Track record-level final hash approval separately from provisional outline acceptance, validation and integration.",
+          "status": "review",
+          "evidence": ["docs/qa/spec-004/004-03-corrected-draft.md"],
+          "note": "CONTENT-008 corrected draft checkpoint verified. Applied 134 draft and eight blueprint edits, added 21 pending sources and held one semantic conflict. Scientific, historical, rights and final record approval remain open.",
           "priority": "P0"
         },
         {

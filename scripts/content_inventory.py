@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 import re
 
-from curriculum_handoff import load_handoff, variant_signature
+from curriculum_handoff import variant_signature
+from curriculum_review_patch import load_review_handoff
 
 ROOT = Path(__file__).resolve().parents[1]
 KINDS = {
@@ -157,6 +158,24 @@ def handoff_inventory(handoff):
         "mixedReviewVariants": len(handoff["mixedReviewPrerequisites"]),
         "prayerReadinessLessons": enhancement["prayerReadiness"]["lessonIds"],
     }
+    if review := handoff.get("scientificReview"):
+        result["handoff"]["contentPackages"] += 1
+        result["handoff"]["scientificReview"] = {
+            "package": review["package"],
+            "appliedDraftRecords": sum(row["kind"] != "blueprint" for row in review["changedRecordDigests"]),
+            "appliedBlueprintRecords": sum(row["kind"] == "blueprint" for row in review["changedRecordDigests"]),
+            "addedPendingSources": len(review["sourceAdditions"]),
+            "unusedOriginalSources": len(review["unusedOriginalSources"]),
+            "memorizationExcerptsReviewed": len(review["memorizationReview"]),
+            "repeatPromptGroups": len(review["duplicatePromptsBacklog"]),
+            "queueStatus": dict(Counter(row["status"] for row in queue)),
+            "originalSourceEvidence": dict(Counter(row["status"] for row in review["sourceLedger"])),
+        }
+        fingerprint = hashlib.sha256(digests)
+        for name, value in sorted(review["patchDigests"].items()):
+            fingerprint.update(name.encode())
+            fingerprint.update(bytes.fromhex(value))
+        result["inputDigest"] = fingerprint.hexdigest()
     return result
 
 
@@ -169,7 +188,7 @@ def main():
     parser.add_argument("inputs", type=Path, nargs="*", default=[])
     parser.add_argument("--check", action="store_true", help="compare the export with the tracked snapshot")
     args = parser.parse_args()
-    result = create_inventory(args.inputs) if args.inputs else handoff_inventory(load_handoff())
+    result = create_inventory(args.inputs) if args.inputs else handoff_inventory(load_review_handoff()[0])
     snapshot = ROOT / "docs/curriculum/public-inventory.json"
     content = inventory_json(result)
     if args.check:

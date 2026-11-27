@@ -8,3 +8,5 @@ For 004-01, decode independently versioned packs, validate the combined record g
 For the 004-02 pilot checkpoint, verify the CONTENT-007 input digests, select four lessons and generate a private local debug payload. Use the existing lesson player, challenge decoders and isolated preview stores behind an adult acknowledgment screen. Keep the standard entry point and production activation gate independent. Verify with targeted tests and the connected Android tablet.
 
 After owner pilot acceptance, generate the complete local review snapshot and correction queue from CONTENT-001–007. Reuse draft challenge normalization for the pilot. Export public-safe coverage from that validated graph and verify with targeted tests and static analysis.
+
+For the 004-03 draft checkpoint, guard the CONTENT-008 overlay with SHA-256 and exact before-values, then validate the corrected private authoring snapshot and regenerate the review queue, dashboard and sanitized inventory. Leave exact record approval and production activation open.

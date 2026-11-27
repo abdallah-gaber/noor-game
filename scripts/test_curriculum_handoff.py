@@ -11,6 +11,7 @@ from content_inventory import handoff_inventory, inventory_json
 from curriculum_handoff import (AUDIT, BLUEPRINT, CORE, CURRICULUM, ENHANCEMENT,
                                 challenge, load_handoff, validate_path, validate_prerequisites)
 from generate_curriculum_review import render_review
+from curriculum_review_patch import PATCH_DIR, load_review_handoff
 
 
 class ReviewLinks(HTMLParser):
@@ -123,3 +124,70 @@ class CanonicalTests(unittest.TestCase):
             patch.write_text(json.dumps(enhancement))
             with self.assertRaisesRegex(ValueError, "Unresolved|unresolved"):
                 load_handoff(curriculum)
+
+
+@unittest.skipUnless((CURRICULUM / PATCH_DIR / "corrections.json").is_file(),
+                     "Private CONTENT-008 files are local only")
+class CorrectedDraftTests(unittest.TestCase):
+    def test_corrected_inputs_preserve_ids_and_queue_holds_semantic_conflict(self):
+        baseline = load_handoff()
+        handoff, encoded = load_review_handoff()
+        review = handoff["scientificReview"]
+        inventory = handoff_inventory(handoff)
+        self.assertEqual(len(encoded), 8)
+        self.assertEqual(len(review["changedRecordDigests"]), 142)
+        self.assertTrue(all(row["beforeSha256"] != row["afterSha256"] for row in review["changedRecordDigests"]))
+        self.assertEqual([row["recordId"] for row in review["semanticConflicts"]], ["S01.Q03"])
+        self.assertEqual(handoff["variantDefinitions"]["S01.Q03"], baseline["variantDefinitions"]["S01.Q03"])
+        self.assertEqual(handoff["variantDefinitions"].keys(), baseline["variantDefinitions"].keys())
+        self.assertEqual(inventory["totals"], handoff_inventory(baseline)["totals"])
+        self.assertEqual(inventory["mechanics"], handoff_inventory(baseline)["mechanics"])
+        self.assertEqual(inventory["handoff"]["prayerReadinessLessons"],
+                         handoff_inventory(baseline)["handoff"]["prayerReadinessLessons"])
+        self.assertEqual(len(review["duplicatePromptsBacklog"]), 60)
+        self.assertEqual(sum(inventory["sources"].values()), 202)
+        self.assertEqual(len(review["unusedOriginalSources"]), 9)
+        for stage in ("sourceVerified", "ownerReviewed", "finalApproval", "integrated"):
+            self.assertFalse(any(row[stage] for row in inventory["stages"].values()))
+        statuses = {row["id"]: row["status"] for row in handoff["correctionQueue"]}
+        self.assertEqual(len(statuses), 40)
+        self.assertEqual(statuses["CONTENT-007-10"], "conflict_open")
+        self.assertEqual(statuses["memorization-rights"], "rights_candidate_open")
+        self.assertEqual(statuses["sources-ibadah"], "partial_open")
+        self.assertEqual(statuses["CONTENT-007-07"], "applied_edition_pending")
+        with tempfile.TemporaryDirectory() as folder:
+            corrected = Path(folder)
+            for name, data in encoded.items():
+                target = corrected / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(data)
+            self.assertEqual(load_handoff(corrected)["variantDefinitions"], handoff["variantDefinitions"])
+        html = ReviewLinks()
+        html.feed(render_review(handoff))
+        self.assertEqual(len(html.ids), len(set(html.ids)))
+        self.assertEqual(set(html.fragments) - set(html.ids), set())
+        snapshot = inventory_json(inventory)
+        self.assertNotRegex(snapshot, r"[\u0600-\u06ff]")
+        for private_value in ("https://", "beforeSha256", "afterSha256", "S01.Q03", "sourceRefs"):
+            self.assertNotIn(private_value, snapshot)
+
+    def test_wrong_before_or_bundle_digest_fails_closed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            curriculum = Path(folder) / "curriculum"
+            shutil.copytree(CURRICULUM, curriculum)
+            corrections = curriculum / PATCH_DIR / "corrections.json"
+            summary_file = curriculum / PATCH_DIR / "summary.json"
+            patch = json.loads(corrections.read_bytes())
+            op = patch["recordOperations"][0]
+            delta = next(iter(op["fields"].values()))
+            before = delta["before"]
+            delta["before"] = "wrong baseline value"
+            corrections.write_text(json.dumps(patch))
+            with self.assertRaisesRegex(ValueError, "Before-value conflict"):
+                load_review_handoff(curriculum)
+            delta["before"] = before
+            patch["summary"]["baselineBundleSha256"] = "0" * 64
+            summary_file.write_text(json.dumps(patch["summary"]))
+            corrections.write_text(json.dumps(patch))
+            with self.assertRaisesRegex(ValueError, "baseline digest does not match"):
+                load_review_handoff(curriculum)

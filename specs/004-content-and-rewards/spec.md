@@ -41,3 +41,10 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - Validate the whole draft graph, including authored answer definitions, scoped sources, cross-lesson knowledge, and ordered prayer readiness. Keep cross-lesson variants available for later mixed review.
 - Preserve proposals as an open correction queue and identify affected variant IDs. Show unresolved source verification and reuse rights separately. Reconcile draft and blueprint differences without changing authored text.
 - Generate browsable private review HTML and machine-readable records and queue. Regenerate public Mission Control from the same analysis using aggregate data and stable identifiers. Existing production activation remains the gate for any child content.
+
+## 004-03 corrected draft checkpoint
+
+- Require the exact CONTENT-008 baseline bundle digest, input file digests and guarded before-values before constructing a corrected draft snapshot.
+- Preserve original authoring files for audit. Apply compatible operations to their private authoring records and regenerate the review artifacts. Hold answer-semantic conflicts for review.
+- Keep the supplied dispositions and evidence linked to their queue items. Distinguish applied text edits from open source, historical edition, rights and human approval work.
+- Keep the public inventory aggregate-only and require the existing approval gate for child integration. Log repeated question prompts as future content-quality work.

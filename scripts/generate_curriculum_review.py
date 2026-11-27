@@ -7,7 +7,8 @@ import subprocess
 import sys
 
 from content_inventory import handoff_inventory, inventory_json
-from curriculum_handoff import ROOT, load_handoff
+from curriculum_handoff import ROOT
+from curriculum_review_patch import load_review_handoff
 from generate_dashboard import metrics, table
 
 OUTPUT = ROOT / ".dart_tool/noor-curriculum-review"
@@ -44,6 +45,12 @@ def source_links(scope, refs):
 
 def render_review(handoff):
     inventory = handoff_inventory(handoff)
+    scientific = handoff.get("scientificReview", {})
+    conflicts = {row["recordId"]: row for row in scientific.get("semanticConflicts", [])}
+    excerpts = {row["id"]: row for row in scientific.get("memorizationReview", [])}
+    source_review = {(row["scope"], row["sourceId"]): row for row in scientific.get("sourceLedger", [])}
+    source_review.update(((row["scope"], row["sourceId"]), row) for row in scientific.get("sourceAdditions", []))
+    unused_sources = {(row["scope"], row["sourceId"]) for row in scientific.get("unusedOriginalSources", [])}
     blueprint = handoff["blueprint"]
     enhancement = handoff["enhancement"]
     extras = handoff["extras"]
@@ -96,6 +103,14 @@ def render_review(handoff):
         if "additionalSourceRefs" in row:
             body += f'<p>Check the additional citations against linked knowledge · {links(row["knowledgeIds"])}</p>'
             body += f'<p>{source_links(row["sourceScope"], row["additionalSourceRefs"])}</p>'
+        for field in ("resolutionAr", "noteAr"):
+            if row.get(field):
+                body += arabic(row[field])
+        for url in row.get("evidenceUrls", []):
+            body += f'<p dir="ltr">{text(url)}</p>'
+        for id, conflict in conflicts.items():
+            if row["id"] in conflict["reasons"]:
+                body += f'<p>Withheld edit · {link(id)} · {text(conflict["reason"])}</p>'
         queue_body += detail(row["id"], row["kind"], row["status"], body)
 
     lesson_body = ""
@@ -105,7 +120,13 @@ def render_review(handoff):
         outline = planned[key]
         body = f'<p>{text(scope)} · {text(lesson["unitId"])}</p>'
         body += "<h4>CONTENT-001 planning</h4>" + arabic(outline["titleAr"])
-        body += "".join(arabic(row["id"] + " · " + row["textAr"]) for row in outline["objectives"])
+        authored_objectives = {row["id"]: row["textAr"] for row in lesson["objectives"]}
+        for row in outline["objectives"]:
+            id = row["id"]
+            body += f'<div id="{text(id)}">{arabic(id + " · " + row["textAr"])}'
+            if authored_objectives[id] != row["textAr"]:
+                body += arabic(authored_objectives[id])
+            body += "</div>"
         body += arabic(" · ".join(outline["candidateSources"]))
         body += "<h4>Knowledge units</h4>"
         for row in lesson["knowledgeUnits"]:
@@ -150,6 +171,10 @@ def render_review(handoff):
             if kind == "memorization":
                 body += arabic(row["explanationAr"]) + arabic(row["recall"]["promptAr"])
                 body += "<p>Unscored recall · reuse rights pending.</p>" if not row.get("rights") else "<p>Unscored recall.</p>"
+                if review := excerpts.get(row["id"]):
+                    body += f'<p>Excerpt review · {text(review["textReview"])}</p>'
+                    body += arabic(review["noteAr"])
+                    body += f'<p>Rights candidate · {text(review["rightsCandidate"]["evidence"])}</p>'
             extras_body += detail(row["id"], kind, row.get("titleAr", row.get("kind", "")), body)
     for row in extras["deferred"]:
         extras_body += arabic(row["reason"])
@@ -164,6 +189,12 @@ def render_review(handoff):
             body = arabic(row.get("title", "")) + arabic(row["locator"])
             if row.get("url"):
                 body += f'<p dir="ltr">{text(row["url"])}</p>'
+            if (scope, id) in unused_sources:
+                body += "<p>Original source retained for provenance. No current record cites it.</p>"
+            if review := source_review.get((scope, id)):
+                body += f'<p>Review evidence · {text(review.get("status", "new_pending_source"))}</p>'
+                for evidence in review["evidence"]:
+                    body += arabic(evidence["noteAr"]) + f'<p dir="ltr">{text(evidence["url"])}</p>'
             if usages := source_usages[scope, id]:
                 body += f'<p>Linked records · {links(sorted(usages))}</p>'
             sources_body += detail(source_key(scope, id), state, id, body)
@@ -175,13 +206,19 @@ def render_review(handoff):
         ("extras", "Memorization and treasures", extras_body),
         ("sources", "Source locators", sources_body),
     )
+    if scientific:
+        backlog = "".join(
+            f'<p>{link(row["lessonId"])} · {links(row["variantIds"])}</p>{arabic(row["promptAr"])}'
+            for row in scientific["duplicatePromptsBacklog"]
+        )
+        sections += (("prompt-backlog", "Repeated prompts · Future quality work", backlog),)
     sections_html = "".join(f'<section id="{id}"><h2>{title}</h2>{body}</section>' for id, title, body in sections)
     navigation = " · ".join(link(id, title) for id, title, _ in sections)
     totals = metrics([
         ("Draft lessons", inventory["totals"]["lessons"]),
         ("Draft knowledge units", inventory["totals"]["knowledgeUnits"]),
         ("Draft variants", inventory["totals"]["variants"]),
-        ("Open queue items", len(handoff["correctionQueue"])),
+        ("Open queue items", sum(row["status"] != "applied_draft" for row in handoff["correctionQueue"])),
         ("Final record approvals", sum(stages["finalApproval"] for stages in inventory["stages"].values())),
     ])
     return f"""<!doctype html>
@@ -198,7 +235,7 @@ details>details{{margin-inline-start:1rem}}[dir=rtl]{{text-align:right;font-size
 table{{border-collapse:collapse}}td,th{{text-align:start;border-bottom:1px solid #dae6df;padding:.4rem}}
 </style>
 <header><h1>Noor · Private curriculum review</h1>
-<p>CONTENT-001–007 · structurally checked drafts for adult review. Source verification, editorial decisions and final record approval are pending.</p>
+<p>{text("CONTENT-001–008" if scientific else "CONTENT-001–007")} · Structurally checked private drafts for adult review. Source verification, rights and final record approval are pending.</p>
 {totals}<p>CONTENT-001 plans {inventory["handoff"]["plannedLessons"]} lessons and {inventory["handoff"]["plannedObjectives"]} objectives.</p>
 <nav aria-label="Review sections">{navigation}</nav>
 <form id="jump"><label for="record-id">Record ID</label> <input id="record-id" required> <button>Open</button>
@@ -233,9 +270,13 @@ addEventListener('hashchange', openTarget); openTarget();
 
 
 def main():
-    handoff = load_handoff()
+    handoff, corrected = load_review_handoff()
     html = render_review(handoff)
     OUTPUT.mkdir(parents=True, exist_ok=True)
+    for name, data in corrected.items():
+        target = OUTPUT / "corrected-drafts" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
     for name, content in (("review-bundle.json", handoff), ("correction-queue.json", handoff["correctionQueue"])):
         (OUTPUT / name).write_text(json.dumps(content, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (OUTPUT / "index.html").write_text(html, encoding="utf-8")
