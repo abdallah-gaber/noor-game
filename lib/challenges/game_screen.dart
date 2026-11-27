@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../audio/pilot_effects.dart';
 import '../audio/speech_control.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
@@ -88,6 +89,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           .save(scope, widget.world, widget.lesson.id, next);
       if (!mounted) return;
       if (next.finished) ref.invalidate(progressProvider(scope));
+      _effect(
+        next.finished
+            ? PilotEffect.complete
+            : switch (next.feedback?.correct) {
+                true => PilotEffect.correct,
+                false => PilotEffect.retry,
+                null => PilotEffect.tap,
+              },
+      );
       setState(() {
         if (_session?.cursor != next.cursor) _revealed = false;
         _session = next;
@@ -97,6 +107,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       if (mounted) setState(() => _error = true);
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _effect(PilotEffect effect) {
+    if (widget.curriculum.isDraftPilot) {
+      ref.read(pilotEffectsProvider).play(effect);
     }
   }
 
@@ -174,6 +190,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           semanticsLabel: 'تقدّم التحدّيات',
         ),
         const SizedBox(height: 12),
+        if (widget.curriculum.isDraftPilot && item is Arrangement)
+          Text(item.kind.label, style: Theme.of(context).textTheme.titleMedium),
         switch (item) {
           final ScoredQuestion question => QuestionView(
             question: question,
@@ -187,13 +205,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             options: session.optionsFor(question),
             answer: answer,
             enabled: !_busy,
+            enablePilotEffects: widget.curriculum.isDraftPilot,
             onAnswer: (ids) => _save(session.submit(ids)),
           ),
           final Flashcard card => FlashcardView(
             card: card,
             revealed: _revealed || answer != null,
             recall: answer == null ? null : Recall.values.byName(answer.single),
-            onReveal: () => setState(() => _revealed = true),
+            onReveal: () {
+              setState(() => _revealed = true);
+              _effect(PilotEffect.tap);
+            },
             onRecall: (recall) => _save(session.submit([recall.name])),
           ),
           _ => const Text('هذا النشاط غير متاح.'),

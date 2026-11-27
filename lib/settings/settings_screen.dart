@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../audio/pilot_effects.dart';
+import '../audio/speech_control.dart';
 import '../design_system/noor_layout.dart';
 import '../design_system/noor_theme.dart';
 import 'settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, this.isPilot = false});
+
+  final bool isPilot;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +83,9 @@ class SettingsScreen extends ConsumerWidget {
                       const Divider(indent: 20, endIndent: 20, height: 1),
                       SwitchListTile(
                         title: const Text('المؤثّرات الصوتية'),
-                        subtitle: const Text('للمراحل القادمة'),
+                        subtitle: isPilot
+                            ? null
+                            : const Text('للمراحل القادمة'),
                         value: state.preferences.effects,
                         onChanged: state.saving
                             ? null
@@ -92,6 +98,26 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
+              if (isPilot) ...[
+                const SizedBox(height: 18),
+                const Text('اختبار القراءة العربية'),
+                const SpeechControl(
+                  text: 'مرحبًا، أنا نور.',
+                  showVoiceSetup: true,
+                ),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton.icon(
+                    onPressed: state.preferences.effects
+                        ? () => ref
+                              .read(pilotEffectsProvider)
+                              .play(PilotEffect.correct)
+                        : null,
+                    icon: const Icon(Icons.volume_up_rounded),
+                    label: const Text('جرّب المؤثّر الصوتي'),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

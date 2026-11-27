@@ -1,11 +1,13 @@
 package dev.noor.noor
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.speech.tts.Voice
+import android.util.Log
 import io.flutter.plugin.common.MethodChannel
 
 internal class OfflineArabicSpeech(private val context: Context) {
@@ -21,6 +23,8 @@ internal class OfflineArabicSpeech(private val context: Context) {
     private var generation = 0
     private var sequence = 0L
     private var request: Request? = null
+
+    val isReading: Boolean get() = request != null
 
     fun read(text: String, result: MethodChannel.Result) {
         stop()
@@ -46,6 +50,7 @@ internal class OfflineArabicSpeech(private val context: Context) {
     private fun onInitialized(status: Int) {
         val service = engine
         if (status != TextToSpeech.SUCCESS || service == null) {
+            trace("Speech initialization failed: $status")
             dispose()
             return
         }
@@ -78,18 +83,20 @@ internal class OfflineArabicSpeech(private val context: Context) {
         val current = request ?: return
         val service = engine ?: return
         val accepted = runCatching {
-            val voice = service.voices.orEmpty()
-                .filter {
-                    it.locale.language == "ar" &&
-                        !it.isNetworkConnectionRequired &&
-                        it.features?.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED) == false
-                }
+            val arabic = service.voices.orEmpty().filter { it.locale.language == "ar" }
+            val offline = arabic.filter {
+                !it.isNetworkConnectionRequired &&
+                    it.features?.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED) != true
+            }
+            trace("engine=${service.defaultEngine} Arabic voices=${arabic.size} offline installed=${offline.size}")
+            val voice = offline
                 .sortedWith(compareByDescending<Voice> { it.quality }.thenBy { it.latency }.thenBy { it.name })
                 .firstOrNull { service.setVoice(it) == TextToSpeech.SUCCESS }
 
             if (voice == null) {
                 false
             } else {
+                trace("Arabic offline voice selected: ${voice.name}")
                 service.setSpeechRate(0.88f)
                 service.speak(current.text, TextToSpeech.QUEUE_FLUSH, null, current.id) ==
                     TextToSpeech.SUCCESS
@@ -102,7 +109,14 @@ internal class OfflineArabicSpeech(private val context: Context) {
         val current = request ?: return
         if (current.id != id) return
         request = null
+        trace("speech completed=$played")
         current.result.success(played)
+    }
+
+    private fun trace(message: String) {
+        if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
+            Log.d("NoorAudio", message)
+        }
     }
 
     fun stop() {

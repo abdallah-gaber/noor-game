@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../challenges/arrangement.dart';
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
 import '../challenges/game_screen.dart';
@@ -39,6 +40,17 @@ GoRouter createNoorRouter({
       loadCurriculum(enablePreview: enablePreview);
   var adultConfirmed = false;
 
+  Arrangement? pilotActivity(GoRouterState state) {
+    final world = WorldId.fromId(state.pathParameters['worldId']);
+    if (pilot == null || world == null) return null;
+    return pilot
+        .lesson(world, state.pathParameters['lessonId'])
+        ?.challenges
+        .whereType<Arrangement>()
+        .where((activity) => activity.id == state.pathParameters['variantId'])
+        .firstOrNull;
+  }
+
   return GoRouter(
     initialLocation: initialLocation,
     redirect: (context, state) {
@@ -70,7 +82,7 @@ GoRouter createNoorRouter({
         routes: [
           GoRoute(
             path: 'settings',
-            builder: (context, state) => const SettingsScreen(),
+            builder: (context, state) => SettingsScreen(isPilot: pilot != null),
           ),
           GoRoute(
             path: 'worlds/:worldId',
@@ -129,6 +141,18 @@ GoRouter createNoorRouter({
                   );
                 },
                 routes: [
+                  if (pilot != null)
+                    GoRoute(
+                      path: 'practice/:variantId',
+                      redirect: (_, state) => pilotActivity(state) != null
+                          ? null
+                          : '/worlds/${state.pathParameters['worldId']}/lessons/${state.pathParameters['lessonId']}',
+                      builder: (_, state) => ChallengePreview(
+                        key: ValueKey(state.pathParameters['variantId']),
+                        definition: pilotActivity(state)!,
+                        isPilot: true,
+                      ),
+                    ),
                   GoRoute(
                     path: 'play',
                     redirect: (context, state) {
@@ -180,7 +204,10 @@ GoRouter createNoorRouter({
                     : '/preview',
                 builder: (context, state) {
                   final id = state.pathParameters['id']!;
-                  return ChallengePreview(key: ValueKey(id), id: id);
+                  return ChallengePreview(
+                    key: ValueKey(id),
+                    definition: debugChallenges[id]!,
+                  );
                 },
               ),
             ],

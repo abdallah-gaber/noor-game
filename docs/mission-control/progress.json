@@ -228,8 +228,11 @@
           "id": "004-02",
           "title": "Coordinate pilot content and Season One production",
           "status": "review",
-          "evidence": ["docs/qa/spec-004/004-02-adult-review-pilot.md"],
-          "note": "Four-world adult-review pilot with 15 draft variants across five mechanics, including practical ablution. Focused tests and analysis passed. Owner playthrough and broader authoring remain pending.",
+          "evidence": [
+            "docs/qa/spec-004/004-02-adult-review-pilot.md",
+            "docs/qa/spec-004/004-02-pilot-audio-and-activities.md"
+          ],
+          "note": "Owner accepted the first tablet pilot's presentation and responsiveness. Installed direct ordering and matching practice and offline sound effects. 45 focused tests passed. Offline Arabic voice installation and owner listening retest remain pending.",
           "priority": "P0"
         },
         {
