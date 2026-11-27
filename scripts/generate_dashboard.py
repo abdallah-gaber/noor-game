@@ -99,7 +99,7 @@ for folder, names in {
         "tablet-true-false.webp",
     ),
     "spec-005": (
-        "005-01-toolchain.md", "005-02-layouts.md", "005-03-effects.md",
+        "005-01-toolchain.md", "005-02-layouts.md", "005-03-effects.md", "005-04-owner-playtest.md",
         "phone-audio-settings.png",
         "phone-home.png", "phone-lesson.png", "phone-large-text-settings.png",
         "tablet-home.png", "tablet-lesson.png", "tablet-landscape-lesson.png",

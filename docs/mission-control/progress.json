@@ -309,9 +309,9 @@
         {
           "id": "005-04",
           "title": "Run supervised child playtest and record observations",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "review",
+          "evidence": ["docs/qa/spec-005/005-04-owner-playtest.md"],
+          "note": "Separate owner milestone. Anonymized observation guide prepared. No child observations collected.",
           "priority": "P0"
         },
         {
