@@ -411,7 +411,7 @@ def apply_content_009(baseline, encoded, patch, ledger):
     return corrected, encoded
 
 
-def load_review_handoff(curriculum=CURRICULUM):
+def load_content_009(curriculum=CURRICULUM):
     baseline, encoded = load_content_008(curriculum)
     package = curriculum / FOLLOWUP_DIR
     if not package.is_dir():
@@ -424,3 +424,10 @@ def load_review_handoff(curriculum=CURRICULUM):
         "content-009/source-ledger.json": digest(ledger),
     })
     return corrected, encoded
+
+def load_review_handoff(curriculum=CURRICULUM):
+    from starter_candidate import PACKAGE, load_starter_candidate
+    if (curriculum / PACKAGE).is_file():
+        corrected, encoded, _, _ = load_starter_candidate(curriculum)
+        return corrected, encoded
+    return load_content_009(curriculum)

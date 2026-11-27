@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
+import '../progress/lesson_progress.dart';
 import 'review_selection.dart';
 import 'review_store.dart';
 
@@ -22,8 +23,12 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   Future<void> _setIntervals(Set<int> days) async {
     setState(() => _saving = true);
     try {
-      await ref.read(reviewStoreProvider).setIntervals(days);
-      if (mounted) ref.invalidate(reviewIntervalsProvider);
+      await ref
+          .read(reviewStoreFor(widget.curriculum.progressScope))
+          .setIntervals(days);
+      if (mounted) {
+        ref.invalidate(reviewIntervalsFor(widget.curriculum.progressScope));
+      }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +42,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final intervals = ref.watch(reviewIntervalsProvider);
+    final intervals = ref.watch(
+      reviewIntervalsFor(widget.curriculum.progressScope),
+    );
     final number = MaterialLocalizations.of(context).formatDecimal;
     return Scaffold(
       appBar: const NoorAppBar('المراجعة'),
@@ -46,7 +53,8 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.curriculum.reviewLabel),
+            if (widget.curriculum.isPreview)
+              Text(widget.curriculum.reviewLabel),
             const SizedBox(height: 16),
             Wrap(
               spacing: 12,
@@ -87,7 +95,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 ],
               ),
               error: (_, _) => TextButton(
-                onPressed: () => ref.invalidate(reviewIntervalsProvider),
+                onPressed: () => ref.invalidate(
+                  reviewIntervalsFor(widget.curriculum.progressScope),
+                ),
                 child: const Text('حاول فتح فترات المراجعة مجددًا'),
               ),
               loading: () => const LinearProgressIndicator(

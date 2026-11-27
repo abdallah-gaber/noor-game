@@ -74,10 +74,7 @@ void main() {
       expect(find.textContaining('أول محاولة:'), findsNWidgets(2));
       expect(find.textContaining('الأداء الأخير:'), findsNWidgets(2));
       expect(find.textContaining('الصحيح في النهاية:'), findsNWidgets(2));
-      expect(
-        find.text('لا توجد مراجع دينية لهذا الدرس التجريبي.'),
-        findsOneWidget,
-      );
+      expect(find.text('لا توجد مراجع لهذا الدرس.'), findsOneWidget);
 
       await _tap(tester, 'عالم الإيمان');
       expect(find.text('نقاط القوّة'), findsOneWidget);

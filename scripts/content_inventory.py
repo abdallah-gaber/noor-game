@@ -184,6 +184,9 @@ def handoff_inventory(handoff):
             fingerprint.update(name.encode())
             fingerprint.update(bytes.fromhex(value))
         result["inputDigest"] = fingerprint.hexdigest()
+    if candidate := handoff.get("starterCandidate"):
+        result["handoff"]["contentPackages"] += 1
+        result["handoff"]["starterCandidate"] = candidate
     return result
 
 

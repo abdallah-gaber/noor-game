@@ -219,6 +219,10 @@ def render_review(handoff):
             for row in scientific["duplicatePromptsBacklog"]
         )
         sections += (("prompt-backlog", "Repeated prompts · Future quality work", backlog),)
+    if starter := handoff.get("starterCandidate"):
+        sections += (("starter", "Starter approval candidate",
+                      f'<p>{starter["lessons"]} lessons · {starter["knowledge"]} knowledge records · '
+                      f'{starter["variant"]} variants · {starter["recordRequests"]} pending record requests.</p>'),)
     sections_html = "".join(f'<section id="{id}"><h2>{title}</h2>{body}</section>' for id, title, body in sections)
     navigation = " · ".join(link(id, title) for id, title, _ in sections)
     totals = metrics([
@@ -242,7 +246,7 @@ details>details{{margin-inline-start:1rem}}[dir=rtl]{{text-align:right;font-size
 table{{border-collapse:collapse}}td,th{{text-align:start;border-bottom:1px solid #dae6df;padding:.4rem}}
 </style>
 <header><h1>Noor · Private curriculum review</h1>
-<p>{text("CONTENT-001 through " + scientific.get("package", "CONTENT-007"))} · Structurally checked private drafts for adult review. Source verification, rights and final record approval are pending.</p>
+<p>{text("CONTENT-001 through " + ("CONTENT-010" if handoff.get("starterCandidate") else scientific.get("package", "CONTENT-007")))} · Structurally checked private drafts for adult review. Source verification, rights and final record approval are pending.</p>
 {totals}<p>CONTENT-001 plans {inventory["handoff"]["plannedLessons"]} lessons and {inventory["handoff"]["plannedObjectives"]} objectives.</p>
 <nav aria-label="Review sections">{navigation}</nav>
 <form id="jump"><label for="record-id">Record ID</label> <input id="record-id" required> <button>Open</button>

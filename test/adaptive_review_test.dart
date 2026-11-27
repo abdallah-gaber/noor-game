@@ -8,6 +8,7 @@ import 'package:noor/challenges/debug_catalog.dart';
 import 'package:noor/challenges/game_session.dart';
 import 'package:noor/challenges/scored_question.dart';
 import 'package:noor/progress/progress_store.dart';
+import 'package:noor/progress/lesson_progress.dart';
 import 'package:noor/review/review_history.dart';
 import 'package:noor/review/review_selection.dart';
 import 'package:noor/review/review_store.dart';
@@ -132,6 +133,52 @@ void main() {
     },
   );
 
+  test(
+    'approved review, daily state and intervals are separate from preview',
+    () async {
+      final database = _MemoryNoorDatabase();
+      final preview = ReviewStore(database);
+      final approved = ReviewStore(database, scope: ProgressScope.approved);
+      await preview.setIntervals({1});
+      await approved.setIntervals({7, 14});
+      expect(await preview.intervals(), [1]);
+      expect(await approved.intervals(), [7, 14]);
+      final trial = (await preview.open(
+        ReviewMode.daily,
+        [_pool.first],
+        ReviewHistory(),
+        [1],
+        _today,
+      ))!;
+      await preview.save(trial.key, trial.session.submit(['triangle'])!);
+      final production = (await approved.open(
+        ReviewMode.daily,
+        [_pool.first],
+        ReviewHistory(),
+        [7, 14],
+        _today,
+      ))!;
+      expect(production.session.attempts, isEmpty);
+      expect((await approved.history()).recent, isEmpty);
+      expect(
+        (await preview.history())
+            .knowledge(_choice.knowledgeIds.single)
+            ?.firstCorrect,
+        1,
+      );
+      await approved.save(
+        production.key,
+        production.session.submit(['square'])!,
+      );
+      expect(
+        (await approved.history())
+            .knowledge(_choice.knowledgeIds.single)
+            ?.firstCorrect,
+        0,
+      );
+    },
+  );
+
   testWidgets('preview launches daily play and public routes fall back home', (
     tester,
   ) async {
@@ -180,7 +227,7 @@ class _MemoryNoorDatabase extends NoorDatabase {
 
 class _MemoryDatabase implements Database, Transaction {
   final _rows = <Map<String, Object?>>[];
-  Map<String, Object?>? _settings;
+  final _settings = <String, Map<String, Object?>>{};
 
   @override
   Future<T> transaction<T>(
@@ -195,11 +242,11 @@ class _MemoryDatabase implements Database, Transaction {
     String? nullColumnHack,
     ConflictAlgorithm? conflictAlgorithm,
   }) async {
-    if (table == 'preview_review_settings') {
-      _settings = values;
+    if (table == 'review_settings') {
+      _settings[values['scope'] as String] = values;
     } else {
       expect(table, 'game_sessions');
-      expect(values['scope'], 'preview');
+      expect(values['scope'], anyOf('preview', 'approved'));
       expect(values['lesson_id'], startsWith(reviewHistoryPrefix));
       _rows.add(values);
     }
@@ -216,9 +263,9 @@ class _MemoryDatabase implements Database, Transaction {
   }) async {
     expect(table, 'game_sessions');
     final [scope, id, key, compatibility, revision] = whereArgs!;
-    expect(scope, 'preview');
     final row = _rows.singleWhere(
       (row) =>
+          row['scope'] == scope &&
           row['id'] == id &&
           row['lesson_id'] == key &&
           row['compatibility'] == compatibility &&
@@ -241,16 +288,20 @@ class _MemoryDatabase implements Database, Transaction {
     int? limit,
     int? offset,
   }) async {
-    if (table == 'preview_review_settings') return [?_settings];
+    if (table == 'review_settings') {
+      return [?_settings[whereArgs!.single as String]];
+    }
     expect(table, 'game_sessions');
-    expect(whereArgs!.first, 'preview');
-    if (whereArgs.length == 2) {
-      return _rows.reversed
+    final scoped = _rows
+        .where((row) => row['scope'] == whereArgs!.first)
+        .toList();
+    if (whereArgs!.length == 2) {
+      return scoped.reversed
           .where((row) => row['lesson_id'] == whereArgs[1])
           .take(1)
           .toList();
     }
-    return _rows.skip(offset ?? 0).take(limit ?? _rows.length).toList();
+    return scoped.skip(offset ?? 0).take(limit ?? scoped.length).toList();
   }
 
   @override

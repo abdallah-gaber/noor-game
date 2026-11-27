@@ -12,11 +12,11 @@ class HomeScreen extends StatelessWidget {
     super.key,
     required this.showPreview,
     this.pilotWorlds,
-    this.showPreviewTools = false,
+    this.showLearningTools = false,
   });
 
   final bool showPreview;
-  final bool showPreviewTools;
+  final bool showLearningTools;
   final Iterable<WorldId>? pilotWorlds;
 
   @override
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
-            if (showPreviewTools)
+            if (showLearningTools)
               Wrap(
                 spacing: 10,
                 runSpacing: 4,

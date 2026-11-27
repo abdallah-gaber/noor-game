@@ -67,3 +67,9 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - An explicit preview-only Parent Mode entry shows actual saved world and lesson progress, recent activity and knowledge results. Pre-seeded fixture unlocks do not inflate completion.
 - Separate first-attempt, recent first-pass and eventual correctness. Describe strengths and review needs using recent evidence, and offer recommended practice from the adaptive schedule.
 - Show readable draft source titles, locators and available addresses in context, with an unverified label. Synthetic fixtures contain no religious sources. The view works offline with no account and stays behind the adult review gate for authored drafts.
+
+## CONTENT-010 starter approval checkpoint
+
+- Validate the exact private baseline and evidence manifest. Preserve source scope, variant identities, grading and the declared prerequisite graph. A missing prerequisite blocks the candidate.
+- Generate private v1 draft packs and exact record digest requests. Human verification and trusted exact-record approval remain separate from this checkpoint.
+- Enable the learning tools only for a gated preview or an integrated approved catalog. Scope all rewards, practice records and review preferences to that catalog's progress scope.

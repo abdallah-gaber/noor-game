@@ -26,3 +26,9 @@ With the local CONTENT-008 package installed, the same generation command verifi
 Use the consolidated Correction queue for outstanding scientific, historical edition and reuse-rights work. Entries that carry partial evidence or draft edits remain open where further verification is required. The local source view identifies original locators retained for provenance. See the [corrected-draft QA](../qa/spec-004/004-03-corrected-draft.md).
 
 With CONTENT-009 present, the generator verifies the exact CONTENT-008 bundle, applies the follow-up to private copies and records its dispositions. The prayer-readiness path introduces preparation for prayer. Complete practical instruction remains future content.
+
+### Starter approval candidate
+
+Run `python3 scripts/starter_candidate.py` with CONTENT-010 present. It writes four private v1 draft packs and `approval-request.json` to `.dart_tool/noor-starter-candidate/`. The request includes the exact draft digests and conditional digests for the case where humans verify the same record and only its review status changes. Any change to a locator, authenticity note or other record field requires a new digest and review. The request has no trusted approval entries.
+
+Run `python3 scripts/generate_curriculum_review.py` for the consolidated private view and public aggregate inventory. Only integrated, actually approved catalogs enable the learning tools in production. The remaining lessons and optional extras are still in private authoring.

@@ -12,7 +12,7 @@ from curriculum_handoff import (AUDIT, BLUEPRINT, CORE, CURRICULUM, ENHANCEMENT,
                                 challenge, load_handoff, validate_path, validate_prerequisites)
 from generate_curriculum_review import render_review
 from curriculum_review_patch import (FOLLOWUP_DIR, PATCH_DIR, apply_content_009, load_content_008,
-                                     load_review_handoff)
+                                     load_content_009)
 
 
 class ReviewLinks(HTMLParser):
@@ -199,7 +199,7 @@ class CorrectedDraftTests(unittest.TestCase):
 class FollowupTests(unittest.TestCase):
     def test_latest_handoff_keeps_scoring_and_pending_states(self):
         old, encoded = load_content_008()
-        new, _ = load_review_handoff()
+        new, _ = load_content_009()
         self.assertEqual(new["scientificReview"]["sourceLedger"], old["scientificReview"]["sourceLedger"])
         self.assertEqual(new["variantDefinitions"]["S01.Q03"], old["variantDefinitions"]["S01.Q03"])
         for id, definition in old["variantDefinitions"].items():

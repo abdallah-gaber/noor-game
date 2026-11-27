@@ -99,20 +99,51 @@ class IntegratedCatalog {
     final lessonsByUnit = <String, List<LearningLesson>>{};
     for (final record in recordsOf(RecordKind.lesson)) {
       final revision = _checked.lessonRevision(record);
+      final knowledge = record
+          .ids('knowledgeIds')
+          .map((id) => records[id]!)
+          .toList();
+      final sourceIds = {
+        for (final entry in knowledge) ...entry.ids('sourceRefs'),
+        for (final id in record.ids('variantIds'))
+          ...records[id]!.ids('sourceRefs'),
+      };
       final lesson = LearningLesson(
         id: record.id,
         title: record.text('title'),
         contentRevision: revision,
         prerequisiteIds: record.ids('prerequisiteIds'),
+        knowledgeLabels: Map.unmodifiable({
+          for (final entry in knowledge) entry.id: entry.text('title'),
+        }),
+        sources: List.unmodifiable([
+          for (final id in sourceIds)
+            (
+              id: id,
+              title: records[id]!.text('title'),
+              locator: records[id]!.text('locator'),
+              url: records[id]!.data['url'] as String?,
+            ),
+        ]),
         steps: List<LessonStep>.unmodifiable(
-          record.ids('knowledgeIds').map((id) {
-            final knowledge = records[id]!;
-            return LessonStep(
-              knowledge.text('title'),
-              knowledge.text('text'),
-              LessonPicture.trail,
-            );
-          }),
+          record
+              .ids('knowledgeIds')
+              .map((id) {
+                final knowledge = records[id]!;
+                return LessonStep(
+                  knowledge.text('title'),
+                  knowledge.text('text'),
+                  LessonPicture.trail,
+                );
+              })
+              .followedBy([
+                if (record.data['adultActivity'] case final String activity)
+                  LessonStep(
+                    'نشاط مع أحد الوالدين',
+                    activity,
+                    LessonPicture.trail,
+                  ),
+              ]),
         ),
         challenges: List<ChallengeDefinition>.unmodifiable(
           record.ids('variantIds').map((id) => _checked.variants[id]!),

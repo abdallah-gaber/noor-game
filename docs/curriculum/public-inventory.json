@@ -6,7 +6,7 @@
     "understanding": 324
   },
   "handoff": {
-    "contentPackages": 9,
+    "contentPackages": 10,
     "correctionQueue": {
       "authoredCorrection": 11,
       "citationAlignment": 3,
@@ -60,9 +60,19 @@
       },
       "repeatPromptGroups": 60,
       "unusedOriginalSources": 9
+    },
+    "starterCandidate": {
+      "deferredLessons": 54,
+      "knowledge": 18,
+      "lessons": 6,
+      "openQueue": 12,
+      "packs": 4,
+      "recordRequests": 112,
+      "scopedSourceAdditions": 3,
+      "variant": 65
     }
   },
-  "inputDigest": "8bd87e66212cc22397069952f6be05a847fd5ef3e33cc336946fbe39e15eec9e",
+  "inputDigest": "fb5c6f17ec8ed3d8a52fcf9fc4688f67ff664ed41b24b9dd938ff112ed5a99b0",
   "mechanics": {
     "flashcard": 168,
     "matching": 12,
@@ -72,7 +82,7 @@
   },
   "sources": {
     "historical_edition_review_pending": 7,
-    "locator_review_pending": 198
+    "locator_review_pending": 201
   },
   "stages": {
     "knowledgeUnits": {

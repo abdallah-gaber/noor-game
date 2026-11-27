@@ -41,6 +41,8 @@ GoRouter createNoorRouter({
       pilot ??
       catalog?.toCurriculum() ??
       loadCurriculum(enablePreview: enablePreview);
+  final hasLearningTools =
+      catalog != null || (showPreview && curriculum.isPreview);
   var adultConfirmed = false;
 
   Arrangement? pilotActivity(GoRouterState state) {
@@ -81,10 +83,10 @@ GoRouter createNoorRouter({
         builder: (context, state) => HomeScreen(
           showPreview: showPreview && pilot == null,
           pilotWorlds: pilot?.units.keys,
-          showPreviewTools: showPreview && curriculum.isPreview,
+          showLearningTools: hasLearningTools,
         ),
         routes: [
-          if (showPreview && curriculum.isPreview)
+          if (hasLearningTools)
             GoRoute(
               path: 'review',
               builder: (_, _) => ReviewScreen(curriculum: curriculum),
@@ -100,7 +102,7 @@ GoRouter createNoorRouter({
                   ),
               ],
             ),
-          if (showPreview && curriculum.isPreview)
+          if (hasLearningTools)
             GoRoute(
               path: 'parent',
               builder: (_, _) => ParentScreen(curriculum: curriculum),

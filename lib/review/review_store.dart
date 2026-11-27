@@ -12,24 +12,28 @@ import '../storage/noor_database.dart';
 import 'review_history.dart';
 import 'review_selection.dart';
 
-final reviewStoreProvider = Provider<ReviewStore>(
-  (ref) => ReviewStore(ref.watch(noorDatabaseProvider)),
+final reviewStoreFor = Provider.family<ReviewStore, ProgressScope>(
+  (ref, scope) => ReviewStore(ref.watch(noorDatabaseProvider), scope: scope),
 );
-final reviewHistoryProvider = FutureProvider.autoDispose<ReviewHistory>(
-  (ref) => ref.watch(reviewStoreProvider).history(),
-  retry: (count, error) => null,
-);
-final reviewIntervalsProvider = FutureProvider.autoDispose<List<int>>(
-  (ref) => ref.watch(reviewStoreProvider).intervals(),
-  retry: (count, error) => null,
-);
+final reviewHistoryFor = FutureProvider.autoDispose
+    .family<ReviewHistory, ProgressScope>(
+      (ref, scope) => ref.watch(reviewStoreFor(scope)).history(),
+      retry: (count, error) => null,
+    );
+final reviewIntervalsFor = FutureProvider.autoDispose
+    .family<List<int>, ProgressScope>(
+      (ref, scope) => ref.watch(reviewStoreFor(scope)).intervals(),
+      retry: (count, error) => null,
+    );
+final reviewHistoryProvider = reviewHistoryFor(ProgressScope.preview);
+final reviewIntervalsProvider = reviewIntervalsFor(ProgressScope.preview);
 
 typedef ReviewRound = ({String key, GameSession session});
 
 class ReviewStore {
-  ReviewStore(this._database);
+  ReviewStore(this._database, {this.scope = ProgressScope.preview});
   final NoorDatabase _database;
-  static const _scope = ProgressScope.preview;
+  final ProgressScope scope;
 
   Future<ReviewHistory> history() async {
     final database = await _database.open();
@@ -42,7 +46,7 @@ class ReviewStore {
           'game_sessions',
           columns: ['lesson_id', 'snapshot', 'updated_at'],
           where: 'scope = ?',
-          whereArgs: [_scope.name],
+          whereArgs: [scope.name],
           orderBy: 'COALESCE(updated_at, 0), rowid',
           limit: pageSize,
           offset: offset,
@@ -65,7 +69,11 @@ class ReviewStore {
 
   Future<List<int>> intervals() async {
     final database = await _database.open();
-    final rows = await database.query('preview_review_settings');
+    final rows = await database.query(
+      'review_settings',
+      where: 'scope = ?',
+      whereArgs: [scope.name],
+    );
     final mask = rows.firstOrNull?['interval_mask'] as int? ?? 15;
     return [
       for (final (index, days) in spacingDays.indexed)
@@ -82,8 +90,8 @@ class ReviewStore {
         if (days.contains(day)) 1 << index,
     ].reduce((a, b) => a | b);
     final database = await _database.open();
-    await database.insert('preview_review_settings', {
-      'id': 1,
+    await database.insert('review_settings', {
+      'scope': scope.name,
       'interval_mask': mask,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
@@ -105,7 +113,7 @@ class ReviewStore {
         'game_sessions',
         columns: ['snapshot', 'compatibility'],
         where: 'scope = ? AND lesson_id = ?',
-        whereArgs: [_scope.name, key],
+        whereArgs: [scope.name, key],
         orderBy: 'rowid DESC',
         limit: 1,
       );
@@ -131,7 +139,7 @@ class ReviewStore {
         random,
       );
       await tx.insert('game_sessions', {
-        'scope': _scope.name,
+        'scope': scope.name,
         'id': session.id,
         'lesson_id': key,
         'compatibility': session.plan.compatibility,
@@ -147,7 +155,7 @@ class ReviewStore {
       throw ArgumentError.value(key, 'key');
     }
     final database = await _database.open();
-    await writeGameSnapshot(database, _scope, key, session);
+    await writeGameSnapshot(database, scope, key, session);
   }
 }
 

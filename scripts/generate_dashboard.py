@@ -100,7 +100,7 @@ for folder, names in {
         "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
         "004-03-corrected-draft.md", "004-03-content-009.md",
         "004-04-preview-rewards.md", "004-05-adaptive-review.md",
-        "004-06-parent-mode.md", "release-world.webp",
+        "004-06-parent-mode.md", "004-03-starter-candidate.md", "release-world.webp",
     ),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
@@ -311,6 +311,12 @@ class Dashboard:
                 approval += table(("Correction disposition", "Items"), review["queueStatus"].items())
                 approval += table(("Partial source evidence", "Original scoped sources"),
                                   review["originalSourceEvidence"].items())
+        if starter := data.get("handoff", {}).get("starterCandidate"):
+            approval += metrics([
+                ("Starter lessons awaiting approval", starter["lessons"]),
+                ("Starter record approval requests", starter["recordRequests"]),
+                ("Lessons in authoring", starter["deferredLessons"]),
+            ])
         approval += table(("Source status", "Scoped source records"),
                           ((key.replace("_", " "), count(total)) for key, total in data["sources"].items()))
         extras = table(

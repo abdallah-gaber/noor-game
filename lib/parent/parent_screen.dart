@@ -17,9 +17,10 @@ class ParentScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progress = ref.watch(progressProvider(ProgressScope.preview));
-    final history = ref.watch(reviewHistoryProvider);
-    final intervals = ref.watch(reviewIntervalsProvider);
+    final scope = curriculum.progressScope;
+    final progress = ref.watch(progressProvider(scope));
+    final history = ref.watch(reviewHistoryFor(scope));
+    final intervals = ref.watch(reviewIntervalsFor(scope));
     return Scaffold(
       appBar: const NoorAppBar('وضع الوالدين'),
       body: NoorPage(
@@ -27,14 +28,14 @@ class ParentScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(curriculum.reviewLabel),
+            if (curriculum.isPreview) Text(curriculum.reviewLabel),
             const SizedBox(height: 16),
             if (progress.hasError || history.hasError || intervals.hasError)
               OutlinedButton(
                 onPressed: () {
-                  ref.invalidate(progressProvider(ProgressScope.preview));
-                  ref.invalidate(reviewHistoryProvider);
-                  ref.invalidate(reviewIntervalsProvider);
+                  ref.invalidate(progressProvider(scope));
+                  ref.invalidate(reviewHistoryFor(scope));
+                  ref.invalidate(reviewIntervalsFor(scope));
                 },
                 child: const Text('تعذّر فتح التقدّم. حاول مجددًا.'),
               )
@@ -154,15 +155,13 @@ class _ParentReport extends StatelessWidget {
                         ),
                       ),
                     if (lesson.sources.isEmpty)
-                      const ListTile(
-                        title: Text('لا توجد مراجع دينية لهذا الدرس التجريبي.'),
-                      )
+                      const ListTile(title: Text('لا توجد مراجع لهذا الدرس.'))
                     else
                       ExpansionTile(
                         title: const Text('مراجع الدرس'),
-                        subtitle: const Text(
-                          'مراجع المسودة في انتظار التحقّق.',
-                        ),
+                        subtitle: curriculum.isPreview
+                            ? const Text('مراجع المسودة في انتظار التحقّق.')
+                            : null,
                         children: [
                           for (final source in lesson.sources)
                             ListTile(

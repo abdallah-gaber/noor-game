@@ -10,6 +10,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/app/noor_app.dart';
 import 'package:noor/challenges/arrangement.dart';
 import 'package:noor/challenges/game_session.dart';
+import 'package:noor/challenges/game_store.dart';
+import 'package:noor/progress/reward_progress.dart';
+import 'package:noor/progress/reward_store.dart';
+import 'package:noor/review/review_history.dart';
+import 'package:noor/review/review_selection.dart';
+import 'package:noor/review/review_store.dart';
+import 'package:noor/storage/noor_database.dart';
 import 'package:noor/challenges/scored_question.dart';
 import 'package:noor/content/curriculum.dart';
 import 'package:noor/content/packs/bundled_catalog.dart';
@@ -426,6 +433,77 @@ void main() {
       expect(progress.value.records, isEmpty);
     },
   );
+  testWidgets('approved synthetic catalog opens scoped learning tools', (
+    tester,
+  ) async {
+    final packs = _examples(production: true);
+    final catalog = _ingestor.activate(
+      packs,
+      approvals: _ledger(packs),
+      assetDigests: _digests(),
+    );
+    final progress = MemoryProgressStore();
+    await progress.save(
+      ProgressScope.approved,
+      const LessonProgress(
+        world: WorldId.iman,
+        lessonId: _learn,
+        contentVersion: 'prior',
+        stepIndex: 0,
+        completed: true,
+        updatedAt: 1,
+      ),
+    );
+    final store = _ApprovedFixtureReview();
+    final router = createNoorRouter(catalog: catalog, enablePreview: false);
+    addTearDown(router.dispose);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          progressStoreProvider.overrideWithValue(progress),
+          gameStoreProvider.overrideWithValue(_CompletedApprovedGame()),
+          reviewStoreFor(ProgressScope.approved).overrideWithValue(store),
+          reviewStoreFor(ProgressScope.preview)
+              .overrideWith((_) => throw StateError('preview scope read')),
+          rewardsProvider(ProgressScope.approved).overrideWith(
+            (_) => const RewardProgress(starsByLesson: {_learn: 3}),
+          ),
+          previewRewardsProvider.overrideWith(
+            (_) => throw StateError('preview rewards read'),
+          ),
+        ],
+        child: NoorApp(router: router),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('وضع الوالدين'), findsOneWidget);
+    router.go('/parent');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('عالم الإيمان'));
+    await tester.pumpAndSettle();
+    final inLesson = find
+        .text(catalog.toCurriculum().lesson(WorldId.iman, _learn)!.title)
+        .first;
+    await tester.ensureVisible(inLesson);
+    await tester.tap(inLesson);
+    await tester.pumpAndSettle();
+    final source = find.text('مراجع الدرس');
+    await tester.ensureVisible(source);
+    await tester.tap(source);
+    await tester.pumpAndSettle();
+    expect(find.text('Synthetic geometry reference'), findsOneWidget);
+    expect(find.text('مراجع المسودة في انتظار التحقّق.'), findsNothing);
+    for (final mode in ReviewMode.values) {
+      router.go('/review/${mode.name}');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('النشاط'), findsOneWidget);
+      expect(store.opened.last, mode);
+    }
+    router.go('/worlds/iman/lessons/$_learn/play');
+    await tester.pumpAndSettle();
+    expect(find.textContaining('مجموع نقاط الخبرة:'), findsOneWidget);
+    expect(progress.value.records, isEmpty);
+  });
 }
 
 class _MemoryBundle extends CachingAssetBundle {
@@ -512,3 +590,65 @@ String _ledgerJson(List<PackDocument> packs, {String? omit}) => jsonEncode({
           },
   ],
 });
+
+class _ApprovedFixtureReview extends ReviewStore {
+  _ApprovedFixtureReview()
+    : super(NoorDatabase(), scope: ProgressScope.approved);
+
+  final opened = <ReviewMode>[];
+
+  @override
+  Future<ReviewHistory> history() async => ReviewHistory();
+
+  @override
+  Future<List<int>> intervals() async => spacingDays;
+
+  @override
+  Future<ReviewRound?> open(
+    ReviewMode mode,
+    List<ReviewCandidate> candidates,
+    ReviewHistory history,
+    List<int> intervals,
+    DateTime now, {
+    String? replayOf,
+  }) async {
+    opened.add(mode);
+    final choices = selectReview(candidates, history, intervals, now);
+    return (
+      key: '@review/fixture',
+      session: GameSession.start(mode.name, reviewPlan(choices), Random(2)),
+    );
+  }
+}
+
+class _CompletedApprovedGame implements GameStore {
+  @override
+  Future<GameSession> open(
+    ProgressScope scope,
+    String lessonId,
+    GameSession draft, {
+    String? replayOf,
+  }) async {
+    expect(scope, ProgressScope.approved);
+    var session = draft;
+    while (!session.finished) {
+      final answer = switch (session.current) {
+        ScoredQuestion question => [question.correctOptionId],
+        Arrangement question => question.correctOrder,
+        _ => ['remembered'],
+      };
+      session = session.submit(answer)!.advance()!;
+    }
+    return session;
+  }
+
+  @override
+  Future<void> save(
+    ProgressScope scope,
+    WorldId world,
+    String lessonId,
+    GameSession session,
+  ) async {
+    throw StateError('fixture is read-only');
+  }
+}

@@ -242,9 +242,10 @@
           "status": "review",
           "evidence": [
             "docs/qa/spec-004/004-03-corrected-draft.md",
-            "docs/qa/spec-004/004-03-content-009.md"
+            "docs/qa/spec-004/004-03-content-009.md",
+            "docs/qa/spec-004/004-03-starter-candidate.md"
           ],
-          "note": "CONTENT-009 applied and validated in private drafts. Pending scientific approval, historical editions, rights and exact record approval. No production integration.",
+          "note": "CONTENT-010 starter candidate validated. Six lessons and 112 record digest requests await human approval. Scientific and rights work remains open. Production learning tools verified with approved synthetic fixtures.",
           "priority": "P0"
         },
         {

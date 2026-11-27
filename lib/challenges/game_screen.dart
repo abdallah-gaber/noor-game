@@ -74,9 +74,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       if (mode == null) {
         session = await _openLesson(replayOf);
       } else {
-        final store = ref.read(reviewStoreProvider);
+        final store = ref.read(reviewStoreFor(widget.curriculum.progressScope));
         final progress = await ref.read(
-          progressProvider(ProgressScope.preview).future,
+          progressProvider(widget.curriculum.progressScope).future,
         );
         final round = await store.open(
           mode,
@@ -128,15 +128,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             .save(scope, widget.world!, widget.lesson!.id, next);
         if (mounted && next.finished) {
           ref.invalidate(progressProvider(scope));
-          if (widget.curriculum.isPreview) {
-            ref.invalidate(previewRewardsProvider);
-          }
+          ref.invalidate(rewardsProvider(scope));
         }
       } else {
-        await ref.read(reviewStoreProvider).save(_reviewKey!, next);
+        await ref
+            .read(reviewStoreFor(widget.curriculum.progressScope))
+            .save(_reviewKey!, next);
       }
       if (!mounted) return;
-      if (widget.curriculum.isPreview) ref.invalidate(reviewHistoryProvider);
+      ref.invalidate(reviewHistoryFor(scope));
       _effect(
         next.finished
             ? PilotEffect.complete
@@ -314,8 +314,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
         Text(accuracy),
         if (eventual.isNotEmpty) Text(eventual.trim()),
-        if (widget.curriculum.isPreview && widget.reviewMode == null)
-          _PreviewRewards(lessonId: widget.lesson!.id),
+        if (widget.reviewMode == null)
+          _RoundRewards(
+            lessonId: widget.lesson!.id,
+            scope: widget.curriculum.progressScope,
+          ),
         SpeechControl(text: 'أكملتَ التحدّيات! $accuracy.$eventual'),
         Wrap(
           spacing: 8,
@@ -346,14 +349,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 }
 
-class _PreviewRewards extends ConsumerWidget {
-  const _PreviewRewards({required this.lessonId});
+class _RoundRewards extends ConsumerWidget {
+  const _RoundRewards({required this.lessonId, required this.scope});
 
   final String lessonId;
+  final ProgressScope scope;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rewards = ref.watch(previewRewardsProvider).asData?.value;
+    final rewards = ref.watch(rewardsProvider(scope)).asData?.value;
     final stars = rewards?.starsByLesson[lessonId];
     if (rewards == null || stars == null) return const SizedBox.shrink();
     final number = MaterialLocalizations.of(context).formatDecimal;
