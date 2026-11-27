@@ -14,3 +14,5 @@ The push workflow rebuilds both available snapshots in one serialized deployment
 3. Open **Actions → Mission Control Pages** and run the workflow on the trusted branch containing it, or push reviewed changes to that branch. Check the deployed commit in the dashboard header. Confirm the engineering, curriculum and QA navigation links open.
 
 [GitHub Pages setup](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
+The SPEC-005 feature branch builds a commit-stamped Mission Control snapshot on every push. Download the `spec-005-mission-control` artifact from that commit’s [Actions run](https://github.com/abdallah-gaber/noor-game/actions/workflows/spec-005-preview.yml), extract it and open `index.html`. The public stable snapshot continues to follow `main`.

@@ -51,6 +51,7 @@ for phase, folder in enumerate(("foundation", "learning-worlds", "game-engine",
 for name in (
     "000-baseline", "001-local-storage", "002-platform-speech", "003-foundation-acceptance",
     "004-lesson-progress", "005-offline-speech-implementation", "006-spec-002-acceptance",
+    "007-android-release-signing",
 ):
     PUBLIC_FILES.add(f"docs/decisions/{name}.md")
 for folder, names in {
@@ -97,6 +98,7 @@ for folder, names in {
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
     ),
+    "spec-005": ("005-01-toolchain.md",),
     "spec-004": (
         "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
         "004-03-corrected-draft.md", "004-03-content-009.md",

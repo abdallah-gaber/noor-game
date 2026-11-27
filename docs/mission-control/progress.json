@@ -285,9 +285,9 @@
         {
           "id": "005-01",
           "title": "Run format, analysis and automated tests",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": ["docs/qa/spec-005/005-01-toolchain.md"],
+          "note": "Pinned format, analysis, starter tests and dashboard tests passed. Release signing configured.",
           "priority": "P0"
         },
         {
