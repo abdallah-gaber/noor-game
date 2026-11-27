@@ -17,7 +17,7 @@ STAGE_LABELS = {
     "sourceVerified": "Source verified",
     "ownerReviewed": "Record reviewed",
     "finalApproval": "Final hash approval",
-    "validated": "Validated",
+    "validated": "Structurally checked",
     "integrated": "Integrated",
     "releaseVerified": "Release verified",
 }
@@ -36,6 +36,12 @@ PUBLIC_FILES = {
     "docs/product.md", "docs/architecture.md", "docs/curriculum/README.md",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
+    "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",
+    "docs/curriculum/starter-release.json",
+    "docs/curriculum/examples/geometry.pack.json",
+    "docs/curriculum/examples/follow-up.pack.json",
+    "docs/curriculum/examples/approvals.example.json",
+    "docs/curriculum/examples/circle.svg",
     "test/goldens/noor-expressions.png", "test/goldens/world-environments.png",
 }
 for phase, folder in enumerate(("foundation", "learning-worlds", "game-engine",
@@ -90,6 +96,15 @@ for folder, names in {
         "tablet-speech-fallback.webp",
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
+    ),
+    "spec-004": (
+        "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
+        "004-03-corrected-draft.md", "004-03-content-009.md",
+        "004-04-preview-rewards.md", "004-05-adaptive-review.md",
+        "004-06-parent-mode.md", "004-03-starter-candidate.md",
+        "004-03-final-starter-approval.md", "004-03-starter-release-verification.md",
+        "phone-starter-home.webp", "tablet-starter-results.webp", "tablet-starter-parent.webp",
+        "release-world.webp",
     ),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
@@ -251,7 +266,17 @@ class Dashboard:
         data = self.inventory
         names = {world["id"]: world["title"] for world in (self.plan or {}).get("worlds", [])}
         coverage = metrics((KINDS[k], count(data["totals"].get(k))) for k in ("lessons", "objectives", "knowledgeUnits", "variants"))
-        coverage += f'<p>Unique record counts from {data["catalogs"]} canonical packs. Open each world for unit totals and lesson coverage.</p>'
+        coverage += f'<p>Unique record counts from {data["catalogs"]} core packs and included supplements. Open each world for unit totals and lesson coverage.</p>'
+        if handoff := data.get("handoff"):
+            coverage += metrics([
+                ("Authoring packages", handoff["contentPackages"]),
+                ("Planned lessons", handoff["plannedLessons"]),
+                ("Planned objectives", handoff["plannedObjectives"]),
+                ("Prayer-readiness lessons", len(handoff["prayerReadinessLessons"])),
+                ("Cross-lesson review variants", handoff["mixedReviewVariants"]),
+            ])
+            coverage += '<p>Prayer readiness · ' + escape(' → '.join(handoff["prayerReadinessLessons"])) + '</p>'
+
         for world, units in data["worlds"].items():
             rows = []
             units_total = []
@@ -273,7 +298,38 @@ class Dashboard:
             ((label, *(count(data["stages"][kind][stage]) for stage in STAGE_LABELS)) for kind, label in KINDS.items()),
         )
         approval += "<p>Stage counts reflect recorded evidence. Provisional acceptance applies to the initial outline. Production requires per-record approval.</p>"
-        approval += table(("Source status", "Distinct sources"),
+        if handoff := data.get("handoff"):
+            approval += table(("Open queue category", "Items"), handoff["correctionQueue"].items())
+            if review := handoff.get("scientificReview"):
+                approval += metrics([
+                    ("Draft records corrected", review["appliedDraftRecords"]),
+                    ("New pending sources", review["addedPendingSources"]),
+                    ("Repeated prompt groups (backlog)", review["repeatPromptGroups"]),
+                ])
+                if followup := review.get("followup"):
+                    approval += metrics([
+                        ("Follow-up draft edits", followup["appliedDraftRecords"]),
+                        ("Follow-up pending sources", followup["addedPendingSources"]),
+                        ("Retained learning objectives", followup["retainedObjectives"]),
+                    ])
+                approval += table(("Correction disposition", "Items"), review["queueStatus"].items())
+                approval += table(("Partial source evidence", "Original scoped sources"),
+                                  review["originalSourceEvidence"].items())
+        if release := data.get("starterRelease"):
+            approval += metrics([
+                ("Approved starter lessons", release["counts"]["lesson"]),
+                ("Approved starter records", release["approvedRecords"]),
+                ("Lessons in private authoring", release["deferred"]["lessons"]),
+                ("Open review items", release["deferred"]["openReviewItems"]),
+            ])
+            approval += "<p>The bundled starter is introductory. The original draft pipeline and broader scientific review remain tracked here.</p>"
+        elif starter := data.get("handoff", {}).get("starterCandidate"):
+            approval += metrics([
+                ("Starter lessons awaiting approval", starter["lessons"]),
+                ("Starter record approval requests", starter["recordRequests"]),
+                ("Lessons in authoring", starter["deferredLessons"]),
+            ])
+        approval += table(("Source status", "Scoped source records"),
                           ((key.replace("_", " "), count(total)) for key, total in data["sources"].items()))
         extras = table(
             ("Content", "Records", "Draft", "Final approval", "Integrated"),

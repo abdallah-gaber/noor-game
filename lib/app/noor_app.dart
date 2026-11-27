@@ -4,37 +4,112 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../challenges/arrangement.dart';
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
 import '../challenges/game_screen.dart';
 import '../content/curriculum.dart';
+import '../content/packs/catalog.dart';
 import '../design_system/noor_theme.dart';
+import '../home/adult_review_screen.dart';
 import '../home/home_screen.dart';
 import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
+import '../parent/parent_screen.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
+import '../review/review_screen.dart';
+import '../review/review_selection.dart';
 import '../settings/settings_screen.dart';
 import '../worlds/world_screen.dart';
 
 GoRouter createNoorRouter({
   String? initialLocation,
   bool enablePreview = true,
+  IntegratedCatalog? catalog,
+  Curriculum? draftPilot,
 }) {
   final showPreview = kDebugMode && enablePreview;
-  final curriculum = loadCurriculum(enablePreview: enablePreview);
+  final pilot =
+      showPreview &&
+          draftPilot != null &&
+          draftPilot.isPreview &&
+          draftPilot.isDraftPilot
+      ? draftPilot
+      : null;
+  final curriculum =
+      pilot ??
+      catalog?.toCurriculum() ??
+      loadCurriculum(enablePreview: enablePreview);
+  final hasLearningTools =
+      catalog != null || (showPreview && curriculum.isPreview);
+  var adultConfirmed = false;
+
+  Arrangement? pilotActivity(GoRouterState state) {
+    final world = WorldId.fromId(state.pathParameters['worldId']);
+    if (pilot == null || world == null) return null;
+    return pilot
+        .lesson(world, state.pathParameters['lessonId'])
+        ?.challenges
+        .whereType<Arrangement>()
+        .where((activity) => activity.id == state.pathParameters['variantId'])
+        .firstOrNull;
+  }
 
   return GoRouter(
     initialLocation: initialLocation,
+    redirect: (context, state) {
+      if (pilot == null) return null;
+      if (state.uri.path == '/adult-review') {
+        adultConfirmed = false;
+        return null;
+      }
+      return adultConfirmed ? null : '/adult-review';
+    },
     onException: (context, state, router) => router.go('/'),
     routes: [
+      if (pilot != null)
+        GoRoute(
+          path: '/adult-review',
+          builder: (context, state) => AdultReviewScreen(
+            onConfirm: () {
+              adultConfirmed = true;
+              context.go('/');
+            },
+          ),
+        ),
       GoRoute(
         path: '/',
-        builder: (context, state) => HomeScreen(showPreview: showPreview),
+        builder: (context, state) => HomeScreen(
+          showPreview: showPreview && pilot == null,
+          pilotWorlds: pilot?.units.keys,
+          showLearningTools: hasLearningTools,
+        ),
         routes: [
+          if (hasLearningTools)
+            GoRoute(
+              path: 'review',
+              builder: (_, _) => ReviewScreen(curriculum: curriculum),
+              routes: [
+                for (final mode in ReviewMode.values)
+                  GoRoute(
+                    path: mode.name,
+                    builder: (_, _) => GameScreen.review(
+                      key: ValueKey(mode),
+                      curriculum: curriculum,
+                      mode: mode,
+                    ),
+                  ),
+              ],
+            ),
+          if (hasLearningTools)
+            GoRoute(
+              path: 'parent',
+              builder: (_, _) => ParentScreen(curriculum: curriculum),
+            ),
           GoRoute(
             path: 'settings',
-            builder: (context, state) => const SettingsScreen(),
+            builder: (context, state) => SettingsScreen(isPilot: pilot != null),
           ),
           GoRoute(
             path: 'worlds/:worldId',
@@ -68,10 +143,7 @@ GoRouter createNoorRouter({
                       progressProvider(curriculum.progressScope).future,
                     );
                     return lesson.state(
-                              completed: progress.completedFor(
-                                curriculum,
-                                world,
-                              ),
+                              completed: progress.completedIn(curriculum),
                             ) ==
                             LessonState.locked
                         ? path
@@ -96,6 +168,18 @@ GoRouter createNoorRouter({
                   );
                 },
                 routes: [
+                  if (pilot != null)
+                    GoRoute(
+                      path: 'practice/:variantId',
+                      redirect: (_, state) => pilotActivity(state) != null
+                          ? null
+                          : '/worlds/${state.pathParameters['worldId']}/lessons/${state.pathParameters['lessonId']}',
+                      builder: (_, state) => ChallengePreview(
+                        key: ValueKey(state.pathParameters['variantId']),
+                        definition: pilotActivity(state)!,
+                        isPilot: true,
+                      ),
+                    ),
                   GoRoute(
                     path: 'play',
                     redirect: (context, state) {
@@ -135,7 +219,8 @@ GoRouter createNoorRouter({
           ),
           GoRoute(
             path: 'preview',
-            redirect: (context, state) => showPreview ? null : '/',
+            redirect: (context, state) =>
+                showPreview && pilot == null ? null : '/',
             builder: (context, state) => const PreviewScreen(),
             routes: [
               GoRoute(
@@ -146,7 +231,10 @@ GoRouter createNoorRouter({
                     : '/preview',
                 builder: (context, state) {
                   final id = state.pathParameters['id']!;
-                  return ChallengePreview(key: ValueKey(id), id: id);
+                  return ChallengePreview(
+                    key: ValueKey(id),
+                    definition: debugChallenges[id]!,
+                  );
                 },
               ),
             ],

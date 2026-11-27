@@ -1,0 +1,1250 @@
+{
+  "schema": 1,
+  "packId": "starter.ibadah",
+  "channel": "production",
+  "version": "0.1.1",
+  "records": [
+    {
+      "kind": "unit",
+      "id": "ibadah.purity",
+      "reviewStatus": "sourceVerified",
+      "title": "أعضاء الوضوء · كيف نتوضأ؟",
+      "worldId": "ibadah"
+    },
+    {
+      "kind": "unit",
+      "id": "ibadah.prayer",
+      "reviewStatus": "sourceVerified",
+      "title": "الصلوات الخمس",
+      "worldId": "ibadah"
+    },
+    {
+      "kind": "lesson",
+      "id": "W05",
+      "reviewStatus": "sourceVerified",
+      "title": "أعضاء الوضوء",
+      "unitId": "ibadah.purity",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "W05.K1",
+        "W05.K2",
+        "W05.K3"
+      ],
+      "variantIds": [
+        "W05.Q01",
+        "W05.Q02",
+        "W05.Q03",
+        "W05.Q04",
+        "W05.Q05",
+        "W05.Q06",
+        "W05.Q07",
+        "W05.Q08",
+        "W05.Q09",
+        "W05.Q10",
+        "W05.E01"
+      ],
+      "adultActivity": "تدرّب مع أحد والديك على تطبيق ما تعلمته خارج الشاشة، دون ربط العبادة بنقاط اللعبة."
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.Q-5-6",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "5:6",
+      "category": "quran",
+      "authoringSourceId": "Q-5-6",
+      "url": "https://quran.com/5/6"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W05.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف أعضاء الغسل",
+      "text": "نغسل الوجه في الوضوء.",
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W05.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يميز مسح الرأس عن الغسل",
+      "text": "نغسل اليدين والساعدين مع المرفقين.",
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W05.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف حدود المرفق والكعب",
+      "text": "نمسح الرأس ونغسل القدمين إلى الكعبين.",
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أي عضو نغسله في الوضوء؟",
+        "explanation": "نغسل الوجه في الوضوء.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الوجه"
+          },
+          {
+            "id": "o2",
+            "label": "الظهر"
+          },
+          {
+            "id": "o3",
+            "label": "الركبة"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "نغسل الوجه في الوضوء.",
+        "explanation": "نغسل الوجه في الوضوء.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "أي عضو نغسله في الوضوء؟",
+        "explanation": "نغسل الوجه في الوضوء.",
+        "answer": "الوجه"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "إلى أين نغسل اليدين؟",
+        "explanation": "نغسل اليدين والساعدين مع المرفقين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "المرفقين"
+          },
+          {
+            "id": "o2",
+            "label": "الأصابع فقط"
+          },
+          {
+            "id": "o3",
+            "label": "الكتفين"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "يكفي غسل الأصابع فقط عن غسل اليدين إلى المرفقين.",
+        "explanation": "نغسل اليدين والساعدين مع المرفقين.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "إلى أين نغسل اليدين؟",
+        "explanation": "نغسل اليدين والساعدين مع المرفقين.",
+        "answer": "المرفقين"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "ماذا نفعل بالرأس؟",
+        "explanation": "نمسح الرأس ونغسل القدمين إلى الكعبين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "نمسحه"
+          },
+          {
+            "id": "o2",
+            "label": "نتركه"
+          },
+          {
+            "id": "o3",
+            "label": "نغسل الكتفين بدلًا منه"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "نغسل القدمين إلى الكعبين في الوضوء المعتاد.",
+        "explanation": "نمسح الرأس ونغسل القدمين إلى الكعبين.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "ماذا نفعل بالرأس؟",
+        "explanation": "نمسح الرأس ونغسل القدمين إلى الكعبين.",
+        "answer": "نمسحه"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K1",
+        "W05.K2",
+        "W05.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "إلى أين نغسل القدمين؟",
+        "explanation": "تذكّر ما تعلمته: الكعبين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الكعبين"
+          },
+          {
+            "id": "o2",
+            "label": "الركبتين"
+          },
+          {
+            "id": "o3",
+            "label": "الأصابع فقط"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W05.E01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W05.K1",
+        "W05.K2",
+        "W05.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.Q-5-6"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "matching",
+        "prompt": "صل العضو بما نفعله في الوضوء.",
+        "explanation": "نغسل الوجه واليدين والساعدين مع المرفقين، ونغسل القدمين، ونمسح الرأس.",
+        "pairs": [
+          {
+            "left": {
+              "id": "l1",
+              "label": "الرأس"
+            },
+            "right": {
+              "id": "r1",
+              "label": "المسح"
+            }
+          },
+          {
+            "left": {
+              "id": "l2",
+              "label": "الوجه واليدان والقدمان"
+            },
+            "right": {
+              "id": "r2",
+              "label": "الغسل"
+            }
+          }
+        ]
+      },
+      "sourceRefsByKnowledge": {
+        "W05.K1": [
+          "source.ibadah.Q-5-6"
+        ],
+        "W05.K2": [
+          "source.ibadah.Q-5-6"
+        ],
+        "W05.K3": [
+          "source.ibadah.Q-5-6"
+        ]
+      }
+    },
+    {
+      "kind": "lesson",
+      "id": "W06",
+      "reviewStatus": "sourceVerified",
+      "title": "كيف نتوضأ؟",
+      "unitId": "ibadah.purity",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "W06.K1",
+        "W06.K2",
+        "W06.K3"
+      ],
+      "variantIds": [
+        "W06.Q01",
+        "W06.Q02",
+        "W06.Q03",
+        "W06.Q04",
+        "W06.Q05",
+        "W06.Q06",
+        "W06.Q07",
+        "W06.Q08",
+        "W06.Q09",
+        "W06.Q10",
+        "W06.E01"
+      ],
+      "adultActivity": "تدرّب مع أحد والديك على تطبيق ما تعلمته خارج الشاشة، دون ربط العبادة بنقاط اللعبة."
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.B-159",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "159",
+      "category": "hadith",
+      "authoringSourceId": "B-159",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:159"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W06.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يرتب الصفة التعليمية",
+      "text": "نتعلم من صفة وضوء النبي ﷺ غسل الكفين والمضمضة والاستنشاق.",
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W06.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف جواز الغسل مرة",
+      "text": "في صفة الوضوء نتعلم غسل الوجه واليدين ثم مسح الرأس وغسل القدمين.",
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.B-157",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "157",
+      "category": "hadith",
+      "authoringSourceId": "B-157",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:157"
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.B-201",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "201",
+      "category": "hadith",
+      "authoringSourceId": "B-201",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:201"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W06.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف أن غسل أعضاء الوضوء مرة واحدة مع إسباغها يكفي، ويتعلم الاقتصاد في الماء",
+      "text": "يجوز غسل أعضاء الوضوء التي تُغسل مرة واحدة مع إسباغ الوضوء، وثبت غسلها ثلاثًا. أما الرأس فنمسحه كما تعلمنا. ونستخدم من الماء قدر حاجتنا دون إسراف.",
+      "sourceRefs": [
+        "source.ibadah.B-157",
+        "source.ibadah.B-159",
+        "source.ibadah.B-201"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "ماذا نفعل بالماء في الفم أثناء الوضوء؟",
+        "explanation": "نتعلم من صفة وضوء النبي ﷺ غسل الكفين والمضمضة والاستنشاق.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "نتمضمض"
+          },
+          {
+            "id": "o2",
+            "label": "نشربه بدل المضمضة"
+          },
+          {
+            "id": "o3",
+            "label": "نترك الفم دائمًا"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "المضمضة من صفة وضوء النبي ﷺ.",
+        "explanation": "نتعلم من صفة وضوء النبي ﷺ غسل الكفين والمضمضة والاستنشاق.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "ماذا نفعل بالماء في الفم أثناء الوضوء؟",
+        "explanation": "نتعلم من صفة وضوء النبي ﷺ غسل الكفين والمضمضة والاستنشاق.",
+        "answer": "نتمضمض"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "ماذا يأتي بعد غسل اليدين في هذه الصفة؟",
+        "explanation": "في صفة الوضوء نتعلم غسل الوجه واليدين ثم مسح الرأس وغسل القدمين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "مسح الرأس"
+          },
+          {
+            "id": "o2",
+            "label": "غسل الوجه من جديد"
+          },
+          {
+            "id": "o3",
+            "label": "التسليم"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "في هذه الصفة نمسح الرأس قبل غسل القدمين.",
+        "explanation": "في صفة الوضوء نتعلم غسل الوجه واليدين ثم مسح الرأس وغسل القدمين.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "ماذا يأتي بعد غسل اليدين في هذه الصفة؟",
+        "explanation": "في صفة الوضوء نتعلم غسل الوجه واليدين ثم مسح الرأس وغسل القدمين.",
+        "answer": "مسح الرأس"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-157",
+        "source.ibadah.B-159",
+        "source.ibadah.B-201"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "هل يجب غسل الوجه ثلاث مرات في الوضوء؟",
+        "explanation": "يجوز غسل أعضاء الوضوء التي تُغسل مرة واحدة مع إسباغ الوضوء، وثبت غسلها ثلاثًا. أما الرأس فنمسحه كما تعلمنا. ونستخدم من الماء قدر حاجتنا دون إسراف.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "لا"
+          },
+          {
+            "id": "o2",
+            "label": "نعم دائمًا"
+          },
+          {
+            "id": "o3",
+            "label": "يلزم خمس مرات"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-157",
+        "source.ibadah.B-159",
+        "source.ibadah.B-201"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "ثبت أن النبي ﷺ توضأ مرة مرة.",
+        "explanation": "يجوز غسل أعضاء الوضوء التي تُغسل مرة واحدة مع إسباغ الوضوء، وثبت غسلها ثلاثًا. أما الرأس فنمسحه كما تعلمنا. ونستخدم من الماء قدر حاجتنا دون إسراف.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-157",
+        "source.ibadah.B-159",
+        "source.ibadah.B-201"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "هل يجب غسل الوجه ثلاث مرات في الوضوء؟",
+        "explanation": "يجوز غسل أعضاء الوضوء التي تُغسل مرة واحدة مع إسباغ الوضوء، وثبت غسلها ثلاثًا. أما الرأس فنمسحه كما تعلمنا. ونستخدم من الماء قدر حاجتنا دون إسراف.",
+        "answer": "لا"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K1",
+        "W06.K2",
+        "W06.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أي عمل يأتي أخيرًا في صفة الوضوء التي تعلمناها؟",
+        "explanation": "تذكّر ما تعلمته: غسل القدمين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "غسل القدمين"
+          },
+          {
+            "id": "o2",
+            "label": "غسل الكفين"
+          },
+          {
+            "id": "o3",
+            "label": "المضمضة"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W06.E01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W06.K1",
+        "W06.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-159"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "ordering",
+        "prompt": "رتب هذه الخطوات المختارة من صفة الوضوء النبوي.",
+        "explanation": "هذا ترتيب الخطوات المختارة من صفة الوضوء؛ ليس حصرًا لكل تفاصيله.",
+        "items": [
+          {
+            "id": "i1",
+            "label": "غسل الكفين والمضمضة والاستنشاق"
+          },
+          {
+            "id": "i2",
+            "label": "غسل الوجه"
+          },
+          {
+            "id": "i3",
+            "label": "غسل اليدين إلى المرفقين"
+          },
+          {
+            "id": "i4",
+            "label": "مسح الرأس"
+          },
+          {
+            "id": "i5",
+            "label": "غسل القدمين"
+          }
+        ],
+        "correctOrder": [
+          "i1",
+          "i2",
+          "i3",
+          "i4",
+          "i5"
+        ]
+      },
+      "sourceRefsByKnowledge": {
+        "W06.K1": [
+          "source.ibadah.B-159"
+        ],
+        "W06.K2": [
+          "source.ibadah.B-159"
+        ]
+      }
+    },
+    {
+      "kind": "lesson",
+      "id": "W08",
+      "reviewStatus": "sourceVerified",
+      "title": "الصلوات الخمس",
+      "unitId": "ibadah.prayer",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "W08.K1",
+        "W08.K2",
+        "W08.K3"
+      ],
+      "variantIds": [
+        "W08.Q01",
+        "W08.Q02",
+        "W08.Q03",
+        "W08.Q04",
+        "W08.Q05",
+        "W08.Q06",
+        "W08.Q07",
+        "W08.Q08",
+        "W08.Q09",
+        "W08.Q10",
+        "W08.E01"
+      ],
+      "adultActivity": "تدرّب مع أحد والديك على تطبيق ما تعلمته خارج الشاشة، دون ربط العبادة بنقاط اللعبة."
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.B-46",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "46",
+      "category": "hadith",
+      "authoringSourceId": "B-46",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:46"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W08.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف أسماء الصلوات",
+      "text": "فرض الله خمس صلوات في اليوم والليلة.",
+      "sourceRefs": [
+        "source.ibadah.B-46"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.M-612a",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح مسلم",
+      "locator": "612a",
+      "category": "hadith",
+      "authoringSourceId": "M-612a",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/muslim:612a"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W08.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف ترتيبها",
+      "text": "الصلوات الخمس بالترتيب: الفجر ثم الظهر ثم العصر ثم المغرب ثم العشاء.",
+      "sourceRefs": [
+        "source.ibadah.M-612a"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.B-561",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "561",
+      "category": "hadith",
+      "authoringSourceId": "B-561",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:561"
+    },
+    {
+      "kind": "knowledge",
+      "id": "W08.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يربط المغرب بغروب الشمس",
+      "text": "يبدأ وقت المغرب بغروب الشمس ويأتي العشاء بعدها.",
+      "sourceRefs": [
+        "source.ibadah.M-612a",
+        "source.ibadah.B-561"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-46"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "كم عدد الصلوات المفروضة؟",
+        "explanation": "فرض الله خمس صلوات في اليوم والليلة.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "خمس"
+          },
+          {
+            "id": "o2",
+            "label": "ثلاث"
+          },
+          {
+            "id": "o3",
+            "label": "سبع"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-46"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "الصلوات المفروضة خمس.",
+        "explanation": "فرض الله خمس صلوات في اليوم والليلة.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K1"
+      ],
+      "sourceRefs": [
+        "source.ibadah.B-46"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "كم عدد الصلوات المفروضة؟",
+        "explanation": "فرض الله خمس صلوات في اليوم والليلة.",
+        "answer": "خمس"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أي صلاة بعد الظهر في الترتيب اليومي؟",
+        "explanation": "الصلوات الخمس بالترتيب: الفجر ثم الظهر ثم العصر ثم المغرب ثم العشاء.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "العصر"
+          },
+          {
+            "id": "o2",
+            "label": "الفجر"
+          },
+          {
+            "id": "o3",
+            "label": "العشاء"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "العصر يأتي قبل المغرب.",
+        "explanation": "الصلوات الخمس بالترتيب: الفجر ثم الظهر ثم العصر ثم المغرب ثم العشاء.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K2"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "أي صلاة بعد الظهر في الترتيب اليومي؟",
+        "explanation": "الصلوات الخمس بالترتيب: الفجر ثم الظهر ثم العصر ثم المغرب ثم العشاء.",
+        "answer": "العصر"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a",
+        "source.ibadah.B-561"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أي صلاة يبدأ وقتها عند غروب الشمس؟",
+        "explanation": "يبدأ وقت المغرب بغروب الشمس ويأتي العشاء بعدها.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "المغرب"
+          },
+          {
+            "id": "o2",
+            "label": "الفجر"
+          },
+          {
+            "id": "o3",
+            "label": "الظهر"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a",
+        "source.ibadah.B-561"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "المغرب بعد العشاء في ترتيب اليوم من الفجر.",
+        "explanation": "يبدأ وقت المغرب بغروب الشمس ويأتي العشاء بعدها.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a",
+        "source.ibadah.B-561"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "أي صلاة يبدأ وقتها عند غروب الشمس؟",
+        "explanation": "يبدأ وقت المغرب بغروب الشمس ويأتي العشاء بعدها.",
+        "answer": "المغرب"
+      }
+    },
+    {
+      "kind": "source",
+      "id": "source.ibadah.M-612d",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح مسلم",
+      "locator": "612d",
+      "category": "hadith",
+      "authoringSourceId": "M-612d",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/muslim:612d"
+    },
+    {
+      "kind": "variant",
+      "id": "W08.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K1",
+        "W08.K2",
+        "W08.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a",
+        "source.ibadah.M-612d"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أي صلاة تبدأ عند طلوع الفجر؟",
+        "explanation": "تذكّر ما تعلمته: الفجر.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الفجر"
+          },
+          {
+            "id": "o2",
+            "label": "العشاء"
+          },
+          {
+            "id": "o3",
+            "label": "العصر"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "W08.E01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "W08.K2",
+        "W08.K3"
+      ],
+      "sourceRefs": [
+        "source.ibadah.M-612a"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "ordering",
+        "prompt": "رتب الصلوات الخمس ابتداءً من الفجر.",
+        "explanation": "الصلوات الخمس بالترتيب: الفجر ثم الظهر ثم العصر ثم المغرب ثم العشاء.",
+        "items": [
+          {
+            "id": "i1",
+            "label": "الفجر"
+          },
+          {
+            "id": "i2",
+            "label": "الظهر"
+          },
+          {
+            "id": "i3",
+            "label": "العصر"
+          },
+          {
+            "id": "i4",
+            "label": "المغرب"
+          },
+          {
+            "id": "i5",
+            "label": "العشاء"
+          }
+        ],
+        "correctOrder": [
+          "i1",
+          "i2",
+          "i3",
+          "i4",
+          "i5"
+        ]
+      },
+      "sourceRefsByKnowledge": {
+        "W08.K2": [
+          "source.ibadah.M-612a"
+        ],
+        "W08.K3": [
+          "source.ibadah.M-612a"
+        ]
+      }
+    }
+  ]
+}

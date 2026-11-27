@@ -8,9 +8,16 @@ import '../worlds/world_art.dart';
 import 'noor_lantern.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.showPreview});
+  const HomeScreen({
+    super.key,
+    required this.showPreview,
+    this.pilotWorlds,
+    this.showLearningTools = false,
+  });
 
   final bool showPreview;
+  final bool showLearningTools;
+  final Iterable<WorldId>? pilotWorlds;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,16 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (pilotWorlds != null) ...[
+              const Text(draftPilotLabel),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton(
+                  onPressed: () => context.go('/adult-review'),
+                  child: const Text('إنهاء مراجعة المسودات'),
+                ),
+              ),
+            ],
             const _WelcomePanel(),
             const SizedBox(height: 22),
             Semantics(
@@ -56,12 +73,29 @@ class HomeScreen extends StatelessWidget {
                   runSpacing: gap,
                   spacing: gap,
                   children: [
-                    for (final world in WorldId.values)
+                    for (final world in pilotWorlds ?? WorldId.values)
                       SizedBox(width: cardWidth, child: _WorldTile(world)),
                   ],
                 );
               },
             ),
+            if (showLearningTools)
+              Wrap(
+                spacing: 10,
+                runSpacing: 4,
+                children: [
+                  TextButton.icon(
+                    onPressed: () => context.push('/review'),
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: const Text('المراجعة والتحدّي اليومي'),
+                  ),
+                  TextButton.icon(
+                    onPressed: () => context.push('/parent'),
+                    icon: const Icon(Icons.family_restroom_rounded),
+                    label: const Text('وضع الوالدين'),
+                  ),
+                ],
+              ),
             if (showPreview)
               Align(
                 alignment: AlignmentDirectional.centerStart,

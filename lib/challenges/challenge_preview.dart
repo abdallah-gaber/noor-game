@@ -1,28 +1,36 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../audio/pilot_effects.dart';
 
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import 'arrangement.dart';
 import 'arrangement_view.dart';
-import 'debug_catalog.dart';
+import 'challenge_definition.dart';
 import 'flashcard.dart';
 import 'flashcard_view.dart';
 import 'question_view.dart';
 import 'scored_question.dart';
 
-class ChallengePreview extends StatefulWidget {
-  const ChallengePreview({super.key, required this.id});
+class ChallengePreview extends ConsumerStatefulWidget {
+  const ChallengePreview({
+    super.key,
+    required this.definition,
+    this.isPilot = false,
+  });
 
-  final String id;
+  final ChallengeDefinition definition;
+  final bool isPilot;
 
   @override
-  State<ChallengePreview> createState() => _ChallengePreviewState();
+  ConsumerState<ChallengePreview> createState() => _ChallengePreviewState();
 }
 
-class _ChallengePreviewState extends State<ChallengePreview> {
-  late final _definition = debugChallenges[widget.id]!;
+class _ChallengePreviewState extends ConsumerState<ChallengePreview> {
+  ChallengeDefinition get _definition => widget.definition;
   late final _order = (_definition as ScoredQuestion).presentationOrder(
     Random(),
   );
@@ -49,7 +57,9 @@ class _ChallengePreviewState extends State<ChallengePreview> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(previewLabel),
+          Text(widget.isPilot ? draftPilotLabel : previewLabel),
+          if (widget.isPilot)
+            const Text('تدريب سريع لا يُسجَّل في تقدّم الدرس.'),
           const SizedBox(height: 12),
           switch (_definition) {
             final ScoredQuestion question => QuestionView(
@@ -69,7 +79,20 @@ class _ChallengePreviewState extends State<ChallengePreview> {
               question: question,
               options: _arrangementOptions,
               answer: _arranged,
-              onAnswer: (answer) => setState(() => _arranged ??= answer),
+              enablePilotEffects: widget.isPilot,
+              onAnswer: (answer) {
+                if (_arranged != null) return;
+                setState(() => _arranged = answer);
+                if (widget.isPilot) {
+                  ref
+                      .read(pilotEffectsProvider)
+                      .play(
+                        question.evaluate(answer) == true
+                            ? PilotEffect.correct
+                            : PilotEffect.retry,
+                      );
+                }
+              },
             ),
             _ => const SizedBox.shrink(),
           },

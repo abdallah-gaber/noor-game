@@ -3,7 +3,14 @@ import 'dart:math';
 import 'challenge_definition.dart';
 import 'scored_question.dart';
 
-enum ArrangementKind { matching, ordering }
+enum ArrangementKind {
+  matching('المطابقة'),
+  ordering('الترتيب');
+
+  const ArrangementKind(this.label);
+
+  final String label;
+}
 
 class Arrangement implements ChallengeDefinition {
   Arrangement._({

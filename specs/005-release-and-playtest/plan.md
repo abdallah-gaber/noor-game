@@ -3,4 +3,4 @@ Read constitution, product and architecture. Review spec, identify dependencies 
 
 Complete the physical low-end Android tablet checks in 005-06 before closing the release gate in 005-05. Keep device observations separate from the supervised child playtest.
 
-Exercise the pilot across all four worlds and test a compatible content-pack update. Validate physical audio playback and text fallback separately. Track Season One engagement as future playtest evidence.
+Exercise the pilot across all four worlds and test a compatible content-pack update. Check readable Arabic and the optional effects on the physical release candidate. Track Season One engagement as future playtest evidence.

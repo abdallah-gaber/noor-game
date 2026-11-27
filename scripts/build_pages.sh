@@ -23,7 +23,7 @@ generate() {
 }
 
 if [[ -n "$preview_sha" ]]; then
-  generate "$source_dir/preview" feat/spec-003-game-engine "$preview_sha" "$site/previews/season-one"
+  generate "$source_dir/preview" feat/spec-004-content-and-rewards "$preview_sha" "$site/previews/season-one"
   generate "$source_dir/main" main "$main_sha" "$site" --preview-link
 else
   generate "$source_dir/main" main "$main_sha" "$site"

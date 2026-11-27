@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../content/curriculum.dart';
 import '../progress/lesson_progress.dart';
@@ -74,19 +75,7 @@ class SqliteGameStore implements GameStore {
   ) async {
     final db = await database.open();
     await db.transaction((tx) async {
-      final updated = await tx.update(
-        'game_sessions',
-        {'revision': session.revision, 'snapshot': session.encode()},
-        where: 'scope = ? AND id = ? AND lesson_id = ? AND compatibility = ? AND revision = ?',
-        whereArgs: [
-          scope.name,
-          session.id,
-          lessonId,
-          session.plan.compatibility,
-          session.revision - 1,
-        ],
-      );
-      if (updated != 1) throw StateError('Stale game session');
+      await writeGameSnapshot(tx, scope, lessonId, session);
       if (session.finished) {
         await writeLessonProgress(
           tx,
@@ -103,4 +92,29 @@ class SqliteGameStore implements GameStore {
       }
     });
   }
+}
+
+Future<void> writeGameSnapshot(
+  DatabaseExecutor transaction,
+  ProgressScope scope,
+  String lessonId,
+  GameSession session,
+) async {
+  final updated = await transaction.update(
+    'game_sessions',
+    {
+      'revision': session.revision,
+      'snapshot': session.encode(),
+      'updated_at': DateTime.now().millisecondsSinceEpoch,
+    },
+    where: 'scope = ? AND id = ? AND lesson_id = ? AND compatibility = ? AND revision = ?',
+    whereArgs: [
+      scope.name,
+      session.id,
+      lessonId,
+      session.plan.compatibility,
+      session.revision - 1,
+    ],
+  );
+  if (updated != 1) throw StateError('Stale game session');
 }

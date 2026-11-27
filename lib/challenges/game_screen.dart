@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../audio/pilot_effects.dart';
 import '../audio/speech_control.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
+import '../progress/reward_store.dart';
+import '../review/review_selection.dart';
+import '../review/review_store.dart';
 import 'arrangement.dart';
 import 'arrangement_view.dart';
 import 'flashcard.dart';
@@ -25,10 +29,19 @@ class GameScreen extends ConsumerStatefulWidget {
     required this.world,
     required this.lesson,
     required this.curriculum,
-  });
+  }) : reviewMode = null;
 
-  final WorldId world;
-  final LearningLesson lesson;
+  const GameScreen.review({
+    super.key,
+    required this.curriculum,
+    required ReviewMode mode,
+  }) : reviewMode = mode,
+       world = null,
+       lesson = null;
+
+  final WorldId? world;
+  final LearningLesson? lesson;
+  final ReviewMode? reviewMode;
   final Curriculum curriculum;
 
   @override
@@ -37,10 +50,13 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   late final _plan = GamePlan(
-    widget.curriculum.version,
-    widget.lesson.challenges,
+    widget.curriculum.lessonVersion(widget.lesson!),
+    widget.lesson!.challenges,
+    compatibleDefinitionDigest: widget.lesson!.contentRevision,
   );
   GameSession? _session;
+  String? _reviewKey;
+  bool _emptyReview = false;
   bool _busy = true;
   bool _error = false;
   bool _revealed = false;
@@ -53,20 +69,30 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   Future<void> _open({String? replayOf}) async {
     try {
-      final random = Random.secure();
-      final id =
-          '${DateTime.now().microsecondsSinceEpoch}-${random.nextInt(1 << 30)}';
-      final session = await ref
-          .read(gameStoreProvider)
-          .open(
-            widget.curriculum.progressScope,
-            widget.lesson.id,
-            GameSession.start(id, _plan, random),
-            replayOf: replayOf,
-          );
+      final mode = widget.reviewMode;
+      final GameSession? session;
+      if (mode == null) {
+        session = await _openLesson(replayOf);
+      } else {
+        final store = ref.read(reviewStoreFor(widget.curriculum.progressScope));
+        final progress = await ref.read(
+          progressProvider(widget.curriculum.progressScope).future,
+        );
+        final round = await store.open(
+          mode,
+          reviewCandidates(widget.curriculum, progress),
+          await store.history(),
+          await store.intervals(),
+          DateTime.now(),
+          replayOf: replayOf,
+        );
+        _reviewKey = round?.key;
+        session = round?.session;
+      }
       if (!mounted) return;
       setState(() {
         _session = session;
+        _emptyReview = session == null;
         _error = false;
         _revealed = false;
       });
@@ -77,16 +103,49 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
   }
 
+  Future<GameSession> _openLesson(String? replayOf) async {
+    final random = Random.secure();
+    final id =
+        '${DateTime.now().microsecondsSinceEpoch}-${random.nextInt(1 << 30)}';
+    return await ref
+        .read(gameStoreProvider)
+        .open(
+          widget.curriculum.progressScope,
+          widget.lesson!.id,
+          GameSession.start(id, _plan, random),
+          replayOf: replayOf,
+        );
+  }
+
   Future<void> _save(GameSession? next) async {
     if (_busy || next == null) return;
     setState(() => _busy = true);
     try {
       final scope = widget.curriculum.progressScope;
-      await ref
-          .read(gameStoreProvider)
-          .save(scope, widget.world, widget.lesson.id, next);
+      if (widget.reviewMode == null) {
+        await ref
+            .read(gameStoreProvider)
+            .save(scope, widget.world!, widget.lesson!.id, next);
+        if (mounted && next.finished) {
+          ref.invalidate(progressProvider(scope));
+          ref.invalidate(rewardsProvider(scope));
+        }
+      } else {
+        await ref
+            .read(reviewStoreFor(widget.curriculum.progressScope))
+            .save(_reviewKey!, next);
+      }
       if (!mounted) return;
-      if (next.finished) ref.invalidate(progressProvider(scope));
+      ref.invalidate(reviewHistoryFor(scope));
+      _effect(
+        next.finished
+            ? PilotEffect.complete
+            : switch (next.feedback?.correct) {
+                true => PilotEffect.correct,
+                false => PilotEffect.retry,
+                null => PilotEffect.tap,
+              },
+      );
       setState(() {
         if (_session?.cursor != next.cursor) _revealed = false;
         _session = next;
@@ -96,6 +155,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       if (mounted) setState(() => _error = true);
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _effect(PilotEffect effect) {
+    if (widget.curriculum.isDraftPilot) {
+      ref.read(pilotEffectsProvider).play(effect);
     }
   }
 
@@ -111,14 +176,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return PopScope(
       canPop: !_busy,
       child: Scaffold(
-        appBar: const NoorAppBar('التحدّيات'),
+        appBar: NoorAppBar(switch (widget.reviewMode) {
+          ReviewMode.daily => 'تحدّي اليوم',
+          ReviewMode.adaptive => 'مراجعة مخصّصة',
+          null => 'التحدّيات',
+        }),
         body: NoorPage(
           key: ValueKey((session?.id, session?.cursor)),
           maxWidth: 680,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (widget.curriculum.isPreview) const Text(previewLabel),
+              if (widget.curriculum.isPreview)
+                Text(widget.curriculum.reviewLabel),
               if (_error)
                 Semantics(
                   liveRegion: true,
@@ -134,6 +204,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       semanticsLabel: 'جارٍ التحميل',
                     ),
                   )
+                else if (_emptyReview)
+                  const Text('ستظهر المراجعة عندما تتاح أنشطة للتدرّب.')
                 else
                   FilledButton(
                     onPressed: _retryOpen,
@@ -172,6 +244,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           semanticsLabel: 'تقدّم التحدّيات',
         ),
         const SizedBox(height: 12),
+        if (widget.curriculum.isDraftPilot && item is Arrangement)
+          Text(item.kind.label, style: Theme.of(context).textTheme.titleMedium),
         switch (item) {
           final ScoredQuestion question => QuestionView(
             question: question,
@@ -185,13 +259,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             options: session.optionsFor(question),
             answer: answer,
             enabled: !_busy,
+            enablePilotEffects: widget.curriculum.isDraftPilot,
             onAnswer: (ids) => _save(session.submit(ids)),
           ),
           final Flashcard card => FlashcardView(
             card: card,
             revealed: _revealed || answer != null,
             recall: answer == null ? null : Recall.values.byName(answer.single),
-            onReveal: () => setState(() => _revealed = true),
+            onReveal: () {
+              setState(() => _revealed = true);
+              _effect(PilotEffect.tap);
+            },
             onRecall: (recall) => _save(session.submit([recall.name])),
           ),
           _ => const Text('هذا النشاط غير متاح.'),
@@ -236,6 +314,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
         Text(accuracy),
         if (eventual.isNotEmpty) Text(eventual.trim()),
+        if (widget.reviewMode == null)
+          _RoundRewards(
+            lessonId: widget.lesson!.id,
+            scope: widget.curriculum.progressScope,
+          ),
         SpeechControl(text: 'أكملتَ التحدّيات! $accuracy.$eventual'),
         Wrap(
           spacing: 8,
@@ -243,15 +326,47 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             FilledButton(
               onPressed: _busy
                   ? null
-                  : () => context.go('/worlds/${widget.world.id}'),
-              child: const Text('إلى الدرب'),
+                  : () => widget.reviewMode == null
+                        ? context.go('/worlds/${widget.world!.id}')
+                        : context.go('/review'),
+              child: Text(
+                widget.reviewMode == null ? 'إلى الدرب' : 'إلى المراجعة',
+              ),
             ),
-            TextButton(
-              onPressed: _busy ? null : () => _retryOpen(replayOf: session.id),
-              child: const Text('أعد التحدّيات'),
-            ),
+            if (widget.reviewMode != ReviewMode.daily)
+              TextButton(
+                onPressed: _busy
+                    ? null
+                    : () => _retryOpen(replayOf: session.id),
+                child: Text(
+                  widget.reviewMode == null ? 'أعد التحدّيات' : 'مراجعة أخرى',
+                ),
+              ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _RoundRewards extends ConsumerWidget {
+  const _RoundRewards({required this.lessonId, required this.scope});
+
+  final String lessonId;
+  final ProgressScope scope;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rewards = ref.watch(rewardsProvider(scope)).asData?.value;
+    final stars = rewards?.starsByLesson[lessonId];
+    if (rewards == null || stars == null) return const SizedBox.shrink();
+    final number = MaterialLocalizations.of(context).formatDecimal;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('نجوم الدرس: ${number(stars)} من ${number(3)}'),
+        Text('نجوم الرحلة: ${number(rewards.stars)}'),
+        Text('مجموع نقاط الخبرة: ${number(rewards.xp)}'),
       ],
     );
   }

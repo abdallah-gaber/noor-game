@@ -23,8 +23,12 @@ Use independently versioned offline packs and show What's New after a pack updat
 | السيرة | النسب والمولد، نزول الوحي، الهجرة |
 | القدوات | الخلفاء الراشدون، العشرة المبشرون بالجنة، الأئمة الأربعة |
 
-Prioritize authentic and well-established topics. Teach clear obligatory and recommended practices, with advanced or disputed classifications deferred. Keep the app music-free. The authoring track supplies rights-cleared, reviewed narration and established memorization aids where appropriate. The durable lesson organization and targets live in the [Season One plan](curriculum/season-one.json).
+Prioritize authentic and well-established topics. Teach clear obligatory and recommended practices, with advanced or disputed classifications deferred. Keep the app music-free. Readable Arabic is sufficient for the MVP. Optional system TTS and bundled, rights-cleared narration are future enhancements. The authoring track supplies reviewed memorization aids where appropriate. The durable lesson organization and targets live in the [Season One plan](curriculum/season-one.json).
 
 ## Success
 
 A child can choose a world and complete a pilot lesson with little assistance. A parent can see learning progress and sources. Observe comfort and repeat engagement without collecting telemetry.
+
+The owner accepted the private pilot after physical-tablet testing. Future audio polish should make the optional effects more audible, joyful and distinct, with gentle retries, no clipping and no music. Richer question interactions and gameplay difficulty changes remain in the backlog.
+
+Prayer readiness is introductory preparation. Complete practical prayer instruction requires future documented practice content and review.

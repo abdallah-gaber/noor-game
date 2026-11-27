@@ -7,9 +7,14 @@ import '../settings/settings_controller.dart';
 import 'speech_service.dart';
 
 class SpeechControl extends ConsumerStatefulWidget {
-  const SpeechControl({super.key, required this.text});
+  const SpeechControl({
+    super.key,
+    required this.text,
+    this.showVoiceSetup = false,
+  });
 
   final String text;
+  final bool showVoiceSetup;
 
   @override
   ConsumerState<SpeechControl> createState() => _SpeechControlState();
@@ -107,7 +112,11 @@ class _SpeechControlState extends ConsumerState<SpeechControl> {
         if (enabled && _unavailable)
           Semantics(
             liveRegion: true,
-            child: const Text('الصوت غير متاح. اقرأ النص هنا.'),
+            child: Text(
+              widget.showVoiceSetup
+                  ? 'تعذّرت القراءة. افتح إعدادات تحويل النص إلى كلام في الجهاز وثبّت صوتًا عربيًا للاستخدام بلا إنترنت.'
+                  : 'الصوت غير متاح. اقرأ النص هنا.',
+            ),
           ),
       ],
     );

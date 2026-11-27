@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../audio/pilot_effects.dart';
 import '../audio/speech_control.dart';
+import '../challenges/arrangement.dart';
 import '../content/curriculum.dart';
 import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
@@ -39,11 +41,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           .saveStep(
             world: widget.world,
             lesson: widget.lesson,
-            contentVersion: widget.curriculum.version,
+            contentVersion: widget.curriculum.lessonVersion(widget.lesson),
             index: index,
             completed: completed,
           );
-      if (mounted && completed) setState(() => _finished = true);
+      if (!mounted) return;
+      if (completed) setState(() => _finished = true);
+      _effect(completed ? PilotEffect.complete : PilotEffect.tap);
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,6 +55,12 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       );
     } finally {
       if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  void _effect(PilotEffect effect) {
+    if (widget.curriculum.isDraftPilot) {
+      ref.read(pilotEffectsProvider).play(effect);
     }
   }
 
@@ -80,7 +90,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           data: (journey) {
             final index =
                 journey.records[lesson.id]?.resumeIndex(
-                  widget.curriculum.version,
+                  widget.curriculum.lessonVersion(lesson),
                   lesson.steps.length,
                 ) ??
                 0;
@@ -110,8 +120,27 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (widget.curriculum.isPreview)
-          Text(previewLabel, style: TextStyle(color: world.ink)),
+          Text(
+            widget.curriculum.reviewLabel,
+            style: TextStyle(color: world.ink),
+          ),
         if (!_finished) ...[
+          if (widget.curriculum.isDraftPilot)
+            for (final activity in lesson.challenges.whereType<Arrangement>())
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: OutlinedButton(
+                  onPressed: _saving
+                      ? null
+                      : () {
+                          _effect(PilotEffect.tap);
+                          context.push(
+                            '/worlds/${world.id}/lessons/${lesson.id}/practice/${activity.id}',
+                          );
+                        },
+                  child: Text('جرّب ${activity.kind.label}'),
+                ),
+              ),
           const SizedBox(height: 8),
           Text(indicator, style: TextStyle(color: world.ink)),
           const SizedBox(height: 6),
@@ -150,9 +179,12 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                 onPressed: _saving
                     ? null
                     : last && hasChallenges
-                    ? () => context.push(
-                        '/worlds/${world.id}/lessons/${lesson.id}/play',
-                      )
+                    ? () {
+                        _effect(PilotEffect.tap);
+                        context.push(
+                          '/worlds/${world.id}/lessons/${lesson.id}/play',
+                        );
+                      }
                     : () => _save(last ? 0 : index + 1, completed: last),
                 child: Text(
                   last

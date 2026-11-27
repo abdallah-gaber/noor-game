@@ -1,0 +1,414 @@
+{
+  "schema": 1,
+  "packId": "starter.seerah",
+  "channel": "production",
+  "version": "0.1.1",
+  "records": [
+    {
+      "kind": "unit",
+      "id": "seerah.madinah-character",
+      "reviewStatus": "sourceVerified",
+      "title": "المسلمون في المدينة",
+      "worldId": "seerah"
+    },
+    {
+      "kind": "lesson",
+      "id": "S11",
+      "reviewStatus": "sourceVerified",
+      "title": "المسلمون في المدينة",
+      "unitId": "seerah.madinah-character",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "S11.K1",
+        "S11.K2",
+        "S11.K3"
+      ],
+      "variantIds": [
+        "S11.Q01",
+        "S11.Q02",
+        "S11.Q03",
+        "S11.Q04",
+        "S11.Q05",
+        "S11.Q06",
+        "S11.Q07",
+        "S11.Q08",
+        "S11.Q09",
+        "S11.Q10",
+        "S11.E01"
+      ]
+    },
+    {
+      "kind": "source",
+      "id": "source.seerah.Q59-3a-8",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "59:8",
+      "category": "quran",
+      "authoringSourceId": "Q59:8",
+      "url": "https://quran.com/59/8"
+    },
+    {
+      "kind": "knowledge",
+      "id": "S11.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف المهاجرين",
+      "text": "المهاجرون تركوا ديارهم ابتغاء فضل الله ورضوانه.",
+      "sourceRefs": [
+        "source.seerah.Q59-3a-8"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.seerah.Q59-3a-9",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "59:9",
+      "category": "quran",
+      "authoringSourceId": "Q59:9",
+      "url": "https://quran.com/59/9"
+    },
+    {
+      "kind": "knowledge",
+      "id": "S11.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف الأنصار",
+      "text": "أحب الأنصار من هاجر إليهم وآثروهم.",
+      "sourceRefs": [
+        "source.seerah.Q59-3a-9"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.seerah.B2048",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "2048",
+      "category": "hadith",
+      "authoringSourceId": "B2048",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:2048"
+    },
+    {
+      "kind": "knowledge",
+      "id": "S11.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يفهم الأخوة والإيثار",
+      "text": "آخى النبي ﷺ بين عبد الرحمن بن عوف وسعد بن الربيع.",
+      "sourceRefs": [
+        "source.seerah.B2048"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K1"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-8"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "ماذا نسمي المسلمين الذين هاجروا من ديارهم؟",
+        "explanation": "المهاجرون تركوا ديارهم ابتغاء فضل الله ورضوانه.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "المهاجرين"
+          },
+          {
+            "id": "o2",
+            "label": "الأنصار"
+          },
+          {
+            "id": "o3",
+            "label": "التابعين"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K1"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-8"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "المهاجرون تركوا ديارهم ابتغاء رضوان الله.",
+        "explanation": "المهاجرون تركوا ديارهم ابتغاء فضل الله ورضوانه.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K1"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-8"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "من المهاجرون؟",
+        "explanation": "المهاجرون تركوا ديارهم ابتغاء فضل الله ورضوانه.",
+        "answer": "المهاجرون تركوا ديارهم ابتغاء فضل الله ورضوانه."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K2"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-9"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "ماذا نسمي أهل المدينة الذين نصروا المهاجرين؟",
+        "explanation": "أحب الأنصار من هاجر إليهم وآثروهم.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الأنصار"
+          },
+          {
+            "id": "o2",
+            "label": "المهاجرين"
+          },
+          {
+            "id": "o3",
+            "label": "التابعين"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K2"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-9"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "كره الأنصار من هاجر إليهم كما في الآية.",
+        "explanation": "أحب الأنصار من هاجر إليهم وآثروهم.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K2"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-9"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "كيف عامل الأنصار المهاجرين؟",
+        "explanation": "أحب الأنصار من هاجر إليهم وآثروهم.",
+        "answer": "أحب الأنصار من هاجر إليهم وآثروهم."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K3"
+      ],
+      "sourceRefs": [
+        "source.seerah.B2048"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "من آخى النبي ﷺ بينه وبين عبد الرحمن بن عوف؟",
+        "explanation": "آخى النبي ﷺ بين عبد الرحمن بن عوف وسعد بن الربيع.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "سعد بن الربيع"
+          },
+          {
+            "id": "o2",
+            "label": "أبو جهل"
+          },
+          {
+            "id": "o3",
+            "label": "أبو لهب"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K3"
+      ],
+      "sourceRefs": [
+        "source.seerah.B2048"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "آخى النبي ﷺ بين عبد الرحمن وسعد بن الربيع.",
+        "explanation": "آخى النبي ﷺ بين عبد الرحمن بن عوف وسعد بن الربيع.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K3"
+      ],
+      "sourceRefs": [
+        "source.seerah.B2048"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "اذكر مثالًا للأخوة بين المهاجرين والأنصار.",
+        "explanation": "آخى النبي ﷺ بين عبد الرحمن بن عوف وسعد بن الربيع.",
+        "answer": "آخى النبي ﷺ بين عبد الرحمن بن عوف وسعد بن الربيع."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K2"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-9"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "كيف تقتدي بالأنصار مع ضيفك؟",
+        "explanation": "أحب الأنصار من هاجر إليهم وآثروهم.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "أكرمه وأساعده"
+          },
+          {
+            "id": "o2",
+            "label": "أطرده"
+          },
+          {
+            "id": "o3",
+            "label": "أسخر منه"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "S11.E01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "S11.K1",
+        "S11.K2"
+      ],
+      "sourceRefs": [
+        "source.seerah.Q59-3a-8",
+        "source.seerah.Q59-3a-9"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "matching",
+        "prompt": "صل المجموعة بوصفها.",
+        "explanation": "المهاجرون والأنصار إخوة في الإسلام.",
+        "pairs": [
+          {
+            "left": {
+              "id": "l1",
+              "label": "المهاجرون"
+            },
+            "right": {
+              "id": "r1",
+              "label": "تركوا ديارهم لله"
+            }
+          },
+          {
+            "left": {
+              "id": "l2",
+              "label": "الأنصار"
+            },
+            "right": {
+              "id": "r2",
+              "label": "نصروا المهاجرين وآثروهم"
+            }
+          }
+        ]
+      },
+      "sourceRefsByKnowledge": {
+        "S11.K1": [
+          "source.seerah.Q59-3a-8"
+        ],
+        "S11.K2": [
+          "source.seerah.Q59-3a-9"
+        ]
+      }
+    }
+  ]
+}

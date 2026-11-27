@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "packId": "starter.exemplars",
+  "channel": "production",
+  "version": "0.1.1",
+  "records": [
+    {
+      "kind": "unit",
+      "id": "exemplars.companions",
+      "reviewStatus": "sourceVerified",
+      "title": "صغار الصحابة",
+      "worldId": "exemplars"
+    },
+    {
+      "kind": "lesson",
+      "id": "P10",
+      "reviewStatus": "sourceVerified",
+      "title": "صغار الصحابة",
+      "unitId": "exemplars.companions",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "P10.K1",
+        "P10.K2",
+        "P10.K3"
+      ],
+      "variantIds": [
+        "P10.Q01",
+        "P10.Q02",
+        "P10.Q03",
+        "P10.Q04",
+        "P10.Q05",
+        "P10.Q06",
+        "P10.Q07",
+        "P10.Q08",
+        "P10.Q09",
+        "P10.Q10"
+      ]
+    },
+    {
+      "kind": "source",
+      "id": "source.exemplars.B75",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "75",
+      "category": "hadith",
+      "authoringSourceId": "B75",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:75"
+    },
+    {
+      "kind": "knowledge",
+      "id": "P10.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يتعرف على: دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+      "text": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+      "sourceRefs": [
+        "source.exemplars.B75"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.exemplars.B6038",
+      "reviewStatus": "sourceVerified",
+      "title": "صحيح البخاري",
+      "locator": "6038",
+      "category": "hadith",
+      "authoringSourceId": "B6038",
+      "authenticity": "صحيح",
+      "url": "https://sunnah.com/bukhari:6038"
+    },
+    {
+      "kind": "knowledge",
+      "id": "P10.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يتعرف على: خدم أنس بن مالك النبي ﷺ عشر سنين.",
+      "text": "خدم أنس بن مالك النبي ﷺ عشر سنين.",
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "knowledge",
+      "id": "P10.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يتعرف على: كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+      "text": "كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K1"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B75"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "لمن دعا النبي ﷺ أن يعلمه الله الكتاب؟",
+        "explanation": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "ابن عباس"
+          },
+          {
+            "id": "o2",
+            "label": "أنس"
+          },
+          {
+            "id": "o3",
+            "label": "أبو عبيدة"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K1"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B75"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+        "explanation": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K1"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B75"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "بم دعا النبي ﷺ لابن عباس في هذا الحديث؟",
+        "explanation": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب.",
+        "answer": "دعا النبي ﷺ لعبد الله بن عباس أن يعلمه الله الكتاب."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K2"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "كم سنة خدم أنس النبي ﷺ؟",
+        "explanation": "خدم أنس بن مالك النبي ﷺ عشر سنين.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "عشر سنين"
+          },
+          {
+            "id": "o2",
+            "label": "سنتين"
+          },
+          {
+            "id": "o3",
+            "label": "خمس سنين"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K2"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "خدم أنس النبي ﷺ سنتين فقط.",
+        "explanation": "خدم أنس بن مالك النبي ﷺ عشر سنين.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K2"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "من الصحابي الذي خدم النبي ﷺ عشر سنين؟",
+        "explanation": "خدم أنس بن مالك النبي ﷺ عشر سنين.",
+        "answer": "خدم أنس بن مالك النبي ﷺ عشر سنين."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K3"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "كيف عامل النبي ﷺ أنسًا؟",
+        "explanation": "كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "برفق"
+          },
+          {
+            "id": "o2",
+            "label": "بقسوة"
+          },
+          {
+            "id": "o3",
+            "label": "باستهزاء"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K3"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "كان النبي ﷺ يقول لأنس أفّ في خدمته.",
+        "explanation": "كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K3"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "ماذا نتعلم من معاملة النبي ﷺ لأنس؟",
+        "explanation": "كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+        "answer": "نتعلم الرفق وحسن المعاملة."
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "P10.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "P10.K3"
+      ],
+      "sourceRefs": [
+        "source.exemplars.B6038"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "إذا أردت الاقتداء بالنبي ﷺ في التعامل مع الصغار، فماذا تختار؟",
+        "explanation": "كان النبي ﷺ رفيقًا بأنس ولم يقل له أفّ خلال خدمته.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الرفق"
+          },
+          {
+            "id": "o2",
+            "label": "السخرية"
+          },
+          {
+            "id": "o3",
+            "label": "القسوة"
+          }
+        ]
+      }
+    }
+  ]
+}

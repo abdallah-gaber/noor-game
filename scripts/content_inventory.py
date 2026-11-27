@@ -6,6 +6,9 @@ import json
 from pathlib import Path
 import re
 
+from curriculum_handoff import variant_signature
+from curriculum_review_patch import digest, json_bytes, load_review_handoff
+
 ROOT = Path(__file__).resolve().parents[1]
 KINDS = {
     "lessons": None,
@@ -52,22 +55,13 @@ def record_stages(record, draft_pack):
     )))
 
 
-def variant_signature(record):
-    def normalized(value):
-        return " ".join(str(value or "").split())
-
-    correct = set(record.get("correctOptionIds") or ())
-    options = tuple(sorted(
-        (normalized(option.get("textAr")), option.get("id") in correct)
-        for option in (record.get("options") or [])
-    ))
-    return (
-        record.get("type"), tuple(sorted(set(record.get("knowledgeIds") or ()))),
-        normalized(record.get("promptAr")), normalized(record.get("answerAr")), options,
-    )
-
-
 def create_inventory(files):
+    payloads = [file.read_bytes() for file in sorted(files)]
+    fingerprint = hashlib.sha256(b"".join(hashlib.sha256(payload).digest() for payload in payloads))
+    return inventory_for_packs([json.loads(payload) for payload in payloads], fingerprint.hexdigest())
+
+
+def inventory_for_packs(packs, input_digest, *, structurally_checked=False):
     result = {
         "catalogs": 0, "inputDigest": "", "totals": {},
         "stages": {kind: {stage: 0 for stage in STAGES} for kind in KINDS},
@@ -76,11 +70,7 @@ def create_inventory(files):
     ids = {kind: set() for kind in KINDS}
     source_status = {}
     variants = set()
-    fingerprint = hashlib.sha256()
-    for file in sorted(files):
-        payload = file.read_bytes()
-        fingerprint.update(hashlib.sha256(payload).digest())
-        pack = json.loads(payload)
+    for pack in packs:
         world = stable_id(pack["worldId"])
         draft_pack = pack.get("status") == "draft_not_for_release"
         result["catalogs"] += 1
@@ -91,9 +81,10 @@ def create_inventory(files):
                 raise ValueError("Missing source identifier")
             value = source.get("verificationStatus")
             status = value if value in SOURCE_STATES else "unknown"
-            if key in source_status and source_status[key] != status:
-                raise ValueError("Conflicting verification statuses for a source identifier")
-            source_status[key] = status
+            scoped = (world, key)
+            if scoped in source_status:
+                raise ValueError("Duplicate source identifier within a world")
+            source_status[scoped] = status
         for lesson in pack["lessons"]:
             unit = stable_id(lesson["unitId"])
             lesson_id = stable_id(lesson["id"])
@@ -107,7 +98,9 @@ def create_inventory(files):
                     ids[kind].add(key)
                     counts[kind] += 1
                     for stage, present in record_stages(record, draft_pack).items():
-                        result["stages"][kind][stage] += int(present)
+                        result["stages"][kind][stage] += int(
+                            present or (stage == "validated" and structurally_checked)
+                        )
                     if kind == "variants":
                         signature = variant_signature(record)
                         if signature in variants:
@@ -121,10 +114,118 @@ def create_inventory(files):
                             breakdown = result[group]
                             breakdown[bucket] = breakdown.get(bucket, 0) + 1
             world_units.setdefault(unit, {})[lesson_id] = counts
-    result["inputDigest"] = fingerprint.hexdigest()
+    result["inputDigest"] = input_digest
     result["totals"] = {kind: len(keys) for kind, keys in ids.items()}
     result["sources"] = dict(Counter(source_status.values()))
     return result
+
+
+def handoff_inventory(handoff):
+    extras = handoff["extras"]
+    enhancement = handoff["enhancement"]
+    by_lesson = {}
+    for collection, field in (
+        (extras["memorization"], "mnemonics"),
+        (extras["treasures"], "treasures"),
+        (enhancement["additions"], "challenges"),
+    ):
+        for row in collection:
+            by_lesson.setdefault(row["lessonId"], {}).setdefault(field, []).append(row)
+
+    packs = []
+    for pack in handoff["corePacks"]:
+        lessons = []
+        for lesson in pack["lessons"]:
+            supplements = by_lesson.get(lesson["id"], {})
+            lessons.append({**lesson, **{
+                field: [*lesson.get(field, []), *rows] for field, rows in supplements.items()
+            }})
+        packs.append({**pack, "lessons": lessons})
+
+    digests = b"".join(bytes.fromhex(digest) for _, digest in sorted(handoff["inputDigests"].items()))
+    result = inventory_for_packs(packs, hashlib.sha256(digests).hexdigest(), structurally_checked=True)
+    source_counts = Counter(result["sources"])
+    for source in extras["sources"].values():
+        state = source["status"]
+        source_counts[state if state in SOURCE_STATES else "unknown"] += 1
+    result["sources"] = dict(source_counts)
+    queue = handoff["correctionQueue"]
+    result["handoff"] = {
+        "contentPackages": len(handoff["inputDigests"]) - 1,  # CONTENT-007 has two audited inputs.
+        "plannedLessons": len(handoff["blueprint"]["lessons"]),
+        "plannedObjectives": sum(len(row["objectives"]) for row in handoff["blueprint"]["lessons"]),
+        "correctionQueue": dict(Counter(row["kind"] for row in queue)),
+        "mixedReviewVariants": len(handoff["mixedReviewPrerequisites"]),
+        "prayerReadinessLessons": enhancement["prayerReadiness"]["lessonIds"],
+    }
+    if review := handoff.get("scientificReview"):
+        result["handoff"]["contentPackages"] += 1
+        result["handoff"]["scientificReview"] = {
+            "package": review["package"],
+            "appliedDraftRecords": sum(row["kind"] != "blueprint" for row in review["changedRecordDigests"]),
+            "appliedBlueprintRecords": sum(row["kind"] == "blueprint" for row in review["changedRecordDigests"]),
+            "addedPendingSources": len(review["sourceAdditions"]),
+            "unusedOriginalSources": len(review["unusedOriginalSources"]),
+            "memorizationExcerptsReviewed": len(review["memorizationReview"]),
+            "repeatPromptGroups": len(review["duplicatePromptsBacklog"]),
+            "queueStatus": dict(Counter(row["status"] for row in queue)),
+            "originalSourceEvidence": dict(Counter(row["status"] for row in review["sourceLedger"])),
+        }
+        if followup := review.get("followup"):
+            result["handoff"]["contentPackages"] += 1
+            result["handoff"]["scientificReview"]["followup"] = {
+                "appliedDraftRecords": sum(row["kind"] != "blueprint" for row in followup["changedRecordDigests"]),
+                "appliedBlueprintRecords": sum(row["kind"] == "blueprint" for row in followup["changedRecordDigests"]),
+                "addedPendingSources": followup["addedPendingSources"],
+                "retainedObjectives": len(review["semanticResolutions"]),
+            }
+        fingerprint = hashlib.sha256(digests)
+        for name, value in sorted(review["patchDigests"].items()):
+            fingerprint.update(name.encode())
+            fingerprint.update(bytes.fromhex(value))
+        result["inputDigest"] = fingerprint.hexdigest()
+    if candidate := handoff.get("starterCandidate"):
+        result["handoff"]["contentPackages"] += 1
+        result["handoff"]["starterCandidate"] = candidate
+    return result
+
+
+def current_inventory(handoff):
+    result = handoff_inventory(handoff)
+    root = ROOT / "assets/curriculum"
+    if not (root / "index.json").is_file():
+        return result
+    index = json.loads((root / "index.json").read_bytes())
+    ledger = json.loads((root / "approvals.json").read_bytes())
+    receipt = json.loads((ROOT / "docs/curriculum/starter-release.json").read_bytes())
+    approvals = {(row["packId"], row["recordId"]): row["digest"] for row in ledger["approvals"]}
+    counts = Counter()
+    seen = set()
+    versions = set()
+    for id in index["packIds"]:
+        pack = json.loads((root / "packs" / f"{id}.json").read_bytes())
+        if pack["packId"] != id or pack["channel"] != "production":
+            raise ValueError(f"Unexpected release pack {id}")
+        versions.add(pack["version"])
+        for record in pack["records"]:
+            key = (id, record["id"])
+            canonical = digest(json_bytes({"packId": id, "record": record}, canonical=True))
+            if key in seen or record["reviewStatus"] != "sourceVerified" or approvals.get(key) != canonical:
+                raise ValueError(f"Release approval differs for {key}")
+            seen.add(key)
+            counts[record["kind"]] += 1
+    if (dict(counts) != receipt["counts"] or len(seen) != len(ledger["approvals"])
+            or seen != approvals.keys() or ledger["approvalRequestSha256"] != receipt["approvalRequestSha256"]):
+        raise ValueError("Approved starter inventory differs from receipt")
+    result["starterRelease"] = {
+        "versions": sorted(versions), "approvedRecords": len(seen), "counts": dict(counts),
+        "deferred": receipt["deferred"], "scope": "introductory_starter",
+    }
+    return result
+
+
+def inventory_json(result):
+    return json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 
 def main():
@@ -132,17 +233,15 @@ def main():
     parser.add_argument("inputs", type=Path, nargs="*", default=[])
     parser.add_argument("--check", action="store_true", help="compare the export with the tracked snapshot")
     args = parser.parse_args()
-    inputs = args.inputs or list((ROOT / "docs/curriculum/drafts").glob("*/*.json"))
-    if not inputs:
-        parser.error("No canonical curriculum packs found")
+    result = create_inventory(args.inputs) if args.inputs else current_inventory(load_review_handoff()[0])
     snapshot = ROOT / "docs/curriculum/public-inventory.json"
-    content = json.dumps(create_inventory(inputs), ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    content = inventory_json(result)
     if args.check:
         if snapshot.read_text() != content:
             parser.error("Public inventory differs from canonical records")
     else:
         snapshot.write_text(content)
-    print("Public inventory matches", len(inputs), "canonical packs")
+    print("Public inventory matches the canonical curriculum inputs")
 
 
 if __name__ == "__main__":

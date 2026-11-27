@@ -7,6 +7,8 @@ import 'package:noor/challenges/game_store.dart';
 import 'package:noor/content/curriculum.dart';
 import 'package:noor/progress/lesson_progress.dart';
 import 'package:noor/progress/progress_store.dart';
+import 'package:noor/progress/reward_progress.dart';
+import 'package:noor/progress/reward_store.dart';
 
 import 'progress_test_support.dart';
 
@@ -57,6 +59,8 @@ void main() {
       expect(progress.value.records['iman-activities'], isNull);
       await _tap(tester, 'النتيجة');
       expect(find.text('أكملتَ التحدّيات!'), findsOneWidget);
+      expect(find.textContaining('نجوم الدرس:'), findsOneWidget);
+      expect(find.textContaining('مجموع نقاط الخبرة:'), findsOneWidget);
       expect(games.sessions.single.score, (
         scored: 4,
         firstCorrect: 3,
@@ -142,6 +146,13 @@ Future<void> _launch(
       overrides: [
         progressStoreProvider.overrideWithValue(games.progress),
         gameStoreProvider.overrideWithValue(games),
+        previewRewardsProvider.overrideWith((ref) {
+          final history = RewardHistory();
+          for (final session in games.sessions) {
+            history.include('iman-activities', session.encode());
+          }
+          return history.summarize();
+        }),
       ],
       child: NoorApp(router: router),
     ),

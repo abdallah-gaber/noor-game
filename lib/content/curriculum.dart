@@ -43,25 +43,40 @@ class LessonStep {
   final LessonPicture picture;
 }
 
+typedef LearningSource = ({
+  String id,
+  String title,
+  String locator,
+  String? url,
+});
+
 class LearningLesson {
   const LearningLesson({
     required this.id,
     required this.title,
     required this.steps,
     this.prerequisiteId,
+    this.prerequisiteIds = const [],
+    this.contentRevision,
     this.challenges = const [],
+    this.knowledgeLabels = const {},
+    this.sources = const [],
   });
 
   final String id;
   final String title;
   final List<LessonStep> steps;
   final List<ChallengeDefinition> challenges;
+  final Map<String, String> knowledgeLabels;
+  final List<LearningSource> sources;
   final String? prerequisiteId;
+  final List<String> prerequisiteIds;
+  final String? contentRevision;
 
   LessonState state({required Set<String> completed, String? currentId}) {
     if (completed.contains(id)) return LessonState.completed;
-    if (prerequisiteId case final requiredId?
-        when !completed.contains(requiredId)) {
+    if ((prerequisiteId != null && !completed.contains(prerequisiteId)) ||
+        !prerequisiteIds.every(completed.contains)) {
       return LessonState.locked;
     }
     return id == currentId ? LessonState.current : LessonState.available;
@@ -86,14 +101,21 @@ class Curriculum {
   const Curriculum({
     required this.version,
     this.isPreview = false,
+    this.isDraftPilot = false,
     this.units = const {},
     this.previewCompletions = const {},
   });
 
   final String version;
   final bool isPreview;
+  final bool isDraftPilot;
+
+  String get reviewLabel => isDraftPilot ? draftPilotLabel : previewLabel;
   final Map<WorldId, List<LearningUnit>> units;
   final Set<String> previewCompletions;
+
+  String lessonVersion(LearningLesson lesson) =>
+      lesson.contentRevision ?? version;
 
   List<LearningUnit> unitsFor(WorldId world) => units[world] ?? const [];
 
@@ -198,6 +220,13 @@ LearningUnit _fixtureUnit(WorldId world) {
             ),
           ],
           challenges: List.unmodifiable(debugChallenges.values),
+          knowledgeLabels: const {
+            'preview.geometry.triangle': 'المثلّث',
+            'preview.geometry.square': 'المربّع',
+            'preview.geometry.circle': 'الدائرة',
+            'preview.geometry.shapes': 'الأشكال والزوايا',
+            'preview.counting': 'ترتيب الأعداد',
+          },
         ),
       if (world == WorldId.iman)
         LearningLesson(
@@ -229,4 +258,5 @@ LearningUnit _fixtureUnit(WorldId world) {
   );
 }
 
+const draftPilotLabel = 'مراجعة للبالغين فقط — محتوى غير متحقق منه';
 const previewLabel = 'معاينة تجريبية للمطوّر';

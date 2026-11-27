@@ -1,19 +1,90 @@
 {
   "catalogs": 4,
   "difficulty": {
-    "application": 58,
+    "application": 72,
     "recognition": 240,
-    "understanding": 302
+    "understanding": 324
   },
-  "inputDigest": "47cd656a15610a2c1e322d44f0476cea74eebec14b45044c267db7696de70df1",
+  "handoff": {
+    "contentPackages": 10,
+    "correctionQueue": {
+      "authoredCorrection": 11,
+      "citationAlignment": 3,
+      "newFinding": 13,
+      "outlineAlignment": 7,
+      "rights": 1,
+      "sourceVerification": 5
+    },
+    "mixedReviewVariants": 8,
+    "plannedLessons": 60,
+    "plannedObjectives": 180,
+    "prayerReadinessLessons": [
+      "I03",
+      "W02",
+      "W03",
+      "W04",
+      "W05",
+      "W06",
+      "W07",
+      "W08",
+      "W09",
+      "W10",
+      "W11",
+      "W12",
+      "W13",
+      "W14"
+    ],
+    "scientificReview": {
+      "addedPendingSources": 24,
+      "appliedBlueprintRecords": 8,
+      "appliedDraftRecords": 134,
+      "followup": {
+        "addedPendingSources": 3,
+        "appliedBlueprintRecords": 1,
+        "appliedDraftRecords": 24,
+        "retainedObjectives": 1
+      },
+      "memorizationExcerptsReviewed": 20,
+      "originalSourceEvidence": {
+        "needs_correction": 5,
+        "partial_passage_checked": 1,
+        "pending_claim_level_verification": 127,
+        "selected_claim_or_excerpt_checked": 48
+      },
+      "package": "CONTENT-009",
+      "queueStatus": {
+        "applied_claim_pending": 1,
+        "applied_draft": 28,
+        "open_release_gate": 10,
+        "retained_edition_pending": 1
+      },
+      "repeatPromptGroups": 60,
+      "unusedOriginalSources": 9
+    },
+    "starterCandidate": {
+      "deferredLessons": 54,
+      "finalEditorialRecords": 12,
+      "hadithAttributions": 10,
+      "knowledge": 18,
+      "lessons": 6,
+      "openQueue": 12,
+      "packs": 4,
+      "recordRequests": 112,
+      "scopedSourceAdditions": 3,
+      "variant": 65
+    }
+  },
+  "inputDigest": "ed3089508e9997f5b5a51530ee6a2079404e3d9c235c9eee9ec4888c6635ac0f",
   "mechanics": {
     "flashcard": 168,
-    "multiple_choice": 252,
+    "matching": 12,
+    "multiple_choice": 266,
+    "ordering": 10,
     "true_false": 180
   },
   "sources": {
     "historical_edition_review_pending": 7,
-    "locator_review_pending": 121
+    "locator_review_pending": 201
   },
   "stages": {
     "knowledgeUnits": {
@@ -23,7 +94,7 @@
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 180
     },
     "lessons": {
       "draft": 60,
@@ -32,16 +103,16 @@
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 60
     },
     "mnemonics": {
-      "draft": 0,
+      "draft": 20,
       "finalApproval": 0,
       "integrated": 0,
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 20
     },
     "objectives": {
       "draft": 180,
@@ -50,34 +121,54 @@
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 180
     },
     "treasures": {
-      "draft": 0,
+      "draft": 30,
       "finalApproval": 0,
       "integrated": 0,
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 30
     },
     "variants": {
-      "draft": 600,
+      "draft": 636,
       "finalApproval": 0,
       "integrated": 0,
       "ownerReviewed": 0,
       "releaseVerified": 0,
       "sourceVerified": 0,
-      "validated": 0
+      "validated": 636
     }
+  },
+  "starterRelease": {
+    "approvedRecords": 112,
+    "counts": {
+      "knowledge": 18,
+      "lesson": 6,
+      "source": 18,
+      "unit": 5,
+      "variant": 65
+    },
+    "deferred": {
+      "lessons": 54,
+      "memorization": 20,
+      "openReviewItems": 12,
+      "treasures": 30
+    },
+    "scope": "introductory_starter",
+    "versions": [
+      "0.1.1"
+    ]
   },
   "totals": {
     "knowledgeUnits": 180,
     "lessons": 60,
-    "mnemonics": 0,
+    "mnemonics": 20,
     "objectives": 180,
-    "treasures": 0,
-    "variants": 600
+    "treasures": 30,
+    "variants": 636
   },
   "worlds": {
     "exemplars": {
@@ -87,7 +178,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "P02": {
@@ -95,15 +186,15 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "P03": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "P04": {
@@ -111,8 +202,8 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         }
       },
       "exemplars.companions": {
@@ -129,7 +220,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 2,
           "variants": 10
         }
       },
@@ -140,7 +231,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         },
         "P13": {
           "knowledgeUnits": 3,
@@ -156,7 +247,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       },
       "exemplars.successors": {
@@ -183,7 +274,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "P07": {
@@ -191,7 +282,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "P08": {
@@ -200,7 +291,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       }
     },
@@ -217,10 +308,10 @@
         "W18": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 2,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 12
         }
       },
       "ibadah.fasting": {
@@ -229,16 +320,16 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "W16": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 12
         }
       },
       "ibadah.pilgrimage": {
@@ -247,7 +338,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "W20": {
@@ -255,15 +346,15 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         }
       },
       "ibadah.pillars": {
         "W01": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
           "treasures": 0,
           "variants": 10
@@ -281,10 +372,10 @@
         "W08": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "W09": {
           "knowledgeUnits": 3,
@@ -292,7 +383,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 12
         },
         "W10": {
           "knowledgeUnits": 3,
@@ -300,7 +391,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         },
         "W11": {
           "knowledgeUnits": 3,
@@ -316,57 +407,57 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 12
         },
         "W13": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 12
         },
         "W14": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       },
       "ibadah.purity": {
         "W03": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         },
         "W04": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         },
         "W05": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "W06": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 2,
+          "variants": 11
         },
         "W07": {
           "knowledgeUnits": 3,
@@ -374,7 +465,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 12
         }
       }
     },
@@ -385,24 +476,24 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "I11": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 1,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "I12": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 2,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       },
       "iman.faith": {
@@ -412,14 +503,14 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         },
         "I07": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "I08": {
@@ -427,8 +518,8 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 2,
+          "variants": 11
         },
         "I09": {
           "knowledgeUnits": 3,
@@ -471,7 +562,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "I03": {
@@ -480,7 +571,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       }
     },
@@ -491,15 +582,15 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "S12": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "S13": {
@@ -513,10 +604,10 @@
         "S14": {
           "knowledgeUnits": 3,
           "lessons": 1,
-          "mnemonics": 0,
+          "mnemonics": 8,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       },
       "seerah.mission-migration": {
@@ -541,16 +632,16 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         },
         "S10": {
           "knowledgeUnits": 3,
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
-          "variants": 10
+          "treasures": 1,
+          "variants": 11
         }
       },
       "seerah.origins": {
@@ -559,7 +650,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "S02": {
@@ -567,7 +658,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "S03": {
@@ -576,7 +667,7 @@
           "mnemonics": 0,
           "objectives": 3,
           "treasures": 0,
-          "variants": 10
+          "variants": 11
         }
       },
       "seerah.youth-revelation": {
@@ -585,7 +676,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         },
         "S05": {
@@ -601,7 +692,7 @@
           "lessons": 1,
           "mnemonics": 0,
           "objectives": 3,
-          "treasures": 0,
+          "treasures": 1,
           "variants": 10
         }
       }

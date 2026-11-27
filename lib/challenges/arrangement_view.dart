@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../audio/pilot_effects.dart';
 
 import '../audio/speech_control.dart';
 import '../design_system/noor_theme.dart';
@@ -6,7 +9,7 @@ import 'arrangement.dart';
 import 'question_view.dart';
 import 'scored_question.dart';
 
-class ArrangementView extends StatefulWidget {
+class ArrangementView extends ConsumerStatefulWidget {
   const ArrangementView({
     super.key,
     required this.question,
@@ -14,19 +17,21 @@ class ArrangementView extends StatefulWidget {
     required this.onAnswer,
     this.answer,
     this.enabled = true,
+    this.enablePilotEffects = false,
   });
 
   final Arrangement question;
   final List<AnswerOption> options;
   final List<String>? answer;
   final bool enabled;
+  final bool enablePilotEffects;
   final ValueChanged<List<String>> onAnswer;
 
   @override
-  State<ArrangementView> createState() => _ArrangementViewState();
+  ConsumerState<ArrangementView> createState() => _ArrangementViewState();
 }
 
-class _ArrangementViewState extends State<ArrangementView> {
+class _ArrangementViewState extends ConsumerState<ArrangementView> {
   final _pairs = <String, String>{};
   final _sequence = <String>[];
   String? _target;
@@ -170,7 +175,14 @@ class _ArrangementViewState extends State<ArrangementView> {
           width: selected ? 2 : 1,
         ),
       ),
-      onPressed: onTap,
+      onPressed: onTap == null
+          ? null
+          : () {
+              onTap();
+              if (widget.enablePilotEffects) {
+                ref.read(pilotEffectsProvider).play(PilotEffect.tap);
+              }
+            },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
