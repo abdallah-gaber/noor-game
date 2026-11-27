@@ -98,7 +98,11 @@ for folder, names in {
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
     ),
-    "spec-005": ("005-01-toolchain.md",),
+    "spec-005": (
+        "005-01-toolchain.md", "005-02-layouts.md",
+        "phone-home.png", "phone-lesson.png", "phone-large-text-settings.png",
+        "tablet-home.png", "tablet-lesson.png", "tablet-landscape-lesson.png",
+    ),
     "spec-004": (
         "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
         "004-03-corrected-draft.md", "004-03-content-009.md",

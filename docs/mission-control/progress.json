@@ -293,9 +293,9 @@
         {
           "id": "005-02",
           "title": "Capture actual tablet and phone screenshots",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": ["docs/qa/spec-005/005-02-layouts.md"],
+          "note": "Signed baseline captured on offline Android phone and tablet emulators. 19 accessibility tests passed.",
           "priority": "P0"
         },
         {
