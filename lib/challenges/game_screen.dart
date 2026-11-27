@@ -11,6 +11,7 @@ import '../design_system/noor_layout.dart';
 import '../home/noor_lantern.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
+import '../progress/reward_store.dart';
 import 'arrangement.dart';
 import 'arrangement_view.dart';
 import 'flashcard.dart';
@@ -88,7 +89,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           .read(gameStoreProvider)
           .save(scope, widget.world, widget.lesson.id, next);
       if (!mounted) return;
-      if (next.finished) ref.invalidate(progressProvider(scope));
+      if (next.finished) {
+        ref.invalidate(progressProvider(scope));
+        if (widget.curriculum.isPreview) ref.invalidate(previewRewardsProvider);
+      }
       _effect(
         next.finished
             ? PilotEffect.complete
@@ -260,6 +264,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
         Text(accuracy),
         if (eventual.isNotEmpty) Text(eventual.trim()),
+        if (widget.curriculum.isPreview)
+          _PreviewRewards(lessonId: widget.lesson.id),
         SpeechControl(text: 'أكملتَ التحدّيات! $accuracy.$eventual'),
         Wrap(
           spacing: 8,
@@ -276,6 +282,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _PreviewRewards extends ConsumerWidget {
+  const _PreviewRewards({required this.lessonId});
+
+  final String lessonId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rewards = ref.watch(previewRewardsProvider).asData?.value;
+    final stars = rewards?.starsByLesson[lessonId];
+    if (rewards == null || stars == null) return const SizedBox.shrink();
+    final number = MaterialLocalizations.of(context).formatDecimal;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('نجوم الدرس: ${number(stars)} من ${number(3)}'),
+        Text('نجوم الرحلة: ${number(rewards.stars)}'),
+        Text('مجموع نقاط الخبرة: ${number(rewards.xp)}'),
       ],
     );
   }

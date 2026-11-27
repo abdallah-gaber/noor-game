@@ -48,3 +48,10 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - Preserve original authoring files for audit. Apply compatible operations to their private authoring records and regenerate the review artifacts. Hold answer-semantic conflicts for review.
 - Keep the supplied dispositions and evidence linked to their queue items. Distinguish applied text edits from open source, historical edition, rights and human approval work.
 - Keep the public inventory aggregate-only and require the existing approval gate for child integration. Log repeated question prompts as future content-quality work.
+
+## 004-04 preview rewards acceptance
+
+- Verified preview game completion earns 10 XP and up to three stars for the lesson. Use first-attempt scored accuracy for stars. A later better round may raise the lesson's best stars within the three-star cap.
+- Retry, replay and compatible content updates retain earned progress without paying XP again for the same stable lesson ID. Unfinished and unscored rounds earn no rewards.
+- Track first and eventual correctness by stable knowledge and variant IDs across durable scored attempts. A repeated variant contributes at most once to a knowledge unit's accuracy denominator.
+- Keep Rewards inside the preview catalog and preview progress scope. Award for in-app learning only. Worship practice, streaks and ordinary child routes do not award anything at this checkpoint.

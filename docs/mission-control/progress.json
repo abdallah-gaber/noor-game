@@ -250,9 +250,9 @@
         {
           "id": "004-04",
           "title": "Implement stars, XP and progress",
-          "status": "todo",
-          "evidence": [],
-          "note": "Track mastery by stable knowledge ID and keep earned history through compatible updates.",
+          "status": "done",
+          "evidence": ["docs/qa/spec-004/004-04-preview-rewards.md"],
+          "note": "Preview results show capped best stars and one-time XP per scored lesson. Stable-ID mastery tallies retain first and eventual correctness. 14 targeted tests passed.",
           "priority": "P0"
         },
         {

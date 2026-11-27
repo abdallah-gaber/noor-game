@@ -10,3 +10,5 @@ For the 004-02 pilot checkpoint, verify the CONTENT-007 input digests, select fo
 After owner pilot acceptance, generate the complete local review snapshot and correction queue from CONTENT-001–007. Reuse draft challenge normalization for the pilot. Export public-safe coverage from that validated graph and verify with targeted tests and static analysis.
 
 For the 004-03 draft checkpoint, guard the CONTENT-008 overlay with SHA-256 and exact before-values, then validate the corrected private authoring snapshot and regenerate the review queue, dashboard and sanitized inventory. Leave exact record approval and production activation open.
+
+For 004-04, derive preview rewards and knowledge practice from durable game history, keyed by stable IDs with no separate payout write. Verify old snapshots, resume, scoped reads, better replay and capped awards. Show the result in the existing preview game results. Defer mastery-driven selection to 004-05.
