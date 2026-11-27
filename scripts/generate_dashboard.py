@@ -102,7 +102,7 @@ for folder, names in {
         "005-01-toolchain.md", "005-02-layouts.md", "005-03-effects.md", "005-04-owner-playtest.md",
         "phone-audio-settings.png", "005-06-physical-android.md",
         "physical-portrait-lesson.png", "physical-landscape-lesson.png",
-        "005-05-release-candidate.md", "upgrade-before-history.png", "upgrade-after-history.png",
+        "005-05-release-candidate.md", "005-05-branding.md", "android-9-noor-splash.png", "android-15-noor-splash.png", "upgrade-before-history.png", "upgrade-after-history.png",
         "upgrade-whats-new.png", "ipad-simulator-home.png",
         "phone-home.png", "phone-lesson.png", "phone-large-text-settings.png",
         "tablet-home.png", "tablet-lesson.png", "tablet-landscape-lesson.png",

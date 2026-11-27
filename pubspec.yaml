@@ -1,7 +1,7 @@
 name: noor
 description: Arabic, tablet-first learning game foundation.
 publish_to: 'none'
-version: 0.1.1+4
+version: 0.1.1+5
 
 environment:
   sdk: '3.13.7'

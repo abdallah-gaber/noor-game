@@ -326,8 +326,8 @@
           "id": "005-05",
           "title": "Resolve release blockers and regenerate tracker",
           "status": "review",
-          "evidence": ["docs/qa/spec-005/005-05-release-candidate.md"],
-          "note": "Signed 0.1.1 candidate, upgrade continuity, offline QA and platform builds verified. Low-end gate awaits the designated tablet.",
+          "evidence": ["docs/qa/spec-005/005-05-release-candidate.md", "docs/qa/spec-005/005-05-branding.md"],
+          "note": "Signed 0.1.1 build 5 includes Noor launcher and splash branding. Low-end gate awaits the designated tablet.",
           "priority": "P0"
         }
       ]
