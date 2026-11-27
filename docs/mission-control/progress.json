@@ -1,6 +1,6 @@
 {
   "project": "Noor / نور",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "phases": [
     {
       "id": "001",
@@ -325,9 +325,9 @@
         {
           "id": "005-05",
           "title": "Resolve release blockers and regenerate tracker",
-          "status": "todo",
-          "evidence": [],
-          "note": "Confirm playable pilot coverage, pack upgrade continuity and the release content gates.",
+          "status": "review",
+          "evidence": ["docs/qa/spec-005/005-05-release-candidate.md"],
+          "note": "Signed 0.1.1 candidate, upgrade continuity, offline QA and platform builds verified. Low-end gate awaits the designated tablet.",
           "priority": "P0"
         }
       ]

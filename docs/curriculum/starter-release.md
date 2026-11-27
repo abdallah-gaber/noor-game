@@ -9,3 +9,7 @@ The release generator checks the exact input manifest, every candidate pack and 
 ## Season One authoring
 
 The starter is a limited milestone. The remaining 54 lessons, 20 memorization entries, 30 treasures and all 12 unresolved review items remain in private authoring. These items include claim-level verification, historical edition confirmation, reuse rights and practical prayer coverage. No general verification status is assigned to deferred uses of the same sources. [Season One roadmap](roadmap.md)
+
+## SPEC-005 compatible update
+
+The signed bundle advances `starter.iman` to 0.1.2 and supplies an Arabic What's New note. The release script verifies the exact approved request, projects the 112 approved records, then applies the engineering patch version from the release log. Only pack-level metadata is versioned in this update. The same lesson IDs, stable learning revisions and approval ledger carry forward. [Release log](releases.json)

@@ -61,14 +61,20 @@ android {
     }
 }
 
-tasks.configureEach {
-    if (name == "validateSigningRelease") {
-        doFirst {
-            require(releaseStore.isPresent && releasePassword.isPresent && releaseAlias.isPresent) {
-                "Set NOOR_RELEASE_STORE_FILE, NOOR_RELEASE_STORE_PASSWORD and NOOR_RELEASE_KEY_ALIAS."
-            }
+val verifyNoorReleaseSigning = tasks.register("verifyNoorReleaseSigning") {
+    doLast {
+        require(
+            !releaseStore.orNull.isNullOrBlank() &&
+                !releasePassword.orNull.isNullOrBlank() &&
+                !releaseAlias.orNull.isNullOrBlank(),
+        ) {
+            "Set NOOR_RELEASE_STORE_FILE, NOOR_RELEASE_STORE_PASSWORD and NOOR_RELEASE_KEY_ALIAS."
         }
     }
+}
+
+tasks.configureEach {
+    if (name == "preReleaseBuild") dependsOn(verifyNoorReleaseSigning)
 }
 
 kotlin {

@@ -7,3 +7,5 @@ On Android 9 with no active network, a fresh install enabled effects and left sp
 The 32 focused Flutter checks exercised the production lesson/game cues, saved defaults and opt-out, pilot retry, and speech fallback. Physical speaker audibility and comfort are recorded separately from PCM and native playback evidence.
 
 The connected Android 16 tablet also entered native playback for the lesson tap and the settings preview while in airplane mode. The isolated app retained the saved opt-out after a cold restart. [Physical hardware run](005-06-physical-android.md)
+
+Compared with the prior pilot cues at their native playback gain, effective RMS increased by 7.0 dB for retry, 8.6 dB for completion, 8.8 dB for correct and 15.8 dB for tap.

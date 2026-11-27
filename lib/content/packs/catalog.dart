@@ -55,10 +55,13 @@ class ValidatedCatalog {
   ]);
 }
 
+typedef PackReleaseNote = ({String packId, String version, String whatsNew});
+
 class IntegratedCatalog {
-  IntegratedCatalog._(this._checked);
+  IntegratedCatalog._(this._checked, this.releaseNotes);
 
   final ValidatedCatalog _checked;
+  final List<String> releaseNotes;
 
   Map<String, PackDocument> get packs => _checked.packs;
   Map<String, PackRecord> get records => _checked.records;
@@ -216,6 +219,7 @@ class CatalogIngestor {
     required ApprovalLedger approvals,
     Map<String, String> assetDigests = const {},
     IntegratedCatalog? previous,
+    Iterable<PackReleaseNote> releaseNotes = const [],
   }) {
     final incomingList = List<PackDocument>.of(incoming);
     final next = <String, PackDocument>{...?previous?.packs};
@@ -252,7 +256,17 @@ class CatalogIngestor {
       }
     }
     if (previous != null) _validateUpdate(previous._checked, checked);
-    return IntegratedCatalog._(checked);
+    final notedPacks = <String>{};
+    for (final note in releaseNotes) {
+      if (checked.packs[note.packId]?.version.toString() != note.version ||
+          !notedPacks.add(note.packId)) {
+        throw FormatException('Invalid release note for ${note.packId}');
+      }
+    }
+    return IntegratedCatalog._(
+      checked,
+      List.unmodifiable(releaseNotes.map((note) => note.whatsNew)),
+    );
   }
 
   void _validateUpdate(ValidatedCatalog previous, ValidatedCatalog next) {

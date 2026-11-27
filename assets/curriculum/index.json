@@ -5,5 +5,12 @@
     "starter.ibadah",
     "starter.seerah",
     "starter.exemplars"
+  ],
+  "releaseNotes": [
+    {
+      "packId": "starter.iman",
+      "version": "0.1.2",
+      "whatsNew": "تحديث تقني لحزمة عالم الإيمان يدعم متابعة الدروس والتدريب المحفوظ."
+    }
   ]
 }

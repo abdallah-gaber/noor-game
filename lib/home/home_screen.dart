@@ -13,10 +13,12 @@ class HomeScreen extends StatelessWidget {
     required this.showPreview,
     this.pilotWorlds,
     this.showLearningTools = false,
+    this.releaseNotes = const [],
   });
 
   final bool showPreview;
   final bool showLearningTools;
+  final List<String> releaseNotes;
   final Iterable<WorldId>? pilotWorlds;
 
   @override
@@ -53,6 +55,21 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
             const _WelcomePanel(),
+            if (releaseNotes.isNotEmpty)
+              ExpansionTile(
+                leading: const Icon(Icons.new_releases_outlined),
+                title: const Text('ما الجديد؟'),
+                initiallyExpanded: true,
+                childrenPadding: const EdgeInsetsDirectional.fromSTEB(
+                  16,
+                  0,
+                  16,
+                  12,
+                ),
+                expandedAlignment: AlignmentDirectional.centerStart,
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                children: [for (final note in releaseNotes) Text(note)],
+              ),
             const SizedBox(height: 22),
             Semantics(
               header: true,

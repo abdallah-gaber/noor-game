@@ -84,6 +84,9 @@ GoRouter createNoorRouter({
           showPreview: showPreview && pilot == null,
           pilotWorlds: pilot?.units.keys,
           showLearningTools: hasLearningTools,
+          releaseNotes: pilot == null
+              ? catalog?.releaseNotes ?? const []
+              : const [],
         ),
         routes: [
           if (hasLearningTools)

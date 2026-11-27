@@ -70,6 +70,61 @@ void main() {
   });
 
   testWidgets(
+    'pack patch preserves lesson identities and shows release notes',
+    (tester) async {
+      final updated = catalog.packs['starter.iman']!;
+      expect(updated.version.toString(), '0.1.2');
+      final previousPacks = [
+        for (final pack in catalog.packs.values)
+          if (pack.id == updated.id)
+            PackDocument.decode(
+              jsonEncode({
+                'schema': PackDocument.schema,
+                'packId': pack.id,
+                'version': '0.1.1',
+                'channel': pack.channel.name,
+                'records': [
+                  for (final record in pack.records.values) record.data,
+                ],
+              }),
+            )
+          else
+            pack,
+      ];
+      final ledger = ApprovalLedger.decodeTrusted(
+        File('assets/curriculum/approvals.json').readAsStringSync(),
+      );
+      const ingestor = CatalogIngestor();
+      final previous = ingestor.activate(previousPacks, approvals: ledger);
+      final patched = ingestor.activate(
+        [updated],
+        approvals: ledger,
+        previous: previous,
+      );
+      final original = previous.toCurriculum();
+      final current = patched.toCurriculum();
+      expect(current.version, isNot(original.version));
+      for (final world in WorldId.values) {
+        for (final unit in original.unitsFor(world)) {
+          for (final lesson in unit.lessons) {
+            expect(
+              current.lesson(world, lesson.id)?.contentRevision,
+              lesson.contentRevision,
+            );
+          }
+        }
+      }
+
+      final router = createNoorRouter(catalog: catalog, enablePreview: false);
+      addTearDown(router.dispose);
+      await tester.pumpWidget(ProviderScope(child: NoorApp(router: router)));
+      await tester.pumpAndSettle();
+      expect(find.text('ما الجديد؟'), findsOneWidget);
+      expect(find.text(catalog.releaseNotes.single), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'approved lessons play all mechanics, resume and drive learning tools',
     (tester) async {
       final progress = MemoryProgressStore();

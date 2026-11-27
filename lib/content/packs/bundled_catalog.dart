@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../../challenges/challenge_definition.dart';
 import 'catalog.dart';
 import 'pack_document.dart';
 
@@ -60,8 +61,16 @@ Future<IntegratedCatalog?> loadBundledCatalog(AssetBundle bundle) async {
           )
           .toString();
     }
+    final releaseNotes = [
+      for (final value in objectList(
+        index['releaseNotes'] ?? const [],
+        'release notes',
+      ))
+        _releaseNote(objectMap(value, 'release note')),
+    ];
     return ingestor.activate(
       packs,
+      releaseNotes: releaseNotes,
       approvals: approvals,
       assetDigests: digests,
     );
@@ -73,3 +82,9 @@ Future<IntegratedCatalog?> loadBundledCatalog(AssetBundle bundle) async {
     return null;
   }
 }
+
+PackReleaseNote _releaseNote(Map<String, Object?> data) => (
+  packId: challengeId(data['packId']),
+  version: challengeText(data['version']),
+  whatsNew: challengeText(data['whatsNew']),
+);
