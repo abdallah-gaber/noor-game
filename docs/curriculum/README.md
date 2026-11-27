@@ -32,3 +32,5 @@ With CONTENT-009 present, the generator verifies the exact CONTENT-008 bundle, a
 Run `python3 scripts/starter_candidate.py` with CONTENT-010 present. It writes four private v1 draft packs and `approval-request.json` to `.dart_tool/noor-starter-candidate/`. The request includes the exact draft digests and conditional digests for the case where humans verify the same record and only its review status changes. Any change to a locator, authenticity note or other record field requires a new digest and review. The request has no trusted approval entries.
 
 Run `python3 scripts/generate_curriculum_review.py` for the consolidated private view and public aggregate inventory. Only integrated, actually approved catalogs enable the learning tools in production. The remaining lessons and optional extras are still in private authoring.
+
+When the local `final-editorial.json` overlay is present, the starter generator checks it against the exact previous request and produces the final private approval request with the full 112 draft records. Use the accompanying SHA-256 sidecar to identify the exact version presented for human approval. The draft packs and request stay local.

@@ -3,7 +3,8 @@ import unittest
 
 from curriculum_handoff import CURRICULUM
 from curriculum_review_patch import load_content_009
-from starter_candidate import PACKAGE, build_candidate, check_closure, load_starter_candidate
+from starter_candidate import (FINAL_EDITORIAL, PACKAGE, apply_final_editorial, build_candidate,
+                               check_closure, load_starter_candidate)
 
 
 class StarterGateTests(unittest.TestCase):
@@ -43,3 +44,34 @@ class StarterCandidateTests(unittest.TestCase):
         evidence["guardedEdits"][0]["before"] = ["changed"]
         with self.assertRaisesRegex(ValueError, "before-value conflict"):
             build_candidate(baseline, encoded, evidence)
+
+    @unittest.skipUnless((CURRICULUM / FINAL_EDITORIAL).is_file(), "Private final editorial overlay is local only")
+    def test_final_request_updates_only_editorial_and_attribution_hashes(self):
+        baseline, encoded = load_content_009()
+        manifest = json.loads((CURRICULUM / PACKAGE).read_bytes())
+        base = build_candidate(baseline, encoded, manifest)
+        handoff, _, packs, final = load_starter_candidate()
+        self.assertEqual(final["checkpoint"], "final_human_approval_requested")
+        self.assertEqual(final["openQueue"], base[3]["openQueue"])
+        self.assertEqual(handoff["starterCandidate"]["finalEditorialRecords"], 12)
+        self.assertEqual(handoff["starterCandidate"]["hadithAttributions"], 10)
+        old = {row["recordId"]: row["candidateDigest"] for row in base[3]["recordRequests"]}
+        changed = [row for row in final["recordRequests"] if old[row["recordId"]] != row["candidateDigest"]]
+        self.assertEqual(len(changed), 22)
+        self.assertEqual({p["version"] for p in packs}, {"0.1.1"})
+        self.assertTrue(all(row["record"]["reviewStatus"] == "draft" for row in final["recordRequests"]))
+        self.assertTrue(all(row["record"]["authenticity"] == "صحيح"
+                            for row in final["recordRequests"] if "collectionAttribution" in row))
+        self.assertEqual(sum("collectionAttribution" in row for row in final["recordRequests"]), 10)
+        definitions = handoff["variantDefinitions"]
+        self.assertEqual(definitions["P10.Q09"]["answer"], "نتعلم الرفق وحسن المعاملة.")
+        self.assertEqual(definitions["I03.Q10"]["explanation"], "نشكر الله ونشكر والدينا على مساعدتهم لنا.")
+        self.assertEqual(definitions["W08.E01"]["explanation"], definitions["W08.Q04"]["explanation"])
+        self.assertIn("مع المرفقين", definitions["W05.Q04"]["explanation"])
+
+        editorial = json.loads((CURRICULUM / FINAL_EDITORIAL).read_bytes())
+        with self.assertRaisesRegex(ValueError, "baseline approval request differs"):
+            apply_final_editorial(base, manifest, {**editorial, "baselineApprovalRequestSha256": "0" * 64})
+        next(iter(editorial["recordEdits"][0]["fields"].values()))["before"] = "changed"
+        with self.assertRaisesRegex(ValueError, "before-value or scored answer conflict"):
+            apply_final_editorial(base, manifest, editorial)

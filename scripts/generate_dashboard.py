@@ -100,7 +100,8 @@ for folder, names in {
         "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",
         "004-03-corrected-draft.md", "004-03-content-009.md",
         "004-04-preview-rewards.md", "004-05-adaptive-review.md",
-        "004-06-parent-mode.md", "004-03-starter-candidate.md", "release-world.webp",
+        "004-06-parent-mode.md", "004-03-starter-candidate.md",
+        "004-03-final-starter-approval.md", "release-world.webp",
     ),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)

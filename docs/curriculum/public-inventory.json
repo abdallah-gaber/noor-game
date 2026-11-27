@@ -63,6 +63,8 @@
     },
     "starterCandidate": {
       "deferredLessons": 54,
+      "finalEditorialRecords": 12,
+      "hadithAttributions": 10,
       "knowledge": 18,
       "lessons": 6,
       "openQueue": 12,
@@ -72,7 +74,7 @@
       "variant": 65
     }
   },
-  "inputDigest": "fb5c6f17ec8ed3d8a52fcf9fc4688f67ff664ed41b24b9dd938ff112ed5a99b0",
+  "inputDigest": "ed3089508e9997f5b5a51530ee6a2079404e3d9c235c9eee9ec4888c6635ac0f",
   "mechanics": {
     "flashcard": 168,
     "matching": 12,

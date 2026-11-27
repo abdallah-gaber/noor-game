@@ -194,6 +194,8 @@ def render_review(handoff):
         for id, row in sources.items():
             state = row.get("verificationStatus", row.get("status"))
             body = arabic(row.get("title", "")) + arabic(row["locator"])
+            if row.get("authenticity"):
+                body += arabic(row["authenticity"])
             if row.get("url"):
                 body += f'<p dir="ltr">{text(row["url"])}</p>'
             if (scope, id) in unused_sources:
@@ -222,7 +224,9 @@ def render_review(handoff):
     if starter := handoff.get("starterCandidate"):
         sections += (("starter", "Starter approval candidate",
                       f'<p>{starter["lessons"]} lessons · {starter["knowledge"]} knowledge records · '
-                      f'{starter["variant"]} variants · {starter["recordRequests"]} pending record requests.</p>'),)
+                      f'{starter["variant"]} variants · {starter["recordRequests"]} pending record requests.</p>'
+                      '<p><a href="../noor-starter-candidate/approval-request.json">Private approval request</a>'
+                      ' · <a href="../noor-starter-candidate/approval-request.sha256">Request SHA-256</a></p>'),)
     sections_html = "".join(f'<section id="{id}"><h2>{title}</h2>{body}</section>' for id, title, body in sections)
     navigation = " · ".join(link(id, title) for id, title, _ in sections)
     totals = metrics([

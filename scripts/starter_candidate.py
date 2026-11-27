@@ -12,6 +12,7 @@ from curriculum_review_patch import (
 
 PACKAGE = "drafts/noor-content-010/candidate-review.json"
 OUTPUT = ".dart_tool/noor-starter-candidate"
+FINAL_EDITORIAL = "drafts/noor-content-010/final-editorial.json"
 
 
 def prerequisites(lesson):
@@ -34,7 +35,7 @@ def record(kind, id, **data):
     return {"kind": kind, "id": id, "reviewStatus": "draft", **data}
 
 
-def normalize(handoff, selected, evidence, groups):
+def normalize(handoff, selected, evidence, groups, *, version="0.1.0"):
     packs = []
     for world in handoff["corePacks"]:
         scope = world["worldId"]
@@ -57,7 +58,7 @@ def normalize(handoff, selected, evidence, groups):
                     source = record("source", alias, title=original["title"], locator=original["locator"],
                                     category=category, authoringSourceId=id)
                     if category == "hadith":
-                        source["authenticity"] = "pendingClaimLevelReview"
+                        source["authenticity"] = original.get("authenticity", "pendingClaimLevelReview")
                     if original.get("url"):
                         source["url"] = original["url"]
                     records.append(source)
@@ -108,7 +109,7 @@ def normalize(handoff, selected, evidence, groups):
                         fixed for fixed, authored in options.items() if authored == definition["correctOptionId"]
                     )
                 records.append(variant)
-        packs.append({"schema": 1, "packId": f"starter.{scope}", "channel": "draft", "version": "0.1.0",
+        packs.append({"schema": 1, "packId": f"starter.{scope}", "channel": "draft", "version": version,
                       "records": records})
     return packs
 
@@ -187,6 +188,17 @@ def build_candidate(baseline, encoded, manifest):
     corrected["correctionQueue"] = baseline["correctionQueue"]
     corrected["scientificReview"] = baseline["scientificReview"]
     packs = normalize(corrected, selected, evidence, sources)
+    approval = create_approval(manifest, packs, pending)
+    corrected["starterCandidate"] = {
+        "lessons": len(selected), **manifest["counts"], "packs": len(packs),
+        "recordRequests": len(approval["recordRequests"]), "deferredLessons": len(manifest["deferredLessonIds"]),
+        "openQueue": len(pending), "scopedSourceAdditions": len(added),
+    }
+    return corrected, output, packs, approval
+
+
+def create_approval(manifest, packs, pending):
+    evidence = {row["id"]: row for row in manifest["reviewedRecords"]}
     source_evidence = defaultdict(list)
     for row in evidence.values():
         for item in row["evidence"]:
@@ -222,17 +234,99 @@ def build_candidate(baseline, encoded, manifest):
         "lessonIds": manifest["selectedLessonIds"], "deferredLessonIds": manifest["deferredLessonIds"],
         "deferredExtras": manifest["deferredExtras"],
     }
-    corrected["starterCandidate"] = {
-        "lessons": len(selected), **manifest["counts"], "packs": len(packs),
-        "recordRequests": len(requests), "deferredLessons": len(manifest["deferredLessonIds"]),
-        "openQueue": len(pending), "scopedSourceAdditions": len(added),
+    return approval
+
+
+
+def apply_final_editorial(base, manifest, editorial):
+    previous, encoded, old_packs, old_approval = base
+    baseline_digest = digest(json_bytes(old_approval))
+    require(editorial["schema"] == 1 and editorial["baselineApprovalRequestSha256"] == baseline_digest,
+            "Final starter editorial baseline approval request differs")
+    documents = {name: json.loads(payload) for name, payload in encoded.items()}
+    records, scoped_sources = authoring_records(documents)
+    groups = sources_by_id(scoped_sources)
+    selected = set(manifest["selectedLessonIds"])
+    evidence = {row["id"]: row for row in manifest["reviewedRecords"]}
+    edits = []
+    seen = set()
+    for edit in editorial["recordEdits"]:
+        key = (edit["scope"], edit["kind"], edit["id"])
+        row = records.get(key)
+        allowed = {"textAr"} if key[1] == "knowledge" else {"answerAr", "explanationAr"}
+        require(row is not None and key not in seen and key[2] in evidence
+                and edit["fields"] and edit["fields"].keys() <= allowed,
+                f"Invalid final starter edit {key}")
+        for field, change in edit["fields"].items():
+            require(field in row and set(change) == {"before", "after"}
+                    and change["before"] == row[field] and isinstance(change["after"], str)
+                    and bool(change["after"].strip())
+                    and (field != "answerAr" or row.get("type") == "flashcard"),
+                    f"Final starter before-value or scored answer conflict at {key}/{field}")
+        seen.add(key)
+        edits.append((row, edit["fields"]))
+    hadith_sources = {
+        (pack["packId"].removeprefix("starter."), entry["authoringSourceId"])
+        for pack in old_packs for entry in pack["records"]
+        if entry["kind"] == "source" and entry["category"] == "hadith"
     }
-    return corrected, output, packs, approval
+    attribution = {}
+    for entry in editorial["hadithAttributions"]:
+        key = (entry["scope"], entry["sourceId"])
+        original = groups.get(key)
+        require(key in hadith_sources and key not in attribution and original is not None
+                and entry["collection"] in {"صحيح البخاري", "صحيح مسلم"}
+                and entry["collection"] == original["title"]
+                and entry["locator"] == original["locator"] and entry["url"] == original["url"]
+                and entry["authenticity"] == "صحيح",
+                f"Hadith attribution differs from the cited collection and locator for {key}")
+        attribution[key] = entry
+    require(attribution.keys() == hadith_sources, "Final starter hadith coverage differs")
+
+    for row, fields in edits:
+        for field, change in fields.items():
+            row[field] = change["after"]
+    for key, entry in attribution.items():
+        groups[key]["authenticity"] = entry["authenticity"]
+    output = encode_authoring(documents)
+    handoff = validate_handoff(documents, {name: digest(payload) for name, payload in output.items()})
+    handoff["correctionQueue"] = previous["correctionQueue"]
+    handoff["scientificReview"] = previous["scientificReview"]
+    handoff["starterCandidate"] = {
+        **previous["starterCandidate"], "finalEditorialRecords": len(edits), "hadithAttributions": len(attribution),
+    }
+    packs = normalize(handoff, selected, evidence, groups, version="0.1.1")
+    pending = old_approval["openQueue"]
+    approval = create_approval(manifest, packs, pending)
+    approval["checkpoint"] = "final_human_approval_requested"
+    approval["priorRequestSha256"] = baseline_digest
+    approval["releaseScope"] = "Six introductory starter lessons across four worlds. Complete practical prayer instruction is outside this starter scope."
+    new_records = {(pack["packId"], row["id"]): row for pack in packs for row in pack["records"]}
+    old_records = {(pack["packId"], row["id"]): row for pack in old_packs for row in pack["records"]}
+    require(new_records.keys() == old_records.keys(), "Final starter record IDs differ")
+    for entry in approval["recordRequests"]:
+        key = (entry["packId"], entry["recordId"])
+        row = new_records[key]
+        old = old_records[key]
+        if row["kind"] == "variant":
+            for field in ("type", "options", "correctOptionId", "items", "correctOrder", "pairs"):
+                require(row["definition"].get(field) == old["definition"].get(field),
+                        f"Final starter scoring or arrangement differs for {row['id']}")
+        entry["record"] = row
+        if row["kind"] == "source" and row["category"] == "hadith":
+            scope = entry["packId"].removeprefix("starter.")
+            entry["collectionAttribution"] = attribution[scope, row["authoringSourceId"]]
+    return handoff, output, packs, approval
 
 
 def load_starter_candidate(curriculum=CURRICULUM):
     baseline, encoded = load_content_009(curriculum)
-    return build_candidate(baseline, encoded, json.loads((curriculum / PACKAGE).read_bytes()))
+    manifest = json.loads((curriculum / PACKAGE).read_bytes())
+    candidate = build_candidate(baseline, encoded, manifest)
+    final = curriculum / FINAL_EDITORIAL
+    if final.is_file():
+        return apply_final_editorial(candidate, manifest, json.loads(final.read_bytes()))
+    return candidate
 
 
 def main():
@@ -242,7 +336,9 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     for pack in packs:
         (output / (pack["packId"] + ".json")).write_bytes(json_bytes(pack))
-    (output / "approval-request.json").write_bytes(json_bytes(approval))
+    request = json_bytes(approval)
+    (output / "approval-request.json").write_bytes(request)
+    (output / "approval-request.sha256").write_text(f"{digest(request)}  approval-request.json\n")
     print(f"Private starter candidate: {len(packs)} packs, {len(approval['recordRequests'])} pending record requests")
 
 

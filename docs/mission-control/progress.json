@@ -243,9 +243,10 @@
           "evidence": [
             "docs/qa/spec-004/004-03-corrected-draft.md",
             "docs/qa/spec-004/004-03-content-009.md",
-            "docs/qa/spec-004/004-03-starter-candidate.md"
+            "docs/qa/spec-004/004-03-starter-candidate.md",
+            "docs/qa/spec-004/004-03-final-starter-approval.md"
           ],
-          "note": "CONTENT-010 starter candidate validated. Six lessons and 112 record digest requests await human approval. Scientific and rights work remains open. Production learning tools verified with approved synthetic fixtures.",
+          "note": "Final CONTENT-010 request ready for explicit human approval of 112 records across six introductory lessons. Scientific and rights work remains open. No production activation.",
           "priority": "P0"
         },
         {

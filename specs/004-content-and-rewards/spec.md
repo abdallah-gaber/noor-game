@@ -73,3 +73,7 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - Validate the exact private baseline and evidence manifest. Preserve source scope, variant identities, grading and the declared prerequisite graph. A missing prerequisite blocks the candidate.
 - Generate private v1 draft packs and exact record digest requests. Human verification and trusted exact-record approval remain separate from this checkpoint.
 - Enable the learning tools only for a gated preview or an integrated approved catalog. Scope all rewards, practice records and review preferences to that catalog's progress scope.
+
+### Final starter approval request
+
+Apply the owner-requested editorial changes to private drafts against the exact previous manifest. Carry compatible explanations through to the v1 records and record hadith collection attribution independently of claim approval. Preserve scoring identities, prerequisite closure and all open review items. Freeze the exact final request for explicit human approval before generating a trusted ledger or activating anything.
