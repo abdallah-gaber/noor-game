@@ -77,3 +77,7 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 ### Final starter approval request
 
 Apply the owner-requested editorial changes to private drafts against the exact previous manifest. Carry compatible explanations through to the v1 records and record hadith collection attribution independently of claim approval. Preserve scoring identities, prerequisite closure and all open review items. Freeze the exact final request for explicit human approval before generating a trusted ledger or activating anything.
+
+### Approved starter release boundary
+
+The owner's explicit decision covers the exact 112-record request for the six introductory starter lessons. Production assets contain only that approved projection. Source evidence applies to the cited selected claims and retains its documented limits. Verify the bundled gate, gameplay and learning tools, offline use, persistence, scoped migration and absence of deferred content. Keep the broader scientific and rights queue open.

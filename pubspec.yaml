@@ -24,3 +24,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/curriculum/index.json
+    - assets/curriculum/approvals.json
+    - assets/curriculum/packs/starter.iman.json
+    - assets/curriculum/packs/starter.ibadah.json
+    - assets/curriculum/packs/starter.seerah.json
+    - assets/curriculum/packs/starter.exemplars.json

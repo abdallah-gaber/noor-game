@@ -36,7 +36,8 @@ PUBLIC_FILES = {
     "docs/product.md", "docs/architecture.md", "docs/curriculum/README.md",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
-    "docs/curriculum/pack-schema.md",
+    "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",
+    "docs/curriculum/starter-release.json",
     "docs/curriculum/examples/geometry.pack.json",
     "docs/curriculum/examples/follow-up.pack.json",
     "docs/curriculum/examples/approvals.example.json",
@@ -101,7 +102,9 @@ for folder, names in {
         "004-03-corrected-draft.md", "004-03-content-009.md",
         "004-04-preview-rewards.md", "004-05-adaptive-review.md",
         "004-06-parent-mode.md", "004-03-starter-candidate.md",
-        "004-03-final-starter-approval.md", "release-world.webp",
+        "004-03-final-starter-approval.md", "004-03-starter-release-verification.md",
+        "phone-starter-home.webp", "tablet-starter-results.webp", "tablet-starter-parent.webp",
+        "release-world.webp",
     ),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
@@ -312,7 +315,15 @@ class Dashboard:
                 approval += table(("Correction disposition", "Items"), review["queueStatus"].items())
                 approval += table(("Partial source evidence", "Original scoped sources"),
                                   review["originalSourceEvidence"].items())
-        if starter := data.get("handoff", {}).get("starterCandidate"):
+        if release := data.get("starterRelease"):
+            approval += metrics([
+                ("Approved starter lessons", release["counts"]["lesson"]),
+                ("Approved starter records", release["approvedRecords"]),
+                ("Lessons in private authoring", release["deferred"]["lessons"]),
+                ("Open review items", release["deferred"]["openReviewItems"]),
+            ])
+            approval += "<p>The bundled starter is introductory. The original draft pipeline and broader scientific review remain tracked here.</p>"
+        elif starter := data.get("handoff", {}).get("starterCandidate"):
             approval += metrics([
                 ("Starter lessons awaiting approval", starter["lessons"]),
                 ("Starter record approval requests", starter["recordRequests"]),

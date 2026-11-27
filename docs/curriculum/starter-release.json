@@ -1,0 +1,11 @@
+{
+  "contentPackage": "CONTENT-010",
+  "approvalRequestSha256": "8fee836f366522ee8393efe3530af1f157c2e738c6ea589085f925c5b9cfcf41",
+  "approvalRole": "Project owner",
+  "approvalRecordedAt": "2026-11-27T15:25:54Z",
+  "basis": "Explicit approval of the exact manifest and conditional record digests based on documented AI-assisted content and source review.",
+  "certification": "Owner approval of introductory educational content. Independent scholarly certification was not asserted.",
+  "lessonIds": ["I03", "W05", "W06", "W08", "S11", "P10"],
+  "counts": {"lesson": 6, "knowledge": 18, "variant": 65, "source": 18, "unit": 5},
+  "deferred": {"lessons": 54, "memorization": 20, "treasures": 30, "openReviewItems": 12}
+}

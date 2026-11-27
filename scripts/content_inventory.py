@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 
 from curriculum_handoff import variant_signature
-from curriculum_review_patch import load_review_handoff
+from curriculum_review_patch import digest, json_bytes, load_review_handoff
 
 ROOT = Path(__file__).resolve().parents[1]
 KINDS = {
@@ -190,6 +190,40 @@ def handoff_inventory(handoff):
     return result
 
 
+def current_inventory(handoff):
+    result = handoff_inventory(handoff)
+    root = ROOT / "assets/curriculum"
+    if not (root / "index.json").is_file():
+        return result
+    index = json.loads((root / "index.json").read_bytes())
+    ledger = json.loads((root / "approvals.json").read_bytes())
+    receipt = json.loads((ROOT / "docs/curriculum/starter-release.json").read_bytes())
+    approvals = {(row["packId"], row["recordId"]): row["digest"] for row in ledger["approvals"]}
+    counts = Counter()
+    seen = set()
+    versions = set()
+    for id in index["packIds"]:
+        pack = json.loads((root / "packs" / f"{id}.json").read_bytes())
+        if pack["packId"] != id or pack["channel"] != "production":
+            raise ValueError(f"Unexpected release pack {id}")
+        versions.add(pack["version"])
+        for record in pack["records"]:
+            key = (id, record["id"])
+            canonical = digest(json_bytes({"packId": id, "record": record}, canonical=True))
+            if key in seen or record["reviewStatus"] != "sourceVerified" or approvals.get(key) != canonical:
+                raise ValueError(f"Release approval differs for {key}")
+            seen.add(key)
+            counts[record["kind"]] += 1
+    if (dict(counts) != receipt["counts"] or len(seen) != len(ledger["approvals"])
+            or seen != approvals.keys() or ledger["approvalRequestSha256"] != receipt["approvalRequestSha256"]):
+        raise ValueError("Approved starter inventory differs from receipt")
+    result["starterRelease"] = {
+        "versions": sorted(versions), "approvedRecords": len(seen), "counts": dict(counts),
+        "deferred": receipt["deferred"], "scope": "introductory_starter",
+    }
+    return result
+
+
 def inventory_json(result):
     return json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
@@ -199,7 +233,7 @@ def main():
     parser.add_argument("inputs", type=Path, nargs="*", default=[])
     parser.add_argument("--check", action="store_true", help="compare the export with the tracked snapshot")
     args = parser.parse_args()
-    result = create_inventory(args.inputs) if args.inputs else handoff_inventory(load_review_handoff()[0])
+    result = create_inventory(args.inputs) if args.inputs else current_inventory(load_review_handoff()[0])
     snapshot = ROOT / "docs/curriculum/public-inventory.json"
     content = inventory_json(result)
     if args.check:

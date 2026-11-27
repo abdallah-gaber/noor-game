@@ -34,3 +34,5 @@ Run `python3 scripts/starter_candidate.py` with CONTENT-010 present. It writes f
 Run `python3 scripts/generate_curriculum_review.py` for the consolidated private view and public aggregate inventory. Only integrated, actually approved catalogs enable the learning tools in production. The remaining lessons and optional extras are still in private authoring.
 
 When the local `final-editorial.json` overlay is present, the starter generator checks it against the exact previous request and produces the final private approval request with the full 112 draft records. Use the accompanying SHA-256 sidecar to identify the exact version presented for human approval. The draft packs and request stay local.
+
+The owner-approval receipt for the exact starter request and the approved child-facing scope are recorded in the [starter milestone](starter-release.md). With the private request available, `python3 scripts/release_starter.py --check` verifies that the six tracked curriculum asset files exactly match that approval. The source review workspace and any deferred curriculum stay local.

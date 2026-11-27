@@ -142,6 +142,26 @@
       "validated": 636
     }
   },
+  "starterRelease": {
+    "approvedRecords": 112,
+    "counts": {
+      "knowledge": 18,
+      "lesson": 6,
+      "source": 18,
+      "unit": 5,
+      "variant": 65
+    },
+    "deferred": {
+      "lessons": 54,
+      "memorization": 20,
+      "openReviewItems": 12,
+      "treasures": 30
+    },
+    "scope": "introductory_starter",
+    "versions": [
+      "0.1.1"
+    ]
+  },
   "totals": {
     "knowledgeUnits": 180,
     "lessons": 60,

@@ -1,0 +1,443 @@
+{
+  "schema": 1,
+  "packId": "starter.iman",
+  "channel": "production",
+  "version": "0.1.1",
+  "records": [
+    {
+      "kind": "unit",
+      "id": "iman.tawhid",
+      "reviewStatus": "sourceVerified",
+      "title": "لمن تكون العبادة؟",
+      "worldId": "iman"
+    },
+    {
+      "kind": "lesson",
+      "id": "I03",
+      "reviewStatus": "sourceVerified",
+      "title": "لمن تكون العبادة؟",
+      "unitId": "iman.tawhid",
+      "revision": "1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "I03.K1",
+        "I03.K2",
+        "I03.K3"
+      ],
+      "variantIds": [
+        "I03.Q01",
+        "I03.Q02",
+        "I03.Q03",
+        "I03.Q04",
+        "I03.Q05",
+        "I03.Q06",
+        "I03.Q07",
+        "I03.Q08",
+        "I03.Q09",
+        "I03.Q10",
+        "I03.E01"
+      ]
+    },
+    {
+      "kind": "source",
+      "id": "source.iman.Q-6-162",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "6:162",
+      "category": "quran",
+      "authoringSourceId": "Q-6-162",
+      "url": "https://quran.com/6/162"
+    },
+    {
+      "kind": "source",
+      "id": "source.iman.Q-1-5",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "1:5",
+      "category": "quran",
+      "authoringSourceId": "Q-1-5",
+      "url": "https://quran.com/1/5"
+    },
+    {
+      "kind": "knowledge",
+      "id": "I03.K1",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف أن الصلاة لله",
+      "text": "الصلاة عبادة لله وحده.",
+      "sourceRefs": [
+        "source.iman.Q-6-162",
+        "source.iman.Q-1-5"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.iman.Q-40-60",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "40:60",
+      "category": "quran",
+      "authoringSourceId": "Q-40-60",
+      "url": "https://quran.com/40/60"
+    },
+    {
+      "kind": "knowledge",
+      "id": "I03.K2",
+      "reviewStatus": "sourceVerified",
+      "title": "يعرف أن الدعاء عبادة لله",
+      "text": "ندعو الله ونسأله الخير.",
+      "sourceRefs": [
+        "source.iman.Q-40-60"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "source",
+      "id": "source.iman.Q-5-2",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "5:2",
+      "category": "quran",
+      "authoringSourceId": "Q-5-2",
+      "url": "https://quran.com/5/2"
+    },
+    {
+      "kind": "knowledge",
+      "id": "I03.K3",
+      "reviewStatus": "sourceVerified",
+      "title": "يميز العبادة عن طلب المساعدة المعتادة من الناس",
+      "text": "يجوز أن نطلب من الناس المساعدة التي يقدرون عليها.",
+      "sourceRefs": [
+        "source.iman.Q-5-2"
+      ],
+      "revision": "1"
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K1"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-6-162",
+        "source.iman.Q-1-5"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "لمن نصلي؟",
+        "explanation": "الصلاة عبادة لله وحده.",
+        "answer": "لله"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q02",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K1"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-6-162",
+        "source.iman.Q-1-5"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "الصلاة عبادة لله.",
+        "explanation": "الصلاة عبادة لله وحده.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q03",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K1"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-6-162",
+        "source.iman.Q-1-5"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "حين أصلي أريد أن أعبد من؟",
+        "explanation": "الصلاة عبادة لله وحده.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الله"
+          },
+          {
+            "id": "o2",
+            "label": "أصدقائي"
+          },
+          {
+            "id": "o3",
+            "label": "نفسي"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q04",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K2"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-40-60"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "من ندعو؟",
+        "explanation": "ندعو الله ونسأله الخير.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "الله"
+          },
+          {
+            "id": "o2",
+            "label": "القمر"
+          },
+          {
+            "id": "o3",
+            "label": "الشمس"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q05",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K2"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-40-60"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "ندعو الشمس لتغفر لنا.",
+        "explanation": "ندعو الله ونسأله الخير.",
+        "correctOptionId": "false"
+      },
+      "authoringBooleanOptionIds": {
+        "false": "o1",
+        "true": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q06",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K2"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-40-60"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "إذا أردت أن يغفر الله لك، ماذا تفعل؟",
+        "explanation": "ندعو الله ونسأله الخير.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "أدعو الله"
+          },
+          {
+            "id": "o2",
+            "label": "أدعو نجمة"
+          },
+          {
+            "id": "o3",
+            "label": "أترك الدعاء"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q07",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K3"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-5-2"
+      ],
+      "difficulty": "recognition",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "من أطلب منه أن يساعدني في حمل حقيبتي؟",
+        "explanation": "يجوز أن نطلب من الناس المساعدة التي يقدرون عليها.",
+        "answer": "شخص يستطيع مساعدتي"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q08",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K3"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-5-2"
+      ],
+      "difficulty": "recall",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "يمكن أن يساعدني أبي في حمل حقيبتي.",
+        "explanation": "يجوز أن نطلب من الناس المساعدة التي يقدرون عليها.",
+        "correctOptionId": "true"
+      },
+      "authoringBooleanOptionIds": {
+        "true": "o1",
+        "false": "o2"
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q09",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K3"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-5-2"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "هل طلب المساعدة المعتادة من شخص قادر مثل عبادته؟",
+        "explanation": "يجوز أن نطلب من الناس المساعدة التي يقدرون عليها.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "لا"
+          },
+          {
+            "id": "o2",
+            "label": "نعم"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "source",
+      "id": "source.iman.Q-31-14",
+      "reviewStatus": "sourceVerified",
+      "title": "القرآن الكريم",
+      "locator": "31:14",
+      "category": "quran",
+      "authoringSourceId": "Q-31-14",
+      "url": "https://quran.com/31/14"
+    },
+    {
+      "kind": "variant",
+      "id": "I03.Q10",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K3"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-5-2",
+        "source.iman.Q-31-14"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "إذا ساعدك أبوك، ماذا تفعل؟",
+        "explanation": "نشكر الله ونشكر والدينا على مساعدتهم لنا.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "أشكره وأشكر الله"
+          },
+          {
+            "id": "o2",
+            "label": "أعبده"
+          },
+          {
+            "id": "o3",
+            "label": "لا أشكره"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "variant",
+      "id": "I03.E01",
+      "reviewStatus": "sourceVerified",
+      "revision": "1",
+      "knowledgeIds": [
+        "I03.K1",
+        "I03.K3"
+      ],
+      "sourceRefs": [
+        "source.iman.Q-1-5",
+        "source.iman.Q-5-2",
+        "source.iman.Q-6-162"
+      ],
+      "difficulty": "application",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "احتجت مساعدة في حمل كتاب ثقيل، ماذا تفعل؟",
+        "explanation": "يجوز طلب المساعدة من الناس فيما يقدرون عليه، والعبادة لله وحده.",
+        "correctOptionId": "o1",
+        "options": [
+          {
+            "id": "o1",
+            "label": "أطلب من شخص قادر أن يساعدني"
+          },
+          {
+            "id": "o2",
+            "label": "أترك الكتاب دائمًا"
+          },
+          {
+            "id": "o3",
+            "label": "أظن أن طلب أي مساعدة من الناس ممنوع"
+          }
+        ]
+      },
+      "sourceRefsByKnowledge": {
+        "I03.K1": [
+          "source.iman.Q-6-162",
+          "source.iman.Q-1-5"
+        ],
+        "I03.K3": [
+          "source.iman.Q-5-2"
+        ]
+      }
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import json
 import subprocess
 import sys
 
-from content_inventory import handoff_inventory, inventory_json
+from content_inventory import current_inventory, handoff_inventory, inventory_json
 from curriculum_handoff import ROOT
 from curriculum_review_patch import load_review_handoff
 from generate_dashboard import metrics, table
@@ -296,7 +296,7 @@ def main():
         (OUTPUT / name).write_text(json.dumps(content, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (OUTPUT / "index.html").write_text(html, encoding="utf-8")
     inventory = ROOT / "docs/curriculum/public-inventory.json"
-    inventory.write_text(inventory_json(handoff_inventory(handoff)), encoding="utf-8")
+    inventory.write_text(inventory_json(current_inventory(handoff)), encoding="utf-8")
     subprocess.run([sys.executable, str(ROOT / "scripts/generate_dashboard.py")], check=True)
     print(f"Private review dashboard: {OUTPUT.relative_to(ROOT)}/index.html")
 

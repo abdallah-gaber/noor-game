@@ -233,20 +233,21 @@
             "docs/qa/spec-004/004-02-pilot-audio-and-activities.md",
             "docs/qa/spec-004/004-02-curriculum-handoff.md"
           ],
-          "note": "Owner accepted the physical-tablet pilot. CONTENT-001–007 handoff generated and verified with 27 open review items. 60 lessons, 180 knowledge units and 636 draft variants structurally checked. Final record approvals and production integration remain pending.",
+          "note": "Owner accepted the physical-tablet pilot. CONTENT-001–007 handoff generated and verified with 27 open review items. 60 lessons, 180 knowledge units and 636 draft variants structurally checked. The later starter milestone records the limited approval and production scope.",
           "priority": "P0"
         },
         {
           "id": "004-03",
           "title": "Obtain explicit human content approval before child access",
-          "status": "review",
+          "status": "done",
           "evidence": [
-            "docs/qa/spec-004/004-03-corrected-draft.md",
-            "docs/qa/spec-004/004-03-content-009.md",
-            "docs/qa/spec-004/004-03-starter-candidate.md",
-            "docs/qa/spec-004/004-03-final-starter-approval.md"
+            "docs/curriculum/starter-release.md",
+            "docs/qa/spec-004/004-03-starter-release-verification.md",
+            "docs/qa/spec-004/phone-starter-home.webp",
+            "docs/qa/spec-004/tablet-starter-results.webp",
+            "docs/qa/spec-004/tablet-starter-parent.webp"
           ],
-          "note": "Final CONTENT-010 request ready for explicit human approval of 112 records across six introductory lessons. Scientific and rights work remains open. No production activation.",
+          "note": "The project owner approved 112 exact records for six introductory lessons. The bundled gate and full regression passed. Broader scientific and rights work remains open.",
           "priority": "P0"
         },
         {

@@ -1,0 +1,790 @@
+{
+  "schema": 1,
+  "approvalRequestSha256": "8fee836f366522ee8393efe3530af1f157c2e738c6ea589085f925c5b9cfcf41",
+  "approvals": [
+    {
+      "packId": "starter.iman",
+      "recordId": "iman.tawhid",
+      "digest": "77f1add1c8fcefa7cd7f56eed6a10f8eff2adb1e3041b597f52314d5a09b19d4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03",
+      "digest": "e9c9b9523329621cfb5c6a28ad42f16ba3392decbafc248528b73455be331618",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "source.iman.Q-6-162",
+      "digest": "cb3141002ea13cf9c9be004441ccd45855eb704de10aa57be63de822cfd9b143",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "source.iman.Q-1-5",
+      "digest": "c9ddaf3ede9bd8479edc9b714fdd07de1a4cbbaf4b101c54d953487c7e42c83b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.K1",
+      "digest": "600a3457020c96100a8f86e75c1c83341681df53837453879c2143fc0522135f",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "source.iman.Q-40-60",
+      "digest": "34cb09b6cf7a7ecbd3c0c9344dfe9d64d197527471effd74a93d8ac219b623f8",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.K2",
+      "digest": "3a73dba2875f2f3aa4ed09227b2eac200f35f6911a1bb95f6aff5cd55ce2b37e",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "source.iman.Q-5-2",
+      "digest": "ef81ef4a55582e3a4b58f0c39a02ddd309ad5df6d0a4074722796bdbbdad64a7",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.K3",
+      "digest": "12c0cd9919087830647abaf3ad979780fb0f9bde576e808348d139e99a265d6f",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q01",
+      "digest": "6520277b6aa234d2aeec9130503fa876c79d41f02c88c2dfd648181e8fa2bd31",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q02",
+      "digest": "3280d3b3d8b889b542104396b18db04e3cc343568f5d1f2189128763c7f8868d",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q03",
+      "digest": "85060f765986f0e654e029c448355f52fc4704323d2b48fc0ce8c06e6bfe2e9d",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q04",
+      "digest": "e215b26300c5d53b2e084ec6fa78b06588ea41aafa99a735aeefd5e08459f0d7",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q05",
+      "digest": "f793b6ba9d4d4ed857b2d044bf5e699066149edf10e4ceeca086c5d10e93539e",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q06",
+      "digest": "f9391bcfda68cdd33ae4152bc2cdc6a3fc8f4ff54d29d5c33b028d47ccaad4d2",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q07",
+      "digest": "8b245e3faaeea8355f7a19dd72622d431ec953822e049b5f6fd58cb7bb17e130",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q08",
+      "digest": "953fe6574977aa43f7cd23bea1415f1bab82c08899f62731c81e884cd8770525",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q09",
+      "digest": "92295731882d1a3009af7dd4b9a7bf9fe69b80c6893ed35fb986f135d18fcb14",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "source.iman.Q-31-14",
+      "digest": "29f22d3e00ca4611ac6ecd71f2655c74a0ffde7cdb3f60033656c60267bb1c42",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.Q10",
+      "digest": "93c9642243c1df5774102c9478345703d70f56bffdfb9bb1430d4ebc150a555a",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.iman",
+      "recordId": "I03.E01",
+      "digest": "9a45365293afecd89c7987506eb093b5b81a0a9f29becb9ef624316a34f7b4b0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "ibadah.purity",
+      "digest": "1126ac64828ac2cf3f99ac567d08deb5f47521b6fe053f1d65ead075f4ea4383",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "ibadah.prayer",
+      "digest": "c185d2970dc5129c32f8f49ffdb2c60d01237d1c073501030223cd19c04eaf73",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05",
+      "digest": "5281bd1cf21053fda41820317b9e1855f9d9dc3bff75371866427aa16fdd18ef",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.Q-5-6",
+      "digest": "6aa252c1e020dfebe0ba871101e9a1e6f5a1ff3ead32a74b8454275df0920cab",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.K1",
+      "digest": "d9f759ae60d4d047d870134dfe2327c6188da4c446a2bd28955339f8d76761f0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.K2",
+      "digest": "c4645cbafb6bee38de370ab2dd3f56eed2c1728be5306ff8d93cdbffe08ad62a",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.K3",
+      "digest": "582eb6dde1e16e14397d98c295fca9a4c8ec0dfbad09a6309b590d6b73516ba3",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q01",
+      "digest": "d31440f42c112e40f16b2d313213a5520383af9d70bc960019591c67748bc960",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q02",
+      "digest": "0803b48222cdbd1d3ea4758f211d715033ba3cefc156eb01ba8ff859f00cb588",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q03",
+      "digest": "2595a5b34640acc168af8d4d7c952469e0b4a95282eb2da186bf220ba14470e4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q04",
+      "digest": "590812a178d8a3edba75ea44808204dd5cc366b3922c43ba6c86fc87cceaf611",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q05",
+      "digest": "05e9c060edc90bb5ff24f2f126b52008143d275477fcad9967ab3efc9e7de0a0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q06",
+      "digest": "a542fded5c7c77b134291c2d8387893b0992451b23fd6fbe7748395ece1669b7",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q07",
+      "digest": "ca55a4ca4dce7599b7d7fb0db8f2d07a5ffd606c909b6c1e4b4bfc92db0e81e7",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q08",
+      "digest": "0c0e918ef900d0ffedb18f2625b3f5d6ce9df441f41a836d072f86fc29f3b5ef",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q09",
+      "digest": "556fbf1b8379be4b0902ffebc43f32b904e33965335af1c1a9475c22b0a327e0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.Q10",
+      "digest": "5def9322e561175221b4251eb136d73fe74d79b89a9132de675f28933b2f0bbb",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W05.E01",
+      "digest": "ef37fb14be29ae45abc51470cf5bb519387f0a1d8a23bf4fb02d195bbde4599a",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06",
+      "digest": "3b214912cc52e1432eef18383f4261f215e569b186362abb9ca74498a8119274",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.B-159",
+      "digest": "8f95f16ae240fed2bb9e24eb2efcacc0d56babdd083d883cfaeeb8e736467f2d",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.K1",
+      "digest": "cc46bde9deb7dc12554d809ac5c637e4a81692498b91d526433d6c1a578c73e8",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.K2",
+      "digest": "6a24e38cc07253c9f265cd475066fd613c6ede5548756591c75a035285adbcba",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.B-157",
+      "digest": "67d915b51b7c7bc2187f342d49ac87c07d09a9a4e4d09ddb8693302ff242cc49",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.B-201",
+      "digest": "7e864b69a6756b7cea9510db03fdafb2b1204b9c77a2fbbc97da0dcd704f28f0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.K3",
+      "digest": "d6662a9d82dc382d31ec4aa9d1d45101cf2adc6e722d507c3ff2da74ef1f6c92",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q01",
+      "digest": "4455ecf22d13acc1a80ec313702a7e64e6dbb363cd8570ad35cac2b1cf7e67bd",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q02",
+      "digest": "2049570969e84e12f59aa28375f89e808d80960a774412fed955864d7b9c7f05",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q03",
+      "digest": "e240bc3d062ee1da88270f1b5fc1cd07e2223942fc8d1b78b3a837aefb13b607",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q04",
+      "digest": "04588e7a639640ccf1ada607f09e505eba506426084d9d298efa4adc9b05fa5f",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q05",
+      "digest": "3d0129ba520e9083fbc134a9301eab2f62d03d6fc34d571112f8cef94d8a20e3",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q06",
+      "digest": "2d3545225eb06b3ba431700e888bedbbe506e7ab8d72bc8b9864fda123356959",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q07",
+      "digest": "73850fb670f6ec680fbb9d197bfd26d55f6d22a80e83cc495060fdafcfba80bd",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q08",
+      "digest": "d300b991be30c90ea96188b7f7bcbb07a27f27f86e413e1fff8b29a95d61d71b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q09",
+      "digest": "938c0b9be0892425bf4936be0fadae507ae30cd4ef30ab2f679394daccf2daa4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.Q10",
+      "digest": "cf99a25d05edcda8ab2d1958431bd8bb066974017600a8d1ec5ab50c347a7bfd",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W06.E01",
+      "digest": "27feb1f3af3779cedbbeac8f6f923c2f0b9683e5802fee9089465c824535e57e",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08",
+      "digest": "b43454f2301af4b1be958dd2c94852b683c664fc08b32b06345ca95050d472d1",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.B-46",
+      "digest": "bea7a91805a01e29f545530e2a42f552273296dc4aabb8f65c6392b22dff4257",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.K1",
+      "digest": "42a75891de02ca2d71ea56775f3454012fe7fa3687148427f56788b2800b564b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.M-612a",
+      "digest": "f91e4cb20faa16187c9ea495f7bda5faa109b1c50d0aec4d49874edf0d4bbc43",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.K2",
+      "digest": "cf788619cc8672c4756209c4fdc375afbceb248ab8e210df4ad526eab15c1b5c",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.B-561",
+      "digest": "6a20d9a2b944203a032aa49b3553d08fe4b75338b151c649cf6db1e6ba8969f4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.K3",
+      "digest": "e003ec9f0d0d75835832c2d7e56ada6c4811f2f914868da851262846e4de4df4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q01",
+      "digest": "212ac0de76c1d2780451352e6363a2fc2b3309952c7b2053267daf25144508d8",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q02",
+      "digest": "ef4519d7cd7706e2ca16ebe910bfc53bfb0919ebf9c1216e0616ab03d2f709eb",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q03",
+      "digest": "f5311e1ed3bb2557029cd580201643a3cf9be44d7a02929bf544722537c2fd8c",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q04",
+      "digest": "5b56dcc05b042ff89daa0e4c333facd5883d4ded63b1e2208310922dc45f3fab",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q05",
+      "digest": "0f6b168549e3d216af9d9a62750e45764a14eff5f9654e4f464f9389731dcee9",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q06",
+      "digest": "d68fc71348787f4336d7b92de832f58aec475d321d0e694e2e603d046d33a802",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q07",
+      "digest": "2b0e3e962351ae9a8a877a7ea68afeebd1aef7fa9e44dfbe45cc5b83d5fb09ca",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q08",
+      "digest": "e7c5700b83fed2246f3b651a3c2fdae3ee33a0b978e1d96b43dab709f921c4d4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q09",
+      "digest": "26bd620a8c5b75f5ef60c6eaea025ddefceac796ddd9560695bded1f690e1673",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "source.ibadah.M-612d",
+      "digest": "2821a77da6bd10d65e0a03509f889b934d526805dc2b2681c776ca8dd3ba5e66",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.Q10",
+      "digest": "1da911068b31e61f34923a813311f9fdd03492ee029010504696464a96a5f93b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.ibadah",
+      "recordId": "W08.E01",
+      "digest": "63519e18cf2cdf480e3afe65de3c3a6ad93c6a10fdee03a597a890306b3e2ac1",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "seerah.madinah-character",
+      "digest": "0211e1f6aaf71500814e62aac27a7115cc1626cae27d576f77b544d9afe2c4e7",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11",
+      "digest": "0f4336478a94131327cf3927c905c425adeca6f08ddf53b1c4a04b3f745fb0e2",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "source.seerah.Q59-3a-8",
+      "digest": "5713977c36af0f290af7d4fff233779e11ea5e9c509a5d1d977a799096843a7c",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.K1",
+      "digest": "23ac5fddb2cd32bb78dcba5141f6c783476ee156bb3bf91db992f8e80dce9e33",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "source.seerah.Q59-3a-9",
+      "digest": "c49193239b2a22cdbf1f7a89c2442e0f9d5c0344a4bcce62329dfa8f84dddab3",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.K2",
+      "digest": "b641053b507347209478713853aed95a72943e8811d3d42918f1eaed661d6444",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "source.seerah.B2048",
+      "digest": "4c5fe96519edccb64cdbea27778fad36f40820aabf0b1b1a9f5172536964fc8c",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.K3",
+      "digest": "d687f81896eea2dfe2511250550d4c53ede3eae44b8fdb54b8ffb2655e1beb64",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q01",
+      "digest": "d0a9c8e0d9a5415f793fc2f356a610c0da503a759d5065aa826eca8e623ec92b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q02",
+      "digest": "fa5e8071cb8b3cd5da69ebfc74f98cea33b82e663ced96c87109babb01407894",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q03",
+      "digest": "5cebe5e531d40ade3c0c8b79e7cb1b14659a90f12305ae260e7411e6aea48a36",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q04",
+      "digest": "6ad684bd029dc2964d2ae274a732a7d12df2a882f31d8d3f4d07870fa7501834",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q05",
+      "digest": "a7afe7958d4cbf2279dbbd2b16d7d1413f77ae77f9e7dc7f439a300fa25fc006",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q06",
+      "digest": "303ea74e57169387376c41188e07b9ff8483704d7723cf5da86ae30845882ad2",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q07",
+      "digest": "83f9605c774448ec8eeb92211c52dacdc9d57ea07965d883d960cb45d1a25416",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q08",
+      "digest": "2f1ff3859b0e5b9f89b6e469f986bc87ae626044beb6c3d1d051c1b7a19ca037",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q09",
+      "digest": "904593b6f8d42f6df3224ceaef410f4af9992b2c27fcbe9735ef49985e9c8229",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.Q10",
+      "digest": "cda7a8f30feb257ff2fb0720e5be885a740a0b8244032a27ce9f52156aabebaf",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.seerah",
+      "recordId": "S11.E01",
+      "digest": "225fda0596eb94eed474a7d31166609487858835926c1e1d59604adac3c9644f",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "exemplars.companions",
+      "digest": "d72e77a5fc109106acb8a8c3164ae55a7d65051d97101503cfdf5c81fcf2a1fa",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10",
+      "digest": "e4ccaebe692f7428c872698fb54107ac2dfde90928c669bf715adfeb269e6481",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "source.exemplars.B75",
+      "digest": "e79cf12a8fbd47b0a068b3b67444d41aaf3f7420c84310723185a8b7bc36a90d",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.K1",
+      "digest": "457ea8735c12897fcb7739f20c71acb4579c67d602aa16233edf0fdeea2f339b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "source.exemplars.B6038",
+      "digest": "ee749eb614855cd45b9bbb107d375c869e06646b5c062f5a0f00eff4b48faf93",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.K2",
+      "digest": "3a47b8a7faceea1d2d692555add1b9a3be13c5c6e30782bcb81e39a6485d5d6f",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.K3",
+      "digest": "69d2ad7dad45c81b26bb269345ca7c64e5672f5689d65b592d818a857dd527de",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q01",
+      "digest": "dfb3ae18fd0e5079885ff2f69ee5d56f85d01da7e57f862de5b986ce26999c5c",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q02",
+      "digest": "a523af9ff0bd1328b0599e0620a3ea72ead4ddbc3af6e8b2e248a49aa111fe31",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q03",
+      "digest": "0d17a947ab0ad340dc8081ae1a8958203f7a6961d7a7370b41da24db8ca0ba01",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q04",
+      "digest": "8b56cd3874bd033a397ac3db7e7a412c3e8a8f78b379637e5d9e1b6f07a766f4",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q05",
+      "digest": "e500c698d219bbbac0e304ce19174ea937e09bade736fac08c0827c5e6825cd0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q06",
+      "digest": "4611af38e625f5d734100d30ece5ccf15e45c3bfd543b871f4025d8424a756da",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q07",
+      "digest": "e792dcbff932708995eacc40a64f7197f73190fbfdc20fe48c4f975333eaaea0",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q08",
+      "digest": "e806749d3307801429507e20e220aae9b67fad54614aa867674b0eda22b20c2b",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q09",
+      "digest": "f1b5c6fb0b11a0af1691272a2f4174c785d4e0cb08ec36de18cafea08bf72d59",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    },
+    {
+      "packId": "starter.exemplars",
+      "recordId": "P10.Q10",
+      "digest": "22b7484e042495d9e521c98f9418cd45e0c01643f5ac27edd9cfe1cd0275ea41",
+      "reviewer": "Project owner",
+      "reviewedAt": "2026-11-27T15:25:54Z"
+    }
+  ]
+}
