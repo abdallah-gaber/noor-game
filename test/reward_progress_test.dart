@@ -122,6 +122,11 @@ class _RewardTransaction implements Transaction {
     expect(arguments, ['preview', 0, 32]);
     return [
       {'rowid': 1, 'lesson_id': 'preview-lesson', 'snapshot': preview},
+      {
+        'rowid': 2,
+        'lesson_id': '@review/daily/2026-11-27',
+        'snapshot': preview,
+      },
     ];
   }
 

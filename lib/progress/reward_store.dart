@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../review/review_history.dart';
 import '../storage/noor_database.dart';
 import 'lesson_progress.dart';
 import 'reward_progress.dart';
@@ -19,7 +20,10 @@ final previewRewardsProvider = FutureProvider.autoDispose<RewardProgress>((
         [ProgressScope.preview.name, cursor, pageSize],
       );
       for (final row in rows) {
-        history.include(row['lesson_id'] as String, row['snapshot'] as String);
+        final lessonId = row['lesson_id'] as String;
+        if (!lessonId.startsWith(reviewHistoryPrefix)) {
+          history.include(lessonId, row['snapshot'] as String);
+        }
         cursor = row['rowid'] as int;
       }
       if (rows.length < pageSize) return history.summarize();

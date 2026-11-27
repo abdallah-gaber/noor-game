@@ -55,3 +55,9 @@ The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-
 - Retry, replay and compatible content updates retain earned progress without paying XP again for the same stable lesson ID. Unfinished and unscored rounds earn no rewards.
 - Track first and eventual correctness by stable knowledge and variant IDs across durable scored attempts. A repeated variant contributes at most once to a knowledge unit's accuracy denominator.
 - Keep Rewards inside the preview catalog and preview progress scope. Award for in-app learning only. Worship practice, streaks and ordinary child routes do not award anything at this checkpoint.
+
+## 004-05 preview review acceptance
+
+- Resume an unfinished adaptive or daily round from durable preview attempts and its saved variant order. A daily round stays available for the local date. A compatible edit preserves the saved sequence.
+- Choose from available lessons using stable knowledge IDs, previously missed variants, separate first and eventual correctness, and recent first-pass performance. Prefer due or weak knowledge, then vary mechanics and avoid identical prompts within a round.
+- Persist the selected spacing intervals from 1, 3, 7 and 14 days, with at least one enabled. The default enables all four. Early optional practice carries no penalty or extra payout.

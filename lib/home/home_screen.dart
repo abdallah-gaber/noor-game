@@ -8,9 +8,15 @@ import '../worlds/world_art.dart';
 import 'noor_lantern.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.showPreview, this.pilotWorlds});
+  const HomeScreen({
+    super.key,
+    required this.showPreview,
+    this.pilotWorlds,
+    this.showReview = false,
+  });
 
   final bool showPreview;
+  final bool showReview;
   final Iterable<WorldId>? pilotWorlds;
 
   @override
@@ -73,6 +79,15 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
+            if (showReview)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  onPressed: () => context.push('/review'),
+                  icon: const Icon(Icons.refresh_rounded),
+                  label: const Text('المراجعة والتحدّي اليومي'),
+                ),
+              ),
             if (showPreview)
               Align(
                 alignment: AlignmentDirectional.centerStart,

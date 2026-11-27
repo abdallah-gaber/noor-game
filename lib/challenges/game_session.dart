@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
+
 import 'arrangement.dart';
 import 'challenge_definition.dart';
 import 'flashcard.dart';
@@ -245,3 +247,29 @@ class GameSession {
     _ => const [],
   };
 }
+
+String challengeGradingKey(ChallengeDefinition definition) {
+  final knowledge = definition.knowledgeIds.toList()..sort();
+  final fields = switch (definition) {
+    ScoredQuestion question => [
+      question.kind.name,
+      question.correctOptionId,
+      question.options.map((option) => option.id).toList()..sort(),
+    ],
+    Arrangement question => [
+      question.kind.name,
+      question.correctOrder,
+      question.targets.map((option) => option.id).toList(),
+      question.items.map((option) => option.id).toList()..sort(),
+    ],
+    Flashcard _ => ['flashcard'],
+    _ => throw const FormatException('Unsupported mechanic'),
+  };
+  return sha256
+      .convert(utf8.encode(jsonEncode([knowledge, fields])))
+      .toString();
+}
+
+String reviewGradingKey(List<ChallengeDefinition> items) => jsonEncode([
+  for (final item in items) [item.id, challengeGradingKey(item)],
+]);

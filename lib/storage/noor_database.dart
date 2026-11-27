@@ -15,7 +15,7 @@ class NoorDatabase {
       final path = await getDatabasesPath();
       return await openDatabase(
         '$path/noor.db',
-        version: 4,
+        version: 5,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE audio_preferences (
@@ -27,6 +27,7 @@ class NoorDatabase {
           await _createProgress(db, ProgressScope.approved);
           await _createProgress(db, ProgressScope.preview);
           await _createGames(db);
+          await _addPreviewReview(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
           if (oldVersion < 3) {
@@ -41,6 +42,7 @@ class NoorDatabase {
             await _createProgress(db, ProgressScope.approved);
           }
           if (oldVersion < 4) await _createGames(db);
+          if (oldVersion < 5) await _addPreviewReview(db);
         },
       );
     } catch (_) {
@@ -71,4 +73,13 @@ class NoorDatabase {
       PRIMARY KEY (scope, id)
     )
     ''');
+  Future<void> _addPreviewReview(Database db) async {
+    await db.execute('ALTER TABLE game_sessions ADD COLUMN updated_at INTEGER');
+    await db.execute('''
+      CREATE TABLE preview_review_settings (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        interval_mask INTEGER NOT NULL CHECK (interval_mask BETWEEN 1 AND 15)
+      )
+      ''');
+  }
 }

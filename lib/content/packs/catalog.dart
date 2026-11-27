@@ -1,6 +1,7 @@
 import '../../challenges/arrangement.dart';
 import '../../challenges/challenge_definition.dart';
 import '../../challenges/flashcard.dart';
+import '../../challenges/game_session.dart';
 import '../../challenges/scored_question.dart';
 import '../curriculum.dart';
 import 'pack_document.dart';
@@ -49,7 +50,7 @@ class ValidatedCatalog {
       [
         variant,
         records[variant]!.identifier('revision'),
-        _gradingKey(variants[variant]!),
+        challengeGradingKey(variants[variant]!),
       ],
   ]);
 }
@@ -250,8 +251,8 @@ class CatalogIngestor {
             );
           }
         case RecordKind.variant:
-          final before = _gradingKey(previous.variants[record.id]!);
-          final after = _gradingKey(next.variants[record.id]!);
+          final before = challengeGradingKey(previous.variants[record.id]!);
+          final after = challengeGradingKey(next.variants[record.id]!);
           if (old.data['revision'] == record.data['revision'] &&
               before != after) {
             throw FormatException(
@@ -270,26 +271,6 @@ String _lessonLayout(PackRecord record) => canonicalDigest([
   record.ids('variantIds'),
   record.ids('prerequisiteIds'),
 ]);
-
-String _gradingKey(ChallengeDefinition definition) {
-  final knowledge = definition.knowledgeIds.toList()..sort();
-  final fields = switch (definition) {
-    ScoredQuestion question => [
-      question.kind.name,
-      question.correctOptionId,
-      question.options.map((option) => option.id).toList()..sort(),
-    ],
-    Arrangement question => [
-      question.kind.name,
-      question.correctOrder,
-      question.targets.map((option) => option.id).toList(),
-      question.items.map((option) => option.id).toList()..sort(),
-    ],
-    Flashcard _ => ['flashcard'],
-    _ => throw const FormatException('Unsupported mechanic'),
-  };
-  return canonicalDigest([knowledge, fields]);
-}
 
 class _GraphValidator {
   _GraphValidator(this.records, this.variants);

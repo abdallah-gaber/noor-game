@@ -12,6 +12,8 @@ import '../home/noor_lantern.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../progress/reward_store.dart';
+import '../review/review_selection.dart';
+import '../review/review_store.dart';
 import 'arrangement.dart';
 import 'arrangement_view.dart';
 import 'flashcard.dart';
@@ -27,10 +29,19 @@ class GameScreen extends ConsumerStatefulWidget {
     required this.world,
     required this.lesson,
     required this.curriculum,
-  });
+  }) : reviewMode = null;
 
-  final WorldId world;
-  final LearningLesson lesson;
+  const GameScreen.review({
+    super.key,
+    required this.curriculum,
+    required ReviewMode mode,
+  }) : reviewMode = mode,
+       world = null,
+       lesson = null;
+
+  final WorldId? world;
+  final LearningLesson? lesson;
+  final ReviewMode? reviewMode;
   final Curriculum curriculum;
 
   @override
@@ -39,11 +50,13 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   late final _plan = GamePlan(
-    widget.curriculum.lessonVersion(widget.lesson),
-    widget.lesson.challenges,
-    compatibleDefinitionDigest: widget.lesson.contentRevision,
+    widget.curriculum.lessonVersion(widget.lesson!),
+    widget.lesson!.challenges,
+    compatibleDefinitionDigest: widget.lesson!.contentRevision,
   );
   GameSession? _session;
+  String? _reviewKey;
+  bool _emptyReview = false;
   bool _busy = true;
   bool _error = false;
   bool _revealed = false;
@@ -56,20 +69,30 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   Future<void> _open({String? replayOf}) async {
     try {
-      final random = Random.secure();
-      final id =
-          '${DateTime.now().microsecondsSinceEpoch}-${random.nextInt(1 << 30)}';
-      final session = await ref
-          .read(gameStoreProvider)
-          .open(
-            widget.curriculum.progressScope,
-            widget.lesson.id,
-            GameSession.start(id, _plan, random),
-            replayOf: replayOf,
-          );
+      final mode = widget.reviewMode;
+      final GameSession? session;
+      if (mode == null) {
+        session = await _openLesson(replayOf);
+      } else {
+        final store = ref.read(reviewStoreProvider);
+        final progress = await ref.read(
+          progressProvider(ProgressScope.preview).future,
+        );
+        final round = await store.open(
+          mode,
+          reviewCandidates(widget.curriculum, progress),
+          await store.history(),
+          await store.intervals(),
+          DateTime.now(),
+          replayOf: replayOf,
+        );
+        _reviewKey = round?.key;
+        session = round?.session;
+      }
       if (!mounted) return;
       setState(() {
         _session = session;
+        _emptyReview = session == null;
         _error = false;
         _revealed = false;
       });
@@ -80,19 +103,40 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
   }
 
+  Future<GameSession> _openLesson(String? replayOf) async {
+    final random = Random.secure();
+    final id =
+        '${DateTime.now().microsecondsSinceEpoch}-${random.nextInt(1 << 30)}';
+    return await ref
+        .read(gameStoreProvider)
+        .open(
+          widget.curriculum.progressScope,
+          widget.lesson!.id,
+          GameSession.start(id, _plan, random),
+          replayOf: replayOf,
+        );
+  }
+
   Future<void> _save(GameSession? next) async {
     if (_busy || next == null) return;
     setState(() => _busy = true);
     try {
       final scope = widget.curriculum.progressScope;
-      await ref
-          .read(gameStoreProvider)
-          .save(scope, widget.world, widget.lesson.id, next);
-      if (!mounted) return;
-      if (next.finished) {
-        ref.invalidate(progressProvider(scope));
-        if (widget.curriculum.isPreview) ref.invalidate(previewRewardsProvider);
+      if (widget.reviewMode == null) {
+        await ref
+            .read(gameStoreProvider)
+            .save(scope, widget.world!, widget.lesson!.id, next);
+        if (mounted && next.finished) {
+          ref.invalidate(progressProvider(scope));
+          if (widget.curriculum.isPreview) {
+            ref.invalidate(previewRewardsProvider);
+          }
+        }
+      } else {
+        await ref.read(reviewStoreProvider).save(_reviewKey!, next);
       }
+      if (!mounted) return;
+      if (widget.curriculum.isPreview) ref.invalidate(reviewHistoryProvider);
       _effect(
         next.finished
             ? PilotEffect.complete
@@ -132,7 +176,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return PopScope(
       canPop: !_busy,
       child: Scaffold(
-        appBar: const NoorAppBar('التحدّيات'),
+        appBar: NoorAppBar(switch (widget.reviewMode) {
+          ReviewMode.daily => 'تحدّي اليوم',
+          ReviewMode.adaptive => 'مراجعة مخصّصة',
+          null => 'التحدّيات',
+        }),
         body: NoorPage(
           key: ValueKey((session?.id, session?.cursor)),
           maxWidth: 680,
@@ -156,6 +204,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       semanticsLabel: 'جارٍ التحميل',
                     ),
                   )
+                else if (_emptyReview)
+                  const Text('ستظهر المراجعة عندما تتاح أنشطة للتدرّب.')
                 else
                   FilledButton(
                     onPressed: _retryOpen,
@@ -264,8 +314,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
         Text(accuracy),
         if (eventual.isNotEmpty) Text(eventual.trim()),
-        if (widget.curriculum.isPreview)
-          _PreviewRewards(lessonId: widget.lesson.id),
+        if (widget.curriculum.isPreview && widget.reviewMode == null)
+          _PreviewRewards(lessonId: widget.lesson!.id),
         SpeechControl(text: 'أكملتَ التحدّيات! $accuracy.$eventual'),
         Wrap(
           spacing: 8,
@@ -273,13 +323,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             FilledButton(
               onPressed: _busy
                   ? null
-                  : () => context.go('/worlds/${widget.world.id}'),
-              child: const Text('إلى الدرب'),
+                  : () => widget.reviewMode == null
+                        ? context.go('/worlds/${widget.world!.id}')
+                        : context.go('/review'),
+              child: Text(
+                widget.reviewMode == null ? 'إلى الدرب' : 'إلى المراجعة',
+              ),
             ),
-            TextButton(
-              onPressed: _busy ? null : () => _retryOpen(replayOf: session.id),
-              child: const Text('أعد التحدّيات'),
-            ),
+            if (widget.reviewMode != ReviewMode.daily)
+              TextButton(
+                onPressed: _busy
+                    ? null
+                    : () => _retryOpen(replayOf: session.id),
+                child: Text(
+                  widget.reviewMode == null ? 'أعد التحدّيات' : 'مراجعة أخرى',
+                ),
+              ),
           ],
         ),
       ],

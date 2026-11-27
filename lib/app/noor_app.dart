@@ -17,6 +17,8 @@ import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
+import '../review/review_screen.dart';
+import '../review/review_selection.dart';
 import '../settings/settings_screen.dart';
 import '../worlds/world_screen.dart';
 
@@ -78,8 +80,25 @@ GoRouter createNoorRouter({
         builder: (context, state) => HomeScreen(
           showPreview: showPreview && pilot == null,
           pilotWorlds: pilot?.units.keys,
+          showReview: showPreview && curriculum.isPreview,
         ),
         routes: [
+          if (showPreview && curriculum.isPreview)
+            GoRoute(
+              path: 'review',
+              builder: (_, _) => ReviewScreen(curriculum: curriculum),
+              routes: [
+                for (final mode in ReviewMode.values)
+                  GoRoute(
+                    path: mode.name,
+                    builder: (_, _) => GameScreen.review(
+                      key: ValueKey(mode),
+                      curriculum: curriculum,
+                      mode: mode,
+                    ),
+                  ),
+              ],
+            ),
           GoRoute(
             path: 'settings',
             builder: (context, state) => SettingsScreen(isPilot: pilot != null),
