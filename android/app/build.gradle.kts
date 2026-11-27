@@ -53,6 +53,10 @@ android {
         }
         release {
             signingConfig = signingConfigs.getByName("noorRelease")
+            if (providers.gradleProperty("noorDeviceQa").orNull == "true") {
+                applicationIdSuffix = ".deviceqa"
+                manifestPlaceholders["noorAppLabel"] = "نور — اختبار الجهاز"
+            }
         }
     }
 }

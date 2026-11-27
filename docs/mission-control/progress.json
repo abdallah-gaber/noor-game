@@ -301,9 +301,9 @@
         {
           "id": "005-03",
           "title": "Verify readable Arabic and optional effects on device",
-          "status": "review",
+          "status": "done",
           "evidence": ["docs/qa/spec-005/005-03-effects.md"],
-          "note": "Production cues, offline native playback, saved opt-out and readable Arabic verified. Physical speaker comfort remains for owner listening.",
+          "note": "Offline native playback, opt-out and readable Arabic verified on an emulator and the connected physical tablet. Speaker comfort remains for owner listening.",
           "priority": "P0"
         },
         {
@@ -317,9 +317,9 @@
         {
           "id": "005-06",
           "title": "Verify release on the child’s physical low-end Android tablet",
-          "status": "todo",
-          "evidence": [],
-          "note": "Owner moved this physical release gate from SPEC-001. Record anonymized offline, layout and responsiveness observations.",
+          "status": "blocked",
+          "evidence": ["docs/qa/spec-005/005-06-physical-android.md"],
+          "note": "Airplane-mode smoke passed on the available Android 16 tablet. The designated low-end tablet was unavailable.",
           "priority": "P0"
         },
         {

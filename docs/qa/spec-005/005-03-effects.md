@@ -5,3 +5,5 @@ The signed Android audio checkpoint (version code 3) ships four original, single
 On Android 9 with no active network, a fresh install enabled effects and left speech off. Android audio diagnostics recorded the app’s game SoundPool entering the started state after pressing the preview button. Disabling effects, force-stopping and reopening settings left the preview disabled. The approved lesson remained readable with speech off. [Settings on the signed build](phone-audio-settings.png)
 
 The 32 focused Flutter checks exercised the production lesson/game cues, saved defaults and opt-out, pilot retry, and speech fallback. Physical speaker audibility and comfort are recorded separately from PCM and native playback evidence.
+
+The connected Android 16 tablet also entered native playback for the lesson tap and the settings preview while in airplane mode. The isolated app retained the saved opt-out after a cold restart. [Physical hardware run](005-06-physical-android.md)
