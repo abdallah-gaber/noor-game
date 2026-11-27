@@ -12,3 +12,14 @@
 Curriculum production is a separate track. See the [curriculum roadmap](../../docs/curriculum/roadmap.md). P1 deferral requires a documented reason and owner review.
 
 Prioritize a prayer-readiness learning path. The canon has no matching or ordering draft records. Fill both coverage gaps through the authoring and review track. The owner’s provisional acceptance of existing drafts is subject to corrections and final source verification.
+
+## 004-01 acceptance
+
+| Given | When | Then |
+|---|---|---|
+| Independent schema-1 packs and a trusted approval ledger | The app validates and activates a batch | Stable typed references, all five mechanics, sources and assets, prerequisite graphs and record digests pass before the new catalog becomes visible |
+| Drafts, malformed definitions or missing/stale approval | The same entry point receives them | The entire candidate is rejected and the previous catalog stays usable |
+| A compatible editorial pack update | The active version changes | Reading resumes under the same lesson key, compatible sessions keep answer identity, and historical rows are retained without rewriting SQLite |
+| A cross-world path marked prayer readiness | The integrated catalog is inspected | The path is prioritized, its lesson dependencies resolve, and memorization and treasures remain addressable as separately approved records |
+
+004-01 delivers infrastructure and synthetic fixtures. The 60 lessons, 180 knowledge units, and 600 variants remain provisionally accepted drafts. CONTENT-006 and CONTENT-007 are authored and reviewed separately.

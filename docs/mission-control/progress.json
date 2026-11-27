@@ -201,7 +201,7 @@
             "docs/qa/spec-003/tablet-portrait-ordering.webp",
             "docs/qa/spec-003/tablet-speech-fallback.webp"
           ],
-          "note": "78 Flutter and 5 dashboard tests passed. Android and iOS builds passed. Both Android emulator release gates, offline tablet fallback and final captures verified.",
+          "note": "78 Flutter and 5 dashboard tests passed. Android and iOS builds passed. Both Android emulator release gates, offline tablet fallback and final captures verified. Accepted in targeted review and merged as f089704.",
           "priority": "P0"
         }
       ]
@@ -215,9 +215,9 @@
         {
           "id": "004-01",
           "title": "Validate versioned curriculum and source references",
-          "status": "todo",
+          "status": "doing",
           "evidence": [],
-          "note": "Validate independent offline packs and knowledge-to-variant links. Preserve compatible progress and expose What’s New.",
+          "note": "Implementing offline pack schema, source validation, an external approval gate and compatible updates.",
           "priority": "P0"
         },
         {
