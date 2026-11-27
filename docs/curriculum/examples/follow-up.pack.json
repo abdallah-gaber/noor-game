@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "packId": "example.follow-up",
+  "version": "2.1.0",
+  "channel": "fixture",
+  "records": [
+    {
+      "id": "example.unit.follow",
+      "kind": "unit",
+      "reviewStatus": "draft",
+      "worldId": "ibadah",
+      "title": "وحدة تجريبية أخرى"
+    },
+    {
+      "id": "example.lesson.follow",
+      "kind": "lesson",
+      "reviewStatus": "draft",
+      "title": "أكمل تجربة الأشكال",
+      "unitId": "example.unit.follow",
+      "revision": "r1",
+      "prerequisiteIds": [
+        "example.lesson.shapes"
+      ],
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ],
+      "variantIds": []
+    },
+    {
+      "id": "example.path.demo",
+      "kind": "path",
+      "reviewStatus": "draft",
+      "title": "مسار تجريبي عابر للعوالم",
+      "priority": "prayerReadiness",
+      "lessonIds": [
+        "example.lesson.shapes",
+        "example.lesson.follow"
+      ]
+    },
+    {
+      "id": "example.path.standard",
+      "kind": "path",
+      "reviewStatus": "draft",
+      "title": "مسار تجريبي عادي",
+      "priority": "standard",
+      "lessonIds": [
+        "example.lesson.shapes"
+      ]
+    }
+  ]
+}

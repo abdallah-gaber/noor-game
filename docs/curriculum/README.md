@@ -8,3 +8,5 @@ Content record fields: id, worldId, lessonId, type, promptAr, explanationAr, opt
 Use the [curriculum roadmap](roadmap.md) and [season plan](season-one.json) for scope. The initial 12-lesson outline is provisionally accepted for authoring. Final hash review is per record. Keep draft payloads in the authoring track and export structure-only public inventory for Mission Control.
 
 A knowledge unit holds one teachable idea, child-facing Arabic, verified source locators and optional parent notes. Variants independently reference knowledge units, carry a mechanic and difficulty, and include reviewed answers and explanations. Reordering the same options does not produce another variant. Keep memorization aids and optional knowledge treasures as individually reviewed and rights-cleared records. The authoring track supplies established material, authentic Qur'an and Hadith content, alongside reviewed Arabic narration.
+
+[Offline pack schema and synthetic examples](pack-schema.md) describe versioning, graph validation, trusted record approvals and progress migration.

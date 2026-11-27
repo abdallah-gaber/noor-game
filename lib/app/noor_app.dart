@@ -8,6 +8,7 @@ import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
 import '../challenges/game_screen.dart';
 import '../content/curriculum.dart';
+import '../content/packs/catalog.dart';
 import '../design_system/noor_theme.dart';
 import '../home/home_screen.dart';
 import '../home/preview_screen.dart';
@@ -20,9 +21,11 @@ import '../worlds/world_screen.dart';
 GoRouter createNoorRouter({
   String? initialLocation,
   bool enablePreview = true,
+  IntegratedCatalog? catalog,
 }) {
   final showPreview = kDebugMode && enablePreview;
-  final curriculum = loadCurriculum(enablePreview: enablePreview);
+  final curriculum =
+      catalog?.toCurriculum() ?? loadCurriculum(enablePreview: enablePreview);
 
   return GoRouter(
     initialLocation: initialLocation,
@@ -68,10 +71,7 @@ GoRouter createNoorRouter({
                       progressProvider(curriculum.progressScope).future,
                     );
                     return lesson.state(
-                              completed: progress.completedFor(
-                                curriculum,
-                                world,
-                              ),
+                              completed: progress.completedIn(curriculum),
                             ) ==
                             LessonState.locked
                         ? path

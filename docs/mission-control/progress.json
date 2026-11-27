@@ -215,9 +215,13 @@
         {
           "id": "004-01",
           "title": "Validate versioned curriculum and source references",
-          "status": "doing",
-          "evidence": [],
-          "note": "Implementing offline pack schema, source validation, an external approval gate and compatible updates.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-004/004-01-curriculum-packs.md",
+            "docs/qa/spec-004/release-world.webp",
+            "docs/curriculum/pack-schema.md"
+          ],
+          "note": "84 Flutter and 5 dashboard tests passed. Android and iOS builds passed. Verified offline release gating and compatible versioned packs. Zero approved or integrated production records.",
           "priority": "P0"
         },
         {

@@ -49,6 +49,8 @@ class LearningLesson {
     required this.title,
     required this.steps,
     this.prerequisiteId,
+    this.prerequisiteIds = const [],
+    this.contentRevision,
     this.challenges = const [],
   });
 
@@ -57,11 +59,13 @@ class LearningLesson {
   final List<LessonStep> steps;
   final List<ChallengeDefinition> challenges;
   final String? prerequisiteId;
+  final List<String> prerequisiteIds;
+  final String? contentRevision;
 
   LessonState state({required Set<String> completed, String? currentId}) {
     if (completed.contains(id)) return LessonState.completed;
-    if (prerequisiteId case final requiredId?
-        when !completed.contains(requiredId)) {
+    if ((prerequisiteId != null && !completed.contains(prerequisiteId)) ||
+        !prerequisiteIds.every(completed.contains)) {
       return LessonState.locked;
     }
     return id == currentId ? LessonState.current : LessonState.available;
@@ -94,6 +98,9 @@ class Curriculum {
   final bool isPreview;
   final Map<WorldId, List<LearningUnit>> units;
   final Set<String> previewCompletions;
+
+  String lessonVersion(LearningLesson lesson) =>
+      lesson.contentRevision ?? version;
 
   List<LearningUnit> unitsFor(WorldId world) => units[world] ?? const [];
 

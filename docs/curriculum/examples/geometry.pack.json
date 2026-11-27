@@ -1,0 +1,257 @@
+{
+  "schema": 1,
+  "packId": "example.geometry",
+  "version": "1.0.0",
+  "channel": "fixture",
+  "records": [
+    {
+      "id": "example.source.math",
+      "kind": "source",
+      "reviewStatus": "draft",
+      "title": "Synthetic geometry reference",
+      "category": "other",
+      "locator": "Documentation example, geometry card A"
+    },
+    {
+      "id": "example.asset.circle",
+      "kind": "asset",
+      "reviewStatus": "draft",
+      "media": "illustration",
+      "path": "assets/curriculum/media/circle.svg",
+      "sha256": "871bfbb0fdf61260a4f57f89f87c2ace6cf481807403a2c9adc25025af728151",
+      "rights": {
+        "basis": "original",
+        "evidence": "Synthetic documentation fixture created for this contract."
+      }
+    },
+    {
+      "id": "example.unit.shapes",
+      "kind": "unit",
+      "reviewStatus": "draft",
+      "worldId": "iman",
+      "title": "أشكال تجريبية"
+    },
+    {
+      "id": "example.knowledge.shapes",
+      "kind": "knowledge",
+      "reviewStatus": "draft",
+      "title": "الأشكال",
+      "text": "للمثلّث ثلاث زوايا.",
+      "revision": "r1",
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "illustrationRef": "example.asset.circle"
+    },
+    {
+      "id": "example.knowledge.counting",
+      "kind": "knowledge",
+      "reviewStatus": "draft",
+      "title": "الأعداد",
+      "text": "ابدأ بواحد ثم اثنين ثم ثلاثة.",
+      "revision": "r1",
+      "sourceRefs": [
+        "example.source.math"
+      ]
+    },
+    {
+      "id": "example.variant.choice",
+      "kind": "variant",
+      "reviewStatus": "draft",
+      "definition": {
+        "type": "multipleChoice",
+        "prompt": "أيُّ شكلٍ له ثلاث زوايا؟",
+        "explanation": "للمثلّث ثلاث زوايا.",
+        "options": [
+          {
+            "id": "circle",
+            "label": "دائرة",
+            "illustration": "example.asset.circle"
+          },
+          {
+            "id": "triangle",
+            "label": "مثلّث"
+          }
+        ],
+        "correctOptionId": "triangle"
+      },
+      "revision": "r1",
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ],
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "difficulty": "recognition"
+    },
+    {
+      "id": "example.variant.boolean",
+      "kind": "variant",
+      "reviewStatus": "draft",
+      "definition": {
+        "type": "trueFalse",
+        "prompt": "للدائرة زوايا.",
+        "explanation": "الدائرة مستديرة وليس لها زوايا.",
+        "correctOptionId": "false"
+      },
+      "revision": "r1",
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ],
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "difficulty": "recognition"
+    },
+    {
+      "id": "example.variant.flash",
+      "kind": "variant",
+      "reviewStatus": "draft",
+      "definition": {
+        "type": "flashcard",
+        "prompt": "كم زاويةً للمثلّث؟",
+        "answer": "ثلاث زوايا."
+      },
+      "revision": "r1",
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ],
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "difficulty": "recognition"
+    },
+    {
+      "id": "example.variant.match",
+      "kind": "variant",
+      "reviewStatus": "draft",
+      "definition": {
+        "type": "matching",
+        "prompt": "صِل الشكل بعدد زواياه.",
+        "explanation": "للدائرة صفر وللمثلّث ثلاث زوايا.",
+        "pairs": [
+          {
+            "left": {
+              "id": "circle",
+              "label": "دائرة"
+            },
+            "right": {
+              "id": "zero",
+              "label": "صفر"
+            }
+          },
+          {
+            "left": {
+              "id": "triangle",
+              "label": "مثلّث"
+            },
+            "right": {
+              "id": "three",
+              "label": "ثلاث"
+            }
+          }
+        ]
+      },
+      "revision": "r1",
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ],
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "difficulty": "recognition"
+    },
+    {
+      "id": "example.variant.order",
+      "kind": "variant",
+      "reviewStatus": "draft",
+      "definition": {
+        "type": "ordering",
+        "prompt": "رتّب الأعداد من الأصغر إلى الأكبر.",
+        "explanation": "واحد ثم اثنان ثم ثلاثة.",
+        "items": [
+          {
+            "id": "one",
+            "label": "واحد"
+          },
+          {
+            "id": "two",
+            "label": "اثنان"
+          },
+          {
+            "id": "three",
+            "label": "ثلاثة"
+          }
+        ],
+        "correctOrder": [
+          "one",
+          "two",
+          "three"
+        ]
+      },
+      "revision": "r1",
+      "knowledgeIds": [
+        "example.knowledge.counting"
+      ],
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "difficulty": "recognition"
+    },
+    {
+      "id": "example.lesson.shapes",
+      "kind": "lesson",
+      "reviewStatus": "draft",
+      "title": "جرّب الأشكال",
+      "unitId": "example.unit.shapes",
+      "revision": "r1",
+      "prerequisiteIds": [],
+      "knowledgeIds": [
+        "example.knowledge.shapes",
+        "example.knowledge.counting"
+      ],
+      "variantIds": [
+        "example.variant.choice",
+        "example.variant.boolean",
+        "example.variant.flash",
+        "example.variant.match",
+        "example.variant.order"
+      ]
+    },
+    {
+      "id": "example.memorization.shapes",
+      "kind": "memorization",
+      "reviewStatus": "draft",
+      "title": "سطر للتذكّر",
+      "text": "للمثلّث ثلاث زوايا.",
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "rights": {
+        "basis": "original",
+        "evidence": "Synthetic documentation fixture created for this contract."
+      }
+    },
+    {
+      "id": "example.treasure.shapes",
+      "kind": "treasure",
+      "reviewStatus": "draft",
+      "title": "معلومة إضافية",
+      "text": "للمربّع أربع زوايا.",
+      "sourceRefs": [
+        "example.source.math"
+      ],
+      "knowledgeIds": [
+        "example.knowledge.shapes"
+      ]
+    },
+    {
+      "id": "example.release.geometry",
+      "kind": "release",
+      "reviewStatus": "draft",
+      "title": "إصدار تجريبي",
+      "whatsNew": "أضفنا أمثلة توضيحية.",
+      "releasedAt": "2026-11-27T00:00:00Z"
+    }
+  ]
+}

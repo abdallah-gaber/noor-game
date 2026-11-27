@@ -36,6 +36,11 @@ PUBLIC_FILES = {
     "docs/product.md", "docs/architecture.md", "docs/curriculum/README.md",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
+    "docs/curriculum/pack-schema.md",
+    "docs/curriculum/examples/geometry.pack.json",
+    "docs/curriculum/examples/follow-up.pack.json",
+    "docs/curriculum/examples/approvals.example.json",
+    "docs/curriculum/examples/circle.svg",
     "test/goldens/noor-expressions.png", "test/goldens/world-environments.png",
 }
 for phase, folder in enumerate(("foundation", "learning-worlds", "game-engine",
@@ -91,6 +96,7 @@ for folder, names in {
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
     ),
+    "spec-004": ("004-01-curriculum-packs.md", "release-world.webp"),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
 

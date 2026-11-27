@@ -7,29 +7,35 @@ import 'flashcard.dart';
 import 'scored_question.dart';
 
 class GamePlan {
-  GamePlan(this.contentVersion, List<ChallengeDefinition> definitions)
-    : definitions = Map.unmodifiable({
-        for (final item in definitions) item.id: item,
-      }) {
+  GamePlan(
+    this.contentVersion,
+    List<ChallengeDefinition> definitions, {
+    this.compatibleDefinitionDigest,
+  }) : definitions = Map.unmodifiable({
+         for (final item in definitions) item.id: item,
+       }) {
     if (definitions.isEmpty || this.definitions.length != definitions.length) {
       throw const FormatException('Expected unique challenge variant IDs');
     }
   }
 
   final String contentVersion;
+  final String? compatibleDefinitionDigest;
   final Map<String, ChallengeDefinition> definitions;
 
-  late final String compatibility = jsonEncode([
-    1,
-    contentVersion,
-    for (final item in definitions.values)
-      switch (item) {
-        ScoredQuestion question => question.toJson(),
-        Arrangement question => question.toJson(),
-        Flashcard card => card.toJson(),
-        _ => throw const FormatException('Unsupported challenge'),
-      },
-  ]);
+  late final String compatibility = compatibleDefinitionDigest != null
+      ? jsonEncode([2, contentVersion, compatibleDefinitionDigest])
+      : jsonEncode([
+          1,
+          contentVersion,
+          for (final item in definitions.values)
+            switch (item) {
+              ScoredQuestion question => question.toJson(),
+              Arrangement question => question.toJson(),
+              Flashcard card => card.toJson(),
+              _ => throw const FormatException('Unsupported challenge'),
+            },
+        ]);
 }
 
 class GameAttempt {

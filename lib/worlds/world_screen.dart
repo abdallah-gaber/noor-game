@@ -60,7 +60,7 @@ class WorldScreen extends ConsumerWidget {
                       for (final unit in units)
                         LearningPath(
                           unit: unit,
-                          completed: journey.completedFor(curriculum, world),
+                          completed: journey.completedIn(curriculum),
                           currentId: journey.currentFor(curriculum, unit),
                           onOpen: (id) =>
                               context.push('/worlds/${world.id}/lessons/$id'),

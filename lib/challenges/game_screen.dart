@@ -37,8 +37,9 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   late final _plan = GamePlan(
-    widget.curriculum.version,
+    widget.curriculum.lessonVersion(widget.lesson),
     widget.lesson.challenges,
+    compatibleDefinitionDigest: widget.lesson.contentRevision,
   );
   GameSession? _session;
   bool _busy = true;

@@ -39,7 +39,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           .saveStep(
             world: widget.world,
             lesson: widget.lesson,
-            contentVersion: widget.curriculum.version,
+            contentVersion: widget.curriculum.lessonVersion(widget.lesson),
             index: index,
             completed: completed,
           );
@@ -80,7 +80,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           data: (journey) {
             final index =
                 journey.records[lesson.id]?.resumeIndex(
-                  widget.curriculum.version,
+                  widget.curriculum.lessonVersion(lesson),
                   lesson.steps.length,
                 ) ??
                 0;

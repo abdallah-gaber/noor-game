@@ -25,3 +25,7 @@ Bundle offline packs with an independent pack ID, version and compatibility cont
 Schema 4 stores one JSON snapshot per session, keyed by preview or approved scope and session ID. A compatible session reopens at its saved activity or feedback with the same candidate order. Compatibility includes the content version and serialized variant definitions. Unsubmitted tap selections are transient. Historical sessions from earlier revisions remain stored.
 
 Each accepted submission records stable variant and knowledge IDs. Review visits each initially missed scored challenge once. Results preserve first-attempt accuracy and the count of eventually correct answers, while flashcard recall stays unscored. Use an absent accuracy value for rounds without scored activities. Replays create separate rows. Finishing advances the snapshot and writes lesson completion in one SQLite transaction guarded by the expected revision. Required challenge lessons use this transaction for unlocks. The reading progress controller handles reading-only completion.
+
+## Offline pack activation
+
+Child mode consumes an integrated catalog from the signed app bundle. Runtime validates the complete multi-pack record graph against an independent trusted approval ledger and local asset bytes before exposing a lesson. Lesson compatibility keys derive from stable lesson, knowledge and assessment revisions and grading identity. Pack versions advance independently of those keys. SQLite schema 4 and its preview scope are preserved. [Pack contract](curriculum/pack-schema.md)

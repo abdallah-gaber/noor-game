@@ -50,8 +50,14 @@ class JourneyProgress {
       if (progress.world == world && progress.completed) progress.lessonId,
   };
 
+  Set<String> completedIn(Curriculum curriculum) => {
+    if (curriculum.isPreview) ...curriculum.previewCompletions,
+    for (final progress in records.values)
+      if (progress.completed) progress.lessonId,
+  };
+
   String? currentFor(Curriculum curriculum, LearningUnit unit) {
-    final completed = completedFor(curriculum, unit.world);
+    final completed = completedIn(curriculum);
     LessonProgress? latest;
     String? firstAvailable;
     for (final lesson in unit.lessons) {
@@ -59,7 +65,7 @@ class JourneyProgress {
       firstAvailable ??= lesson.id;
       final progress = records[lesson.id];
       if (progress != null &&
-          progress.contentVersion == curriculum.version &&
+          progress.contentVersion == curriculum.lessonVersion(lesson) &&
           (latest == null || progress.updatedAt > latest.updatedAt)) {
         latest = progress;
       }
