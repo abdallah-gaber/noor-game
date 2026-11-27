@@ -227,12 +227,13 @@
         {
           "id": "004-02",
           "title": "Coordinate pilot content and Season One production",
-          "status": "review",
+          "status": "done",
           "evidence": [
             "docs/qa/spec-004/004-02-adult-review-pilot.md",
-            "docs/qa/spec-004/004-02-pilot-audio-and-activities.md"
+            "docs/qa/spec-004/004-02-pilot-audio-and-activities.md",
+            "docs/qa/spec-004/004-02-curriculum-handoff.md"
           ],
-          "note": "Owner accepted the first tablet pilot's presentation and responsiveness. Installed direct ordering and matching practice and offline sound effects. 45 focused tests passed. Offline Arabic voice installation and owner listening retest remain pending.",
+          "note": "Owner accepted the physical-tablet pilot. CONTENT-001–007 handoff generated and verified with 27 open review items. 60 lessons, 180 knowledge units and 636 draft variants structurally checked. Final record approvals and production integration remain pending.",
           "priority": "P0"
         },
         {
@@ -293,10 +294,10 @@
         },
         {
           "id": "005-03",
-          "title": "Verify offline audio and fallback on device",
+          "title": "Verify readable Arabic and optional effects on device",
           "status": "todo",
           "evidence": [],
-          "note": "Verify usable offline Arabic speech on supported physical devices and separately exercise fallback. Consider reviewed bundled narration where local voices are unavailable.",
+          "note": "Verify readable Arabic and optional non-musical effects on the devices. System TTS and bundled narration are future enhancements.",
           "priority": "P0"
         },
         {

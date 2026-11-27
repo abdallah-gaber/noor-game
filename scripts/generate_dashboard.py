@@ -17,7 +17,7 @@ STAGE_LABELS = {
     "sourceVerified": "Source verified",
     "ownerReviewed": "Record reviewed",
     "finalApproval": "Final hash approval",
-    "validated": "Validated",
+    "validated": "Structurally checked",
     "integrated": "Integrated",
     "releaseVerified": "Release verified",
 }
@@ -96,7 +96,7 @@ for folder, names in {
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
     ),
-    "spec-004": ("004-01-curriculum-packs.md", "release-world.webp"),
+    "spec-004": ("004-01-curriculum-packs.md", "004-02-curriculum-handoff.md", "release-world.webp"),
 }.items():
     PUBLIC_FILES.update(f"docs/qa/{folder}/{name}" for name in names)
 
@@ -257,7 +257,17 @@ class Dashboard:
         data = self.inventory
         names = {world["id"]: world["title"] for world in (self.plan or {}).get("worlds", [])}
         coverage = metrics((KINDS[k], count(data["totals"].get(k))) for k in ("lessons", "objectives", "knowledgeUnits", "variants"))
-        coverage += f'<p>Unique record counts from {data["catalogs"]} canonical packs. Open each world for unit totals and lesson coverage.</p>'
+        coverage += f'<p>Unique record counts from {data["catalogs"]} core packs and included supplements. Open each world for unit totals and lesson coverage.</p>'
+        if handoff := data.get("handoff"):
+            coverage += metrics([
+                ("Authoring packages", handoff["contentPackages"]),
+                ("Planned lessons", handoff["plannedLessons"]),
+                ("Planned objectives", handoff["plannedObjectives"]),
+                ("Prayer-readiness lessons", len(handoff["prayerReadinessLessons"])),
+                ("Cross-lesson review variants", handoff["mixedReviewVariants"]),
+            ])
+            coverage += '<p>Prayer readiness · ' + escape(' → '.join(handoff["prayerReadinessLessons"])) + '</p>'
+
         for world, units in data["worlds"].items():
             rows = []
             units_total = []
@@ -279,7 +289,9 @@ class Dashboard:
             ((label, *(count(data["stages"][kind][stage]) for stage in STAGE_LABELS)) for kind, label in KINDS.items()),
         )
         approval += "<p>Stage counts reflect recorded evidence. Provisional acceptance applies to the initial outline. Production requires per-record approval.</p>"
-        approval += table(("Source status", "Distinct sources"),
+        if handoff := data.get("handoff"):
+            approval += table(("Open queue category", "Items"), handoff["correctionQueue"].items())
+        approval += table(("Source status", "Scoped source records"),
                           ((key.replace("_", " "), count(total)) for key, total in data["sources"].items()))
         extras = table(
             ("Content", "Records", "Draft", "Final approval", "Integrated"),

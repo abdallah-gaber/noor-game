@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Project a small local authoring sample into an Android debug build define."""
 
-import hashlib
 import json
 from pathlib import Path
+
+from curriculum_handoff import ENHANCEMENT, challenge, read_json, verify_inputs
 
 ROOT = Path(__file__).resolve().parents[1]
 DRAFTS = ROOT / 'docs/curriculum/drafts'
@@ -14,43 +15,6 @@ SELECTION = (
     ('noor-content-004/seerah.json', 'S11'),
     ('noor-content-005/exemplars.json', 'P01'),
 )
-
-
-def read_json(path):
-    return json.loads(path.read_bytes())
-
-
-def option(record):
-    return {'id': record['id'], 'label': record['textAr']}
-
-
-def challenge(record):
-    kind = {
-        'multiple_choice': 'multipleChoice', 'true_false': 'trueFalse',
-        'flashcard': 'flashcard', 'matching': 'matching', 'ordering': 'ordering',
-    }[record['type']]
-    result = {
-        'schema': 1, 'type': kind, 'id': record['id'],
-        'prompt': record['promptAr'], 'explanation': record['explanationAr'],
-        'knowledgeIds': record['knowledgeIds'], 'sourceRefs': record['sourceRefs'],
-    }
-    if kind in ('multipleChoice', 'trueFalse'):
-        correct, = record['correctOptionIds']
-        result.update(correctOptionId=correct, options=list(map(option, record['options'])))
-    elif kind == 'flashcard':
-        result['answer'] = record['answerAr']
-    elif kind == 'matching':
-        result['pairs'] = [
-            {side: {'id': pair[side + 'Id'], 'label': pair[side + 'Ar']}
-             for side in ('left', 'right')}
-            for pair in record['pairs']
-        ]
-    else:
-        result.update(items=list(map(option, record['items'])),
-                      correctOrder=record['correctOrderIds'])
-    if 'sourceRefsByKnowledge' in record:
-        result['sourceRefsByKnowledge'] = record['sourceRefsByKnowledge']
-    return result
 
 
 def project_lesson(pack, lesson_id, additions):
@@ -89,12 +53,8 @@ def project_lesson(pack, lesson_id, additions):
 
 def main():
     OUTPUT.unlink(missing_ok=True)
-    authoring = DRAFTS / 'noor-content-007'
-    audit = read_json(authoring / 'audit.json')
-    for name, expected in audit['inputSha256'].items():
-        if hashlib.sha256((DRAFTS / name).read_bytes()).hexdigest() != expected:
-            raise ValueError(f'CONTENT-007 input digest differs for {name}')
-    enhancement = read_json(authoring / 'enhancement.json')
+    verify_inputs(DRAFTS)
+    enhancement = read_json(DRAFTS / ENHANCEMENT)
     lessons = [
         project_lesson(read_json(DRAFTS / path), lesson_id, enhancement['additions'])
         for path, lesson_id in SELECTION

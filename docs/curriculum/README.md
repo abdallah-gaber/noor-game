@@ -10,3 +10,11 @@ Use the [curriculum roadmap](roadmap.md) and [season plan](season-one.json) for 
 A knowledge unit holds one teachable idea, child-facing Arabic, verified source locators and optional parent notes. Variants independently reference knowledge units, carry a mechanic and difficulty, and include reviewed answers and explanations. Reordering the same options does not produce another variant. Keep memorization aids and optional knowledge treasures as individually reviewed and rights-cleared records. The authoring track supplies established material, authentic Qur'an and Hadith content, alongside reviewed Arabic narration.
 
 [Offline pack schema and synthetic examples](pack-schema.md) describe versioning, graph validation, trusted record approvals and progress migration.
+
+## Consolidated owner review
+
+Run `python3 scripts/generate_curriculum_review.py` from the checkout with CONTENT-001–007 under the local planning and draft directories. Open `.dart_tool/noor-curriculum-review/index.html`. The command produces the private HTML, the versioned review bundle and the correction queue, then refreshes the public-safe inventory and Mission Control. GitHub Actions uses the checked-in aggregate snapshot.
+
+Start with Prayer readiness and the Correction queue. The dashboard links findings to affected variants and source locators. Use the Record ID field to jump to individual lessons, knowledge units, variants or extras. Carry decisions back to the canonical authoring files. Apply any approved correction to its linked questions and explanations before producing a new review snapshot. A new source edit requires a corresponding CONTENT-007 audit update from the authoring track.
+
+The private review schema preserves the original versioned documents and IDs, adds normalized game definitions and records lesson requirements for cross-lesson variants. Source identifiers stay scoped to their owning pack. It records structural checks separately from human verification, rights and final hash approval. The review bundle has no production channel or approval ledger. Records enter production through the existing [pack contract](pack-schema.md) after the consolidated human review.

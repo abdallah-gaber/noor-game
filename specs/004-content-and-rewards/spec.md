@@ -11,7 +11,7 @@
 
 Curriculum production is a separate track. See the [curriculum roadmap](../../docs/curriculum/roadmap.md). P1 deferral requires a documented reason and owner review.
 
-Prioritize a prayer-readiness learning path. The canon has no matching or ordering draft records. Fill both coverage gaps through the authoring and review track. The owner’s provisional acceptance of existing drafts is subject to corrections and final source verification.
+Prioritize a prayer-readiness learning path. CONTENT-007 supplies draft matching and ordering, including cross-lesson variants for later mixed review. The owner’s provisional acceptance of existing drafts is subject to corrections and final source verification.
 
 ## 004-01 acceptance
 
@@ -34,3 +34,10 @@ Prioritize a prayer-readiness learning path. The canon has no matching or orderi
 | The reviewed input files or references differ from the expected draft graph | The local adapter prepares the pilot | Preparation fails before a new payload is emitted |
 
 The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-006 extras, open editorial corrections, further conversion and final approval remain on the separate authoring track.
+
+## 004-02 curriculum handoff acceptance
+
+- Import CONTENT-001 planning and CONTENT-002–007 draft evidence into one private, independently versioned review snapshot. Preserve all native IDs and source references. Track outlined, structurally validated and finally approved items separately.
+- Validate the whole draft graph, including authored answer definitions, scoped sources, cross-lesson knowledge, and ordered prayer readiness. Keep cross-lesson variants available for later mixed review.
+- Preserve proposals as an open correction queue and identify affected variant IDs. Show unresolved source verification and reuse rights separately. Reconcile draft and blueprint differences without changing authored text.
+- Generate browsable private review HTML and machine-readable records and queue. Regenerate public Mission Control from the same analysis using aggregate data and stable identifiers. Existing production activation remains the gate for any child content.

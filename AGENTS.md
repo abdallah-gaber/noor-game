@@ -5,7 +5,7 @@ Read the constitution, product, architecture, curriculum workflow and decision l
 ## Task workflow
 
 1. Refine the specification, plan and acceptance checks before implementation. Mark the task `doing` in `docs/mission-control/progress.json`.
-2. Implement only that task, then run relevant formatting, analysis and tests.
+2. Implement only that task, then run targeted tests and static analysis. Reserve full regression, platform builds and comprehensive QA for SPEC boundaries.
 3. Capture actual evidence and record commands, results, commit references and screenshots in `docs/qa`. Update status and documentation. Regenerate Mission Control with `python3 scripts/generate_dashboard.py`. Never edit the generated HTML.
 4. Review the staged diff, make one atomic task commit and push the feature branch immediately. Verify the commit is on the remote. A task is fully delivered when its verified commit is published. If publishing fails, preserve the local commit, record the error and report the delivery blocker.
 
@@ -16,3 +16,5 @@ Before moving to the next specification, report completed tasks, blockers, tests
 ## Mission Control and curriculum
 
 Generate the standalone dashboard with `python3 scripts/generate_dashboard.py` and open `docs/mission-control/index.html`. Refresh the structure-only inventory from local canonical packs with `python3 scripts/content_inventory.py` when authoring updates arrive. Review the sanitized export and keep the draft payloads local. [Published dashboard](https://abdallah-gaber.github.io/noor-game/) · [Deployment and publication allowlist workflow](docs/mission-control/deployment.md)
+
+Advance within the authorized specification after each verified push. Consolidate owner reviews at the requested checkpoint.
