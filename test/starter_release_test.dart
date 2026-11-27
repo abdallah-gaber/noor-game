@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/app/noor_app.dart';
+import 'package:noor/audio/speech_service.dart';
 import 'package:noor/challenges/arrangement.dart';
 import 'package:noor/challenges/flashcard.dart';
 import 'package:noor/challenges/game_session.dart';
@@ -23,6 +24,8 @@ import 'package:noor/progress/reward_store.dart';
 import 'package:noor/review/review_history.dart';
 import 'package:noor/review/review_selection.dart';
 import 'package:noor/review/review_store.dart';
+import 'package:noor/settings/settings_controller.dart';
+import 'package:noor/settings/settings_store.dart';
 import 'package:noor/storage/noor_database.dart';
 
 import 'progress_test_support.dart';
@@ -67,6 +70,61 @@ void main() {
   });
 
   testWidgets(
+    'pack patch preserves lesson identities and shows release notes',
+    (tester) async {
+      final updated = catalog.packs['starter.iman']!;
+      expect(updated.version.toString(), '0.1.2');
+      final previousPacks = [
+        for (final pack in catalog.packs.values)
+          if (pack.id == updated.id)
+            PackDocument.decode(
+              jsonEncode({
+                'schema': PackDocument.schema,
+                'packId': pack.id,
+                'version': '0.1.1',
+                'channel': pack.channel.name,
+                'records': [
+                  for (final record in pack.records.values) record.data,
+                ],
+              }),
+            )
+          else
+            pack,
+      ];
+      final ledger = ApprovalLedger.decodeTrusted(
+        File('assets/curriculum/approvals.json').readAsStringSync(),
+      );
+      const ingestor = CatalogIngestor();
+      final previous = ingestor.activate(previousPacks, approvals: ledger);
+      final patched = ingestor.activate(
+        [updated],
+        approvals: ledger,
+        previous: previous,
+      );
+      final original = previous.toCurriculum();
+      final current = patched.toCurriculum();
+      expect(current.version, isNot(original.version));
+      for (final world in WorldId.values) {
+        for (final unit in original.unitsFor(world)) {
+          for (final lesson in unit.lessons) {
+            expect(
+              current.lesson(world, lesson.id)?.contentRevision,
+              lesson.contentRevision,
+            );
+          }
+        }
+      }
+
+      final router = createNoorRouter(catalog: catalog, enablePreview: false);
+      addTearDown(router.dispose);
+      await tester.pumpWidget(ProviderScope(child: NoorApp(router: router)));
+      await tester.pumpAndSettle();
+      expect(find.text('ما الجديد؟'), findsOneWidget);
+      expect(find.text(catalog.releaseNotes.single), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'approved lessons play all mechanics, resume and drive learning tools',
     (tester) async {
       final progress = MemoryProgressStore();
@@ -74,6 +132,15 @@ void main() {
       final review = _ApprovedReview(rounds);
       final curriculum = catalog.toCurriculum();
       final exercised = <Object>{};
+      final effects = <String>[];
+      final messenger = tester.binding.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(PlatformSpeech.channel, (call) async {
+        if (call.method == 'effect') effects.add(call.arguments as String);
+        return null;
+      });
+      addTearDown(
+        () => messenger.setMockMethodCallHandler(PlatformSpeech.channel, null),
+      );
 
       Future<void> launch(String location) async {
         final router = createNoorRouter(
@@ -86,6 +153,7 @@ void main() {
           ProviderScope(
             key: ValueKey(router),
             overrides: [
+              settingsProvider.overrideWith(_EnabledAudioSettings.new),
               progressStoreProvider.overrideWithValue(progress),
               gameStoreProvider.overrideWithValue(rounds),
               rewardsProvider(ProgressScope.approved)
@@ -161,6 +229,7 @@ void main() {
         ArrangementKind.matching,
         ArrangementKind.ordering,
       });
+      expect(effects, containsAll(['tap', 'correct', 'complete']));
       expect(rounds.rewards().xp, 20);
       expect(progress.value.records, isEmpty);
 
@@ -202,6 +271,12 @@ Future<void> _tap(
   await tester.ensureVisible(target);
   await tester.tap(target);
   await tester.pumpAndSettle();
+}
+
+class _EnabledAudioSettings extends SettingsController {
+  @override
+  Future<SettingsState> build() async =>
+      (preferences: const AudioPreferences(), saving: false);
 }
 
 class _ApprovedRounds implements GameStore {

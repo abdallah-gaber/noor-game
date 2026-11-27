@@ -3,12 +3,14 @@
 import argparse
 from collections import Counter
 import json
+import re
 
 from curriculum_handoff import ROOT, require, visible
 from curriculum_review_patch import digest, json_bytes
 from starter_candidate import OUTPUT
 
 RECEIPT = ROOT / "docs/curriculum/starter-release.json"
+RELEASES = ROOT / "docs/curriculum/releases.json"
 CANDIDATE = ROOT / OUTPUT
 DESTINATION = ROOT / "assets/curriculum"
 
@@ -92,12 +94,38 @@ def release_files(receipt, manifest_bytes, read_pack):
     return files
 
 
+def apply_pack_releases(files, releases):
+    """Project engineering-only version bumps after verifying all record bytes."""
+    index = json.loads(files["index.json"])
+    notes = []
+    version_pattern = r"(0|[1-9][0-9]{0,8})(?:\.(0|[1-9][0-9]{0,8})){2}"
+    for entry in releases:
+        pack_id, version = entry["packId"], entry["version"]
+        require(pack_id in index["packIds"] and re.fullmatch(version_pattern, version)
+                and visible(entry["whatsNew"]), f"Invalid release metadata for {pack_id}")
+        name = f"packs/{pack_id}.json"
+        pack = json.loads(files[name])
+        version_tuple = tuple(map(int, version.split(".")))
+        previous = tuple(map(int, pack["version"].split(".")))
+        require(version_tuple > previous and version_tuple[:2] == previous[:2],
+                f"Expected increasing compatible patch version for {pack_id}")
+        pack["version"] = version
+        files[name] = json_bytes(pack)
+        notes = [note for note in notes if note["packId"] != pack_id]
+        notes.append({key: entry[key] for key in ("packId", "version", "whatsNew")})
+    if notes:
+        index["releaseNotes"] = notes
+        files["index.json"] = json_bytes(index)
+    return files
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     files = release_files(json.loads(RECEIPT.read_bytes()), (CANDIDATE / "approval-request.json").read_bytes(),
                           lambda id: (CANDIDATE / f"{id}.json").read_bytes())
+    files = apply_pack_releases(files, json.loads(RELEASES.read_bytes())["releases"])
     existing = {file.relative_to(DESTINATION).as_posix() for file in DESTINATION.rglob("*") if file.is_file()}
     require(existing <= files.keys(), "Unexpected app curriculum assets")
     for name, data in files.items():

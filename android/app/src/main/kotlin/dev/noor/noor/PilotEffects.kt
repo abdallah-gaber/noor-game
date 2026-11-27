@@ -4,21 +4,22 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.media.AudioAttributes
 import android.media.SoundPool
+import android.os.SystemClock
 import android.util.Log
+import io.flutter.FlutterInjector
 
 internal class PilotEffects(private val context: Context) {
-    private val sounds = mapOf(
-        "tap" to R.raw.noor_tap, "correct" to R.raw.noor_correct,
-        "retry" to R.raw.noor_retry, "complete" to R.raw.noor_complete,
-    )
+    private val holdMillis = mapOf("tap" to 66L, "correct" to 230L, "retry" to 158L, "complete" to 336L)
     private val samples = mutableMapOf<String, Int>()
     private val ready = mutableSetOf<Int>()
     private var pool: SoundPool? = null
     private var stream = 0
+    private var protectUntil = 0L
     private var pending: String? = null
 
     fun play(name: String) {
-        if (name !in sounds) return
+        val duration = holdMillis[name] ?: return
+        if (name == "tap" && SystemClock.uptimeMillis() < protectUntil) return
         val player = pool ?: SoundPool.Builder()
             .setMaxStreams(1)
             .setAudioAttributes(
@@ -34,17 +35,27 @@ internal class PilotEffects(private val context: Context) {
                         if (next != null && samples[next] == sample) play(next)
                     }
                 }
-                for ((effect, resource) in sounds) {
-                    samples[effect] = created.load(context, resource, 1)
+                val loader = FlutterInjector.instance().flutterLoader()
+                for (effect in holdMillis.keys) {
+                    val asset = loader.getLookupKeyForAsset("assets/audio/noor_$effect.wav")
+                    try {
+                        context.assets.openFd(asset).use { descriptor ->
+                            val sample = created.load(descriptor, 1)
+                            if (sample != 0) samples[effect] = sample
+                        }
+                    } catch (_: java.io.IOException) {
+                        // Missing audio is optional and must not interrupt play.
+                    }
                 }
             }
-        val sample = samples.getValue(name)
+        val sample = samples[name] ?: return
         if (sample !in ready) {
             pending = name
             return
         }
         stop()
-        stream = player.play(sample, 0.78f, 0.78f, 1, 0, 1f)
+        stream = player.play(sample, 1f, 1f, 1, 0, 1f)
+        if (name != "tap" && stream != 0) protectUntil = SystemClock.uptimeMillis() + duration
         if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
             Log.d("NoorAudio", "effect=$name streamStarted=${stream != 0}")
         }
@@ -54,6 +65,7 @@ internal class PilotEffects(private val context: Context) {
         pending = null
         if (stream != 0) pool?.stop(stream)
         stream = 0
+        protectUntil = 0L
     }
 
     fun dispose() {

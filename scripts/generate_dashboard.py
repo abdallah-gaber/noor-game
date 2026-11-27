@@ -51,6 +51,7 @@ for phase, folder in enumerate(("foundation", "learning-worlds", "game-engine",
 for name in (
     "000-baseline", "001-local-storage", "002-platform-speech", "003-foundation-acceptance",
     "004-lesson-progress", "005-offline-speech-implementation", "006-spec-002-acceptance",
+    "007-android-release-signing",
 ):
     PUBLIC_FILES.add(f"docs/decisions/{name}.md")
 for folder, names in {
@@ -96,6 +97,15 @@ for folder, names in {
         "tablet-speech-fallback.webp",
         "tablet-true-false-feedback.webp",
         "tablet-true-false.webp",
+    ),
+    "spec-005": (
+        "005-01-toolchain.md", "005-02-layouts.md", "005-03-effects.md", "005-04-owner-playtest.md",
+        "phone-audio-settings.png", "005-06-physical-android.md",
+        "physical-portrait-lesson.png", "physical-landscape-lesson.png",
+        "005-05-release-candidate.md", "005-05-branding.md", "android-9-noor-splash.png", "android-15-noor-splash.png", "upgrade-before-history.png", "upgrade-after-history.png",
+        "upgrade-whats-new.png", "ipad-simulator-home.png",
+        "phone-home.png", "phone-lesson.png", "phone-large-text-settings.png",
+        "tablet-home.png", "tablet-lesson.png", "tablet-landscape-lesson.png",
     ),
     "spec-004": (
         "004-01-curriculum-packs.md", "004-02-curriculum-handoff.md",

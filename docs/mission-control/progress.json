@@ -1,6 +1,6 @@
 {
   "project": "Noor / نور",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "phases": [
     {
       "id": "001",
@@ -285,49 +285,49 @@
         {
           "id": "005-01",
           "title": "Run format, analysis and automated tests",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": ["docs/qa/spec-005/005-01-toolchain.md"],
+          "note": "Pinned format, analysis, starter tests and dashboard tests passed. Release signing configured.",
           "priority": "P0"
         },
         {
           "id": "005-02",
           "title": "Capture actual tablet and phone screenshots",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": ["docs/qa/spec-005/005-02-layouts.md"],
+          "note": "Signed baseline captured on offline Android phone and tablet emulators. 19 accessibility tests passed.",
           "priority": "P0"
         },
         {
           "id": "005-03",
           "title": "Verify readable Arabic and optional effects on device",
-          "status": "todo",
-          "evidence": [],
-          "note": "Verify readable Arabic and optional non-musical effects on the devices. System TTS and bundled narration are future enhancements.",
+          "status": "done",
+          "evidence": ["docs/qa/spec-005/005-03-effects.md"],
+          "note": "Offline native playback, opt-out and readable Arabic verified on an emulator and the connected physical tablet. Speaker comfort remains for owner listening.",
           "priority": "P0"
         },
         {
           "id": "005-04",
           "title": "Run supervised child playtest and record observations",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "review",
+          "evidence": ["docs/qa/spec-005/005-04-owner-playtest.md"],
+          "note": "Separate owner milestone. Anonymized observation guide prepared. No child observations collected.",
           "priority": "P0"
         },
         {
           "id": "005-06",
           "title": "Verify release on the child’s physical low-end Android tablet",
-          "status": "todo",
-          "evidence": [],
-          "note": "Owner moved this physical release gate from SPEC-001. Record anonymized offline, layout and responsiveness observations.",
+          "status": "blocked",
+          "evidence": ["docs/qa/spec-005/005-06-physical-android.md"],
+          "note": "Airplane-mode smoke passed on the available Android 16 tablet. The designated low-end tablet was unavailable.",
           "priority": "P0"
         },
         {
           "id": "005-05",
           "title": "Resolve release blockers and regenerate tracker",
-          "status": "todo",
-          "evidence": [],
-          "note": "Confirm playable pilot coverage, pack upgrade continuity and the release content gates.",
+          "status": "review",
+          "evidence": ["docs/qa/spec-005/005-05-release-candidate.md", "docs/qa/spec-005/005-05-branding.md"],
+          "note": "Signed 0.1.1 build 5 includes Noor launcher and splash branding. Low-end gate awaits the designated tablet.",
           "priority": "P0"
         }
       ]

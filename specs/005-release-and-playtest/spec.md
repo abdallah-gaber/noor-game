@@ -10,6 +10,7 @@
 - Verify the release candidate on the child’s physical low-end Android tablet (005-06). Given the installed candidate in airplane mode, when an adult exercises launch, both orientations, world and lesson navigation, mascot reactions, background/resume and a full restart, then controls respond comfortably, settings and progress persist, and no crashes, obvious visual stalls or layout failures occur. Record the build, non-identifying hardware and OS details, rendering and responsiveness observations, and actual screenshot evidence where appropriate. An emulator cannot satisfy this gate.
 
 ## Gates
+- Launcher branding (005-05). Given a fresh install or signed update, the app appears as نور with the Noor lantern. Verify Android adaptive and legacy launcher rendering, the monochrome layer for themed launchers, and the iOS AppIcon catalog. Check that the update retains existing learning state. Cold launch on Android 12+, older Android and iOS shows a centered Noor lantern on the warm home background. Check for a clean transition to the home screen without an artificial delay, white flash or Flutter logo.
 Follow constitution and product/architecture docs. Record concrete acceptance scenarios before coding; tests and real screenshots where applicable. P1 items may be deferred with reason, not counted done.
 
 ## Pilot and pack release

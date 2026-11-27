@@ -1,7 +1,7 @@
 name: noor
 description: Arabic, tablet-first learning game foundation.
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.1+5
 
 environment:
   sdk: '3.13.7'
@@ -25,6 +25,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/
     - assets/curriculum/index.json
     - assets/curriculum/approvals.json
     - assets/curriculum/packs/starter.iman.json

@@ -139,7 +139,7 @@ void main() {
 
     bool value(Finder finder) => tester.widget<SwitchListTile>(finder).value;
     expect(value(speech), isFalse);
-    expect(value(effects), isFalse);
+    expect(value(effects), isTrue);
 
     final pendingSave = store.pendingSave = Completer<void>();
     await tester.tap(speech);
@@ -149,20 +149,22 @@ void main() {
     pendingSave.complete();
     await tester.pumpAndSettle();
     expect(value(speech), isTrue);
-    expect(value(effects), isFalse);
+    expect(value(effects), isTrue);
 
     store.failSave = true;
     await tester.tap(effects);
     await tester.pumpAndSettle();
     expect(find.text('تعذّر حفظ الإعدادات. حاول مرة أخرى.'), findsOneWidget);
-    expect(value(effects), isFalse);
+    expect(value(effects), isTrue);
 
     store.failSave = false;
     await tester.tap(effects);
     await tester.pumpAndSettle();
     expect(store.saved.speech, isTrue);
-    expect(store.saved.effects, isTrue);
-    expect(value(effects), isTrue);
+    expect(store.saved.effects, isFalse);
+    expect(value(effects), isFalse);
+    await _start(tester, store: store, location: '/settings');
+    expect(value(effects), isFalse);
   });
 
   testWidgets('a failed load can be retried from settings', (tester) async {

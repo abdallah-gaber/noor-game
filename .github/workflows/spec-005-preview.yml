@@ -1,0 +1,27 @@
+name: SPEC-005 Mission Control preview
+
+on:
+  push:
+    branches:
+      - feat/spec-005-release-and-playtest
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s scripts -p test_mission_control.py
+      - name: Build preview snapshot
+        run: |
+          python3 scripts/generate_dashboard.py --pages-dir _site \
+            --source-branch "$GITHUB_REF_NAME" --source-sha "$GITHUB_SHA" \
+            --updated-at "$(git show -s --format=%cI HEAD)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spec-005-mission-control
+          path: _site

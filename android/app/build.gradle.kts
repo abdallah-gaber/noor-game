@@ -4,6 +4,10 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val releaseStore = providers.environmentVariable("NOOR_RELEASE_STORE_FILE")
+val releasePassword = providers.environmentVariable("NOOR_RELEASE_STORE_PASSWORD")
+val releaseAlias = providers.environmentVariable("NOOR_RELEASE_KEY_ALIAS")
+
 android {
     namespace = "dev.noor.noor"
     compileSdk = flutter.compileSdkVersion
@@ -30,6 +34,16 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("noorRelease") {
+            storeFile = file(releaseStore.orElse("missing-noor-release-keystore").get())
+            storeType = "PKCS12"
+            storePassword = releasePassword.orNull
+            keyAlias = releaseAlias.orNull
+            keyPassword = releasePassword.orNull
+        }
+    }
+
     buildTypes {
         debug {
             if (providers.gradleProperty("noorAdultReview").orNull == "true") {
@@ -38,11 +52,29 @@ android {
             }
         }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("noorRelease")
+            if (providers.gradleProperty("noorDeviceQa").orNull == "true") {
+                applicationIdSuffix = ".deviceqa"
+                manifestPlaceholders["noorAppLabel"] = "نور — اختبار الجهاز"
+            }
         }
     }
+}
+
+val verifyNoorReleaseSigning = tasks.register("verifyNoorReleaseSigning") {
+    doLast {
+        require(
+            !releaseStore.orNull.isNullOrBlank() &&
+                !releasePassword.orNull.isNullOrBlank() &&
+                !releaseAlias.orNull.isNullOrBlank(),
+        ) {
+            "Set NOOR_RELEASE_STORE_FILE, NOOR_RELEASE_STORE_PASSWORD and NOOR_RELEASE_KEY_ALIAS."
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name == "preReleaseBuild") dependsOn(verifyNoorReleaseSigning)
 }
 
 kotlin {

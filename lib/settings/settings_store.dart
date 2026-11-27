@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../storage/noor_database.dart';
 
 class AudioPreferences {
-  const AudioPreferences({this.speech = false, this.effects = false});
+  const AudioPreferences({this.speech = false, this.effects = true});
 
   final bool speech;
   final bool effects;

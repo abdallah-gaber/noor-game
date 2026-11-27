@@ -1,7 +1,8 @@
 import json
 import unittest
 
-from release_starter import CANDIDATE, DESTINATION, RECEIPT, release_files, scoped_claim_evidence
+from release_starter import (CANDIDATE, DESTINATION, RECEIPT, RELEASES, apply_pack_releases,
+                             release_files, scoped_claim_evidence)
 
 
 class ScopedReleaseTests(unittest.TestCase):
@@ -21,7 +22,15 @@ class ScopedReleaseTests(unittest.TestCase):
         read_pack = lambda id: (CANDIDATE / f"{id}.json").read_bytes()
         assets = release_files(receipt, manifest, read_pack)
         self.assertEqual(len(assets), 6)
-        self.assertTrue(all((DESTINATION / name).read_bytes() == data for name, data in assets.items()))
+        projected = apply_pack_releases(dict(assets), json.loads(RELEASES.read_bytes())["releases"])
+        self.assertTrue(all((DESTINATION / name).read_bytes() == data for name, data in projected.items()))
+        self.assertEqual(projected["approvals.json"], assets["approvals.json"])
+        packs = [name for name in assets if name.startswith("packs/")]
+        for name in packs:
+            reference = json.loads(assets[name])
+            actual = json.loads(projected[name])
+            actual["version"] = reference["version"]
+            self.assertEqual(actual, reference)
         with self.assertRaisesRegex(ValueError, "Approval request SHA-256 differs"):
             release_files(receipt, manifest + b"\n", read_pack)
 

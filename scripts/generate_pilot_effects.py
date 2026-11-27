@@ -1,31 +1,53 @@
 #!/usr/bin/env python3
-"""Create Noor's original offline foley cues from enveloped noise."""
+"""Create Noor's short offline foley cues with enveloped, filtered noise."""
 
+from math import cos, pi
 from pathlib import Path
 from random import Random
 import struct
 import wave
 
-RATE = 16000
-OUT = Path(__file__).resolve().parents[1] / "android/app/src/main/res/raw"
-# Each tuple is (offset, duration, level, smoothing). No melody or instruments.
+RATE = 24000
+OUT = Path(__file__).resolve().parents[1] / "assets/audio"
+# Peak amplitude and gestures (offset, duration, weight, fast/slow smoothing).
+# The different patterns resemble a soft click, two bright pops, a muted
+# brush, and a longer burst of paper confetti. There are no pitched notes.
 CUES = {
-    "tap": [(0, .045, .24, .32)],
-    "correct": [(0, .064, .63, .30), (.076, .100, .48, .46)],
-    "retry": [(0, .148, .66, .14)],
-    "complete": [(0, .081, .56, .24), (.084, .085, .55, .35), (.174, .125, .50, .47)],
+    "tap": (.54, [(0, .066, 1, .24, .035)]),
+    "correct": (.68, [(0, .09, 1, .24, .040), (.105, .125, .95, .43, .080)]),
+    "retry": (.40, [(0, .158, 1, .13, .022)]),
+    "complete": (.71, [
+        (0, .105, 1, .16, .030),
+        (.086, .120, .93, .29, .042),
+        (.176, .160, .92, .38, .055),
+    ]),
 }
 
-for cue, gestures in CUES.items():
-    samples = [0.0] * (round(max(start + duration for start, duration, *_ in gestures) * RATE) + 1)
-    rng = Random(cue)
-    for start, duration, level, smoothing in gestures:
-        state = 0.0
+
+def write_cue(name, peak, gestures):
+    length = round(max(start + duration for start, duration, *_ in gestures) * RATE)
+    samples = [0.0] * (length + 1)
+    rng = Random(name)
+    for start, duration, weight, fast, slow in gestures:
+        first = round(start * RATE)
         count = round(duration * RATE)
+        attack = round((.022 if name == "retry" else .009) * RATE)
+        fast_state = slow_state = 0.0
         for i in range(count):
-            state += smoothing * (rng.uniform(-1, 1) - state)
-            envelope = min(i / 80, 1) * (1 - i / count) ** 1.7
-            samples[round(start * RATE) + i] += state * level * envelope
-    with wave.open(str(OUT / f"noor_{cue}.wav"), "wb") as audio:
+            noise = rng.uniform(-1, 1)
+            fast_state += fast * (noise - fast_state)
+            slow_state += slow * (noise - slow_state)
+            rise = (1 - cos(pi * min(i / attack, 1))) / 2
+            decay = (1 + cos(pi * i / count)) / 2
+            samples[first + i] += (fast_state - slow_state) * weight * rise * decay
+    scale = peak * 32767 / max(map(abs, samples))
+    pcm = [round(value * scale) for value in samples]
+    with wave.open(str(OUT / f"noor_{name}.wav"), "wb") as audio:
         audio.setparams((1, 2, RATE, 0, "NONE", "not compressed"))
-        audio.writeframes(struct.pack(f"<{len(samples)}h", *(round(value * 32767) for value in samples)))
+        audio.writeframes(struct.pack(f"<{len(pcm)}h", *pcm))
+
+
+if __name__ == "__main__":
+    OUT.mkdir(parents=True, exist_ok=True)
+    for cue, (peak, gestures) in CUES.items():
+        write_cue(cue, peak, gestures)
