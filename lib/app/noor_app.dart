@@ -10,6 +10,7 @@ import '../challenges/game_screen.dart';
 import '../content/curriculum.dart';
 import '../content/packs/catalog.dart';
 import '../design_system/noor_theme.dart';
+import '../home/adult_review_screen.dart';
 import '../home/home_screen.dart';
 import '../home/preview_screen.dart';
 import '../lesson/lesson_screen.dart';
@@ -22,18 +23,50 @@ GoRouter createNoorRouter({
   String? initialLocation,
   bool enablePreview = true,
   IntegratedCatalog? catalog,
+  Curriculum? draftPilot,
 }) {
   final showPreview = kDebugMode && enablePreview;
+  final pilot =
+      showPreview &&
+          draftPilot != null &&
+          draftPilot.isPreview &&
+          draftPilot.isDraftPilot
+      ? draftPilot
+      : null;
   final curriculum =
-      catalog?.toCurriculum() ?? loadCurriculum(enablePreview: enablePreview);
+      pilot ??
+      catalog?.toCurriculum() ??
+      loadCurriculum(enablePreview: enablePreview);
+  var adultConfirmed = false;
 
   return GoRouter(
     initialLocation: initialLocation,
+    redirect: (context, state) {
+      if (pilot == null) return null;
+      if (state.uri.path == '/adult-review') {
+        adultConfirmed = false;
+        return null;
+      }
+      return adultConfirmed ? null : '/adult-review';
+    },
     onException: (context, state, router) => router.go('/'),
     routes: [
+      if (pilot != null)
+        GoRoute(
+          path: '/adult-review',
+          builder: (context, state) => AdultReviewScreen(
+            onConfirm: () {
+              adultConfirmed = true;
+              context.go('/');
+            },
+          ),
+        ),
       GoRoute(
         path: '/',
-        builder: (context, state) => HomeScreen(showPreview: showPreview),
+        builder: (context, state) => HomeScreen(
+          showPreview: showPreview && pilot == null,
+          pilotWorlds: pilot?.units.keys,
+        ),
         routes: [
           GoRoute(
             path: 'settings',
@@ -135,7 +168,8 @@ GoRouter createNoorRouter({
           ),
           GoRoute(
             path: 'preview',
-            redirect: (context, state) => showPreview ? null : '/',
+            redirect: (context, state) =>
+                showPreview && pilot == null ? null : '/',
             builder: (context, state) => const PreviewScreen(),
             routes: [
               GoRoute(

@@ -8,9 +8,10 @@ import '../worlds/world_art.dart';
 import 'noor_lantern.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.showPreview});
+  const HomeScreen({super.key, required this.showPreview, this.pilotWorlds});
 
   final bool showPreview;
+  final Iterable<WorldId>? pilotWorlds;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,16 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (pilotWorlds != null) ...[
+              const Text(draftPilotLabel),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton(
+                  onPressed: () => context.go('/adult-review'),
+                  child: const Text('إنهاء مراجعة المسودات'),
+                ),
+              ),
+            ],
             const _WelcomePanel(),
             const SizedBox(height: 22),
             Semantics(
@@ -56,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                   runSpacing: gap,
                   spacing: gap,
                   children: [
-                    for (final world in WorldId.values)
+                    for (final world in pilotWorlds ?? WorldId.values)
                       SizedBox(width: cardWidth, child: _WorldTile(world)),
                   ],
                 );

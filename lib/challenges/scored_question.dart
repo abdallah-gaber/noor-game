@@ -62,7 +62,16 @@ class ScoredQuestion implements ChallengeDefinition {
   final List<AnswerOption> options;
   final String correctOptionId;
 
-  factory ScoredQuestion.fromJson(Map<String, Object?> json) {
+  factory ScoredQuestion.fromJson(Map<String, Object?> json) =>
+      ScoredQuestion._decode(json, draftTrueFalse: false);
+
+  factory ScoredQuestion.fromDraftTrueFalse(Map<String, Object?> json) =>
+      ScoredQuestion._decode(json, draftTrueFalse: true);
+
+  factory ScoredQuestion._decode(
+    Map<String, Object?> json, {
+    required bool draftTrueFalse,
+  }) {
     final identity = ChallengeIdentity.fromJson(json);
     final kind = switch (json['type']) {
       'multipleChoice' => QuestionKind.multipleChoice,
@@ -70,7 +79,10 @@ class ScoredQuestion implements ChallengeDefinition {
       _ => throw const FormatException('Unsupported question type'),
     };
     final List<AnswerOption> options;
-    if (kind == QuestionKind.trueFalse) {
+    if (draftTrueFalse && kind != QuestionKind.trueFalse) {
+      throw const FormatException('Expected a draft true/false question');
+    }
+    if (kind == QuestionKind.trueFalse && !draftTrueFalse) {
       if (json.containsKey('options')) {
         throw const FormatException('True/false uses the fixed options');
       }
@@ -81,6 +93,13 @@ class ScoredQuestion implements ChallengeDefinition {
         throw const FormatException('Expected two to four choices');
       }
       options = List.unmodifiable(entries.map(AnswerOption.fromJson));
+      if (draftTrueFalse &&
+          (options.length != 2 ||
+              !{'صحيح', 'خطأ'}.every(
+                (label) => options.any((option) => option.label == label),
+              ))) {
+        throw const FormatException('Expected one true and one false label');
+      }
     }
     validateOptions(options);
     final correctId = challengeId(json['correctOptionId']);
@@ -105,7 +124,7 @@ class ScoredQuestion implements ChallengeDefinition {
     'prompt': prompt,
     'explanation': explanation,
     'correctOptionId': correctOptionId,
-    if (kind == QuestionKind.multipleChoice)
+    if (!identical(options, _booleanOptions))
       'options': [for (final option in options) option.toJson()],
   };
 

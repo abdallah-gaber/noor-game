@@ -227,9 +227,9 @@
         {
           "id": "004-02",
           "title": "Coordinate pilot content and Season One production",
-          "status": "todo",
-          "evidence": [],
-          "note": "Draft packs provisionally accepted subject to corrections and final source verification. Prioritize prayer readiness and author matching and ordering variants.",
+          "status": "review",
+          "evidence": ["docs/qa/spec-004/004-02-adult-review-pilot.md"],
+          "note": "Four-world adult-review pilot with 15 draft variants across five mechanics, including practical ablution. Focused tests and analysis passed. Owner playthrough and broader authoring remain pending.",
           "priority": "P0"
         },
         {

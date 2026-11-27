@@ -119,7 +119,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (widget.curriculum.isPreview) const Text(previewLabel),
+              if (widget.curriculum.isPreview)
+                Text(widget.curriculum.reviewLabel),
               if (_error)
                 Semantics(
                   liveRegion: true,

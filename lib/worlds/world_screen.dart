@@ -56,7 +56,10 @@ class WorldScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (curriculum.isPreview)
-                        Text(previewLabel, style: TextStyle(color: world.ink)),
+                        Text(
+                          curriculum.reviewLabel,
+                          style: TextStyle(color: world.ink),
+                        ),
                       for (final unit in units)
                         LearningPath(
                           unit: unit,

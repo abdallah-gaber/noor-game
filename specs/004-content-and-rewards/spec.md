@@ -23,3 +23,14 @@ Prioritize a prayer-readiness learning path. The canon has no matching or orderi
 | A cross-world path marked prayer readiness | The integrated catalog is inspected | The path is prioritized, its lesson dependencies resolve, and memorization and treasures remain addressable as separately approved records |
 
 004-01 delivers infrastructure and synthetic fixtures. The 60 lessons, 180 knowledge units, and 600 variants remain provisionally accepted drafts. CONTENT-006 and CONTENT-007 are authored and reviewed separately.
+
+## 004-02 adult-review pilot checkpoint
+
+| Given | When | Then |
+|---|---|---|
+| The owner builds a local debug pilot from the canonical drafts | An adult acknowledges the unverified-content notice | The existing worlds and game screens open one selected lesson per world, including the practical ablution lesson and its authored ordering activity |
+| A user follows a lesson or game deep link before acknowledgment | The pilot router handles it | The review notice opens before any draft content |
+| A learner uses a normal build | The app starts or resolves a pilot lesson link | Production approval still controls the catalog and preview progress cannot count toward it |
+| The reviewed input files or references differ from the expected draft graph | The local adapter prepares the pilot | Preparation fails before a new payload is emitted |
+
+The pilot samples the core packs and compatible CONTENT-007 activities. CONTENT-006 extras, open editorial corrections, further conversion and final approval remain on the separate authoring track.

@@ -90,12 +90,16 @@ class Curriculum {
   const Curriculum({
     required this.version,
     this.isPreview = false,
+    this.isDraftPilot = false,
     this.units = const {},
     this.previewCompletions = const {},
   });
 
   final String version;
   final bool isPreview;
+  final bool isDraftPilot;
+
+  String get reviewLabel => isDraftPilot ? draftPilotLabel : previewLabel;
   final Map<WorldId, List<LearningUnit>> units;
   final Set<String> previewCompletions;
 
@@ -236,4 +240,5 @@ LearningUnit _fixtureUnit(WorldId world) {
   );
 }
 
+const draftPilotLabel = 'مراجعة للبالغين فقط — محتوى غير متحقق منه';
 const previewLabel = 'معاينة تجريبية للمطوّر';

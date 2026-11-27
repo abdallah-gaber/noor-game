@@ -110,7 +110,10 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (widget.curriculum.isPreview)
-          Text(previewLabel, style: TextStyle(color: world.ink)),
+          Text(
+            widget.curriculum.reviewLabel,
+            style: TextStyle(color: world.ink),
+          ),
         if (!_finished) ...[
           const SizedBox(height: 8),
           Text(indicator, style: TextStyle(color: world.ink)),
