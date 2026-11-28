@@ -16,9 +16,21 @@ import UIKit
       name: "dev.noor.noor/speech", binaryMessenger: registrar.messenger()
     )
     channel.setMethodCallHandler { [weak self] call, result in
+      if call.method == "stopEffects" {
+        self?.stopEffects()
+        result(nil)
+        return
+      }
+      let pilot = ["tap", "correct", "retry", "complete"]
+      #if DEBUG
+      let names = pilot + ["wudu_pickup", "wudu_place", "wudu_splash", "wudu_wipe",
+                           "wudu_retry", "wudu_finish", "wudu_reveal"]
+      #else
+      let names = pilot
+      #endif
       guard call.method == "effect",
         let name = call.arguments as? String,
-        ["tap", "correct", "retry", "complete"].contains(name)
+        names.contains(name)
       else {
         result(FlutterMethodNotImplemented)
         return
@@ -36,8 +48,10 @@ import UIKit
   }
 
   private func playEffect(_ name: String, at url: URL) {
-    if name == "tap", effectName != "tap", effectsPlayer?.isPlaying == true {
-      return
+    let light = ["tap", "wudu_pickup", "wudu_place"]
+    if let active = effectName, effectsPlayer?.isPlaying == true {
+      if light.contains(name) && !light.contains(active) { return }
+      if name.hasPrefix("wudu_") && name == active { return }
     }
     do {
       try AVAudioSession.sharedInstance().setCategory(.ambient)

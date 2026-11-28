@@ -8,6 +8,7 @@ import '../adventure/worship_adventure_map.dart';
 import '../adventure/wudu_challenge.dart';
 import '../adventure/wudu_discovery.dart';
 import '../adventure/wudu_preview.dart';
+import '../adventure/wudu_treasure.dart';
 import '../challenges/arrangement.dart';
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
@@ -241,11 +242,19 @@ GoRouter createNoorRouter({
                   path: 'adventure/ibadah',
                   builder: (context, state) => WorshipAdventureMap(
                     onExit: () => context.go('/preview'),
+                    onTreasures: () => context.go(worshipTreasuresPath),
                     onDiscovery: () => context.go('/preview/adventure/w06'),
                     onChallenge: () => context.go(
                       '/preview/adventure/w06/challenge',
                       extra: true,
                     ),
+                  ),
+                ),
+                GoRoute(
+                  path: 'adventure/ibadah/treasures',
+                  builder: (context, state) => WuduTreasures(
+                    waterReminder: wudu.waterReminder,
+                    onExit: () => context.go(worshipMapPath),
                   ),
                 ),
                 GoRoute(
@@ -264,6 +273,7 @@ GoRouter createNoorRouter({
                   builder: (context, state) => WuduChallenge(
                     discovery: wudu,
                     onExit: () => context.go(worshipMapPath),
+                    onTreasure: () => context.go(worshipTreasuresPath),
                     replayCompletedOnEntry: state.extra == true,
                   ),
                 ),

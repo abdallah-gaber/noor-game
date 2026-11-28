@@ -17,21 +17,24 @@ import 'wudu_courtyard.dart';
 import 'wudu_courtyard_frame.dart';
 import 'wudu_discovery.dart';
 import 'wudu_discovery_art.dart';
+import 'wudu_treasure.dart';
 
 class WuduChallenge extends ConsumerStatefulWidget {
   const WuduChallenge({
     super.key,
     required this.discovery,
     required this.onExit,
+    required this.onTreasure,
     this.replayCompletedOnEntry = false,
   });
 
   // Reserve a preview completion key so a draft lesson with ID W06 retains its
   // reading position. The session still records the approved variant and KUs.
-  static const progressId = 'adventure.W06';
+  static const progressId = wuduMissionProgressId;
 
   final WuduDiscovery discovery;
   final VoidCallback onExit;
+  final VoidCallback onTreasure;
   final bool replayCompletedOnEntry;
 
   @override
@@ -133,13 +136,13 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
         ref.invalidate(previewRewardsProvider);
       }
       final effect = next.finished
-          ? PilotEffect.complete
+          ? AdventureEffect.finish
           : switch (next.feedback?.correct) {
-              true => PilotEffect.correct,
-              false => PilotEffect.retry,
-              null => PilotEffect.tap,
+              true => AdventureEffect.place,
+              false => AdventureEffect.retry,
+              null => AdventureEffect.place,
             };
-      ref.read(pilotEffectsProvider).play(effect);
+      ref.read(pilotEffectsProvider).playAdventure(effect);
       setState(() => _showSession(next));
     } catch (_) {
       if (mounted) setState(() => _storageError = true);
@@ -168,7 +171,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
       _slots[index] = id;
       _placementHint = false;
     });
-    ref.read(pilotEffectsProvider).play(PilotEffect.tap);
+    ref.read(pilotEffectsProvider).playAdventure(AdventureEffect.place);
   }
 
   void _tapPiece(String id) {
@@ -178,7 +181,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
       _place(id, index);
     } else {
       setState(() => _placementHint = true);
-      ref.read(pilotEffectsProvider).play(PilotEffect.retry);
+      ref.read(pilotEffectsProvider).playAdventure(AdventureEffect.retry);
     }
   }
 
@@ -192,6 +195,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
       }
       _placementHint = false;
     });
+    ref.read(pilotEffectsProvider).playAdventure(AdventureEffect.pickup);
   }
 
   String _message(GameSession? session) {
@@ -219,6 +223,12 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
     final rewards = session?.finished == true
         ? ref.watch(previewRewardsProvider).asData?.value
         : null;
+    final treasure = session?.finished == true
+        ? ref.watch(progressProvider(_scope)).value
+        : null;
+    final openable =
+        treasure != null &&
+        wuduTreasureState(treasure) == WuduTreasureState.ready;
     return WuduCourtyardFrame(
       title: 'تحدّي الترتيب',
       onExit: widget.onExit,
@@ -344,6 +354,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
                           session,
                           rewards?.starsByLesson[_progressId],
                           number,
+                          openable,
                         ),
                     ],
                   ),
@@ -360,6 +371,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
     GameSession? session,
     int? stars,
     String Function(int) number,
+    bool openable,
   ) {
     if (_storageError) {
       return FilledButton(
@@ -376,6 +388,13 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 10,
         children: [
+          if (openable)
+            FilledButton.icon(
+              style: _controlStyle,
+              onPressed: _busy ? null : widget.onTreasure,
+              icon: const Icon(Icons.inventory_2_outlined),
+              label: const Text('افتح صندوق الكنز'),
+            ),
           if (stars != null)
             _CourtyardCaption(label: 'أفضل النجوم · ${number(stars)}'),
           FilledButton.icon(
@@ -438,7 +457,10 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
                 label: label,
                 hint: highlight ? 'الموضع التالي' : null,
                 excludeSemantics: true,
-                child: DecoratedBox(
+                child: AnimatedContainer(
+                  duration: MediaQuery.disableAnimationsOf(context)
+                      ? Duration.zero
+                      : const Duration(milliseconds: 110),
                   decoration: BoxDecoration(
                     color: candidates.isNotEmpty || highlight
                         ? const Color(0xFFFFDC8B)
@@ -464,6 +486,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
                 id: id,
                 size: size,
                 label: itemLabel,
+                placed: true,
                 onTap: _canEdit ? () => _remove(index) : null,
               ),
       ),
@@ -476,6 +499,7 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
     required String label,
     VoidCallback? onTap,
     bool highlight = false,
+    bool placed = false,
   }) {
     final art = Stack(
       fit: StackFit.expand,
@@ -505,7 +529,17 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
           excludeFromSemantics: true,
           borderRadius: BorderRadius.circular(14),
           onTap: onTap,
-          child: art,
+          child: placed && !MediaQuery.disableAnimationsOf(context)
+              ? TweenAnimationBuilder<double>(
+                  key: ValueKey(id),
+                  tween: Tween(begin: .87, end: 1),
+                  duration: const Duration(milliseconds: 170),
+                  curve: Curves.easeOutBack,
+                  builder: (context, value, child) =>
+                      Transform.scale(scale: value, child: child),
+                  child: art,
+                )
+              : art,
         ),
       ),
     );
@@ -518,6 +552,14 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
         offset: Offset(-size / 2, -size / 2),
         child: SizedBox.square(dimension: size, child: art),
       ),
+      onDragStarted: () =>
+          ref.read(pilotEffectsProvider).playAdventure(AdventureEffect.pickup),
+      onDraggableCanceled: (_, _) {
+        if (mounted && _canEdit) {
+          setState(() => _placementHint = true);
+          ref.read(pilotEffectsProvider).playAdventure(AdventureEffect.retry);
+        }
+      },
       childWhenDragging: Opacity(opacity: .36, child: art),
       child: interactive,
     );

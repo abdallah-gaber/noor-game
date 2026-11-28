@@ -10,12 +10,14 @@ class DiscoveryObjectPainter extends CustomPainter {
     required this.done,
     required this.highlighted,
     required this.phase,
+    this.wipeProgress = 0,
   });
 
   final WuduObject object;
   final bool done;
   final bool highlighted;
   final double phase;
+  final double wipeProgress;
 
   static const _outline = Color(0xFF275A51);
   static const _skin = Color(0xFFFFB77E);
@@ -303,18 +305,28 @@ class DiscoveryObjectPainter extends CustomPainter {
   }
 
   void _wipeTrail(Canvas canvas, Paint paint) {
-    final length = phase > 0 && phase < 1 ? 23 + 42 * phase : 58.0;
     final sweep = Path()
       ..moveTo(31, 41)
-      ..quadraticBezierTo(60, 14, 31 + length, 41);
-    _line(
-      canvas,
-      paint,
-      sweep,
-      done ? _wipe : const Color(0xCCFFFCF0),
-      done ? 5 : 3,
-    );
-    if (!done) {
+      ..quadraticBezierTo(60, 14, 89, 41);
+    _line(canvas, paint, sweep, const Color(0xCCFFFCF0), 3);
+    if (done || wipeProgress != 0) {
+      final stroke = sweep.computeMetrics().first;
+      final amount = done
+          ? (phase > 0 && phase < 1
+                ? .4 + .6 * Curves.easeOut.transform(phase)
+                : 1.0)
+          : wipeProgress.abs();
+      final traced = stroke.length * amount;
+      _line(
+        canvas,
+        paint,
+        wipeProgress < 0
+            ? stroke.extractPath(stroke.length - traced, stroke.length)
+            : stroke.extractPath(0, traced),
+        done ? _wipe : const Color(0xFF54AD9A),
+        5,
+      );
+    } else {
       _line(
         canvas,
         paint,
@@ -330,12 +342,38 @@ class DiscoveryObjectPainter extends CustomPainter {
 
   void _splash(Canvas canvas, Paint paint) {
     final animated = phase > 0 && phase < 1;
-    final radius = animated ? 22 + Curves.easeOut.transform(phase) * 25 : 42.0;
-    for (final angle in [-2.8, -2.1, -1.3, -.5, .3, 2.9]) {
-      canvas.drawCircle(
-        Offset(60 + radius * math.cos(angle), 61 + radius * math.sin(angle)),
-        animated ? 3.8 - phase * 1.5 : 2.8,
-        paint..color = _water,
+    final travel = animated ? Curves.easeOutCubic.transform(phase) : 1.0;
+    final radius = 22 + travel * 22;
+    if (animated) {
+      final wave = Rect.fromCenter(
+        center: const Offset(60, 70),
+        width: 21 + 67 * travel,
+        height: 9 + 22 * travel,
+      );
+      canvas.drawArc(
+        wave,
+        .1,
+        math.pi - .2,
+        false,
+        paint
+          ..color = const Color(0xFF76D1DC).withValues(alpha: .72 * (1 - phase))
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3.5,
+      );
+      paint.style = PaintingStyle.fill;
+    }
+    for (final (index, angle) in [-2.8, -2.1, -1.3, -.5, .3, 2.9].indexed) {
+      final location = Offset(
+        60 + radius * math.cos(angle),
+        61 + radius * math.sin(angle),
+      );
+      final length = animated ? 8 - phase * 3 : 5.2;
+      canvas.drawOval(
+        Rect.fromCenter(center: location, width: length * .69, height: length),
+        paint
+          ..color = index.isEven
+              ? const Color(0xFF40AEC5)
+              : const Color(0xFF78CED3),
       );
     }
   }
@@ -361,5 +399,6 @@ class DiscoveryObjectPainter extends CustomPainter {
       object != oldDelegate.object ||
       done != oldDelegate.done ||
       highlighted != oldDelegate.highlighted ||
-      phase != oldDelegate.phase;
+      phase != oldDelegate.phase ||
+      wipeProgress != oldDelegate.wipeProgress;
 }

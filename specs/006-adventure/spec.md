@@ -29,3 +29,10 @@ Start with the [approved v0.2 direction](../../docs/design/noor-v0.2.md). The W0
 - The fountain starts guided discovery and the challenge marker opens the ordering activity. Completing W06 offers a return to the map. A new run resumes an unfinished challenge or replays a finished one.
 - The map reads the saved adventure completion and distinguishes a solve with Noor from an independent solve, including a later independent replay. The release and draft-review routes retain their existing approval rules.
 - The illustrated map and focusable Arabic controls fit landscape and portrait, including enlarged text and reduced motion.
+
+## 006-05 acceptance
+
+- W06 completion makes one water-drop treasure available in preview. Opening the chest saves the reveal, celebrates with Noor and shows the approved water reminder. Reopening the collection or replaying W06 keeps one collectible.
+- A chest marker on the Worship map opens the collection. The earned gem is visible there alongside the existing assisted or independent mission marker. Pending and already-opened chests restore from preview progress.
+- W06 uses distinct offline foley for pickup, placement, washing, wiping, retry, finishing and opening the chest. The native player uses one stream and honors the audio preference.
+- Animated feedback is short and local to the affected objects. Reduced motion keeps static feedback and the same controls. Production navigation, curriculum, grading and rewards retain their existing behavior.

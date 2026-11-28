@@ -39,18 +39,27 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
   int _reaction = 0;
   bool _selected = false;
   bool _hint = false;
+  bool _dragging = false;
   double _wipeDistance = 0;
+  final _wipeProgress = ValueNotifier<double>(0);
+  late final _objectMotion = Listenable.merge([_response, _wipeProgress]);
 
   WuduStop get _stop => widget.discovery.stops[_index];
   bool get _ready => _touched.length == _stop.objects.length;
   bool get _last => _index == widget.discovery.stops.length - 1;
 
-  void _play(PilotEffect effect) => ref.read(pilotEffectsProvider).play(effect);
+  void _play(AdventureEffect effect) =>
+      ref.read(pilotEffectsProvider).playAdventure(effect);
 
   void _miss() {
     if (!mounted || _ready) return;
-    setState(() => _hint = true);
-    _play(PilotEffect.retry);
+    if (!_hint) {
+      setState(() {
+        _hint = true;
+        _reaction++;
+      });
+    }
+    _play(AdventureEffect.retry);
   }
 
   void _touch(WuduObject object) {
@@ -65,18 +74,24 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
     if (!MediaQuery.disableAnimationsOf(context)) {
       _response.forward(from: 0);
     }
-    _play(_ready && _last ? PilotEffect.complete : PilotEffect.correct);
+    _play(switch (_stop.action) {
+      WuduAction.wipe => AdventureEffect.wipe,
+      WuduAction.closeTap => AdventureEffect.finish,
+      _ => AdventureEffect.splash,
+    });
   }
 
   void _continue() {
     if (!_ready) return;
     _response.reset();
+    _wipeProgress.value = 0;
     setState(() {
       _index = _last ? 0 : _index + 1;
       _touched.clear();
       _lastTouched = null;
       _selected = false;
       _hint = false;
+      _dragging = false;
       _wipeDistance = 0;
     });
   }
@@ -103,6 +118,7 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
   @override
   void dispose() {
     _response.dispose();
+    _wipeProgress.dispose();
     super.dispose();
   }
 
@@ -172,13 +188,17 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
                 ? NoorMood.celebrating
                 : _hint
                 ? NoorMood.encouraging
-                : NoorMood.happy,
+                : _selected || _dragging
+                ? NoorMood.thinking
+                : _touched.isNotEmpty
+                ? NoorMood.happy
+                : NoorMood.curious,
             trigger: _reaction,
           ),
         ),
         if (_stop.action == WuduAction.drop) ...[
           at(basin, unit * 1.42, _palms(reduceMotion)),
-          if (!_ready) at(drop, unit, _droplet(unit)),
+          if (!_ready) at(drop, unit, _droplet(unit, reduceMotion)),
         ] else
           for (final (index, object) in _stop.objects.indexed)
             at(
@@ -328,7 +348,7 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
         animation: _response,
         builder: (_, _) => CustomPaint(
           painter: PalmsPainter(
-            active: _selected || _hint || candidates.isNotEmpty,
+            active: _selected || _dragging || _hint || candidates.isNotEmpty,
             washed: _ready,
             splash: reduceMotion ? 0 : _response.value,
           ),
@@ -337,7 +357,7 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
     ),
   );
 
-  Widget _droplet(double unit) {
+  Widget _droplet(double unit, bool reduceMotion) {
     final art = DropArt(size: unit, selected: _selected || _hint);
     return Draggable<WuduObject>(
       data: WuduObject.palms,
@@ -348,15 +368,31 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
         child: DropArt(size: unit, selected: true),
       ),
       childWhenDragging: Opacity(opacity: .28, child: art),
+      onDragStarted: () {
+        setState(() {
+          _dragging = true;
+          _reaction++;
+        });
+        _play(AdventureEffect.pickup);
+      },
+      onDragEnd: (_) {
+        if (mounted) setState(() => _dragging = false);
+      },
       onDraggableCanceled: (_, _) => _miss(),
       child: _SceneButton(
         label: 'قطرة الماء',
         selected: _selected,
         onTap: () {
           setState(() => _selected = !_selected);
-          _play(PilotEffect.tap);
+          _play(AdventureEffect.pickup);
         },
-        child: art,
+        child: AnimatedScale(
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 135),
+          scale: _selected ? 1.1 : 1,
+          child: art,
+        ),
       ),
     );
   }
@@ -367,12 +403,13 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
       label: object.label,
       onTap: done ? null : () => _touch(object),
       child: AnimatedBuilder(
-        animation: _response,
+        animation: _objectMotion,
         builder: (_, _) => CustomPaint(
           painter: DiscoveryObjectPainter(
             object: object,
             done: done,
             highlighted: !done && (_hint || _touched.isNotEmpty),
+            wipeProgress: reduceMotion ? 0 : _wipeProgress.value,
             phase: !reduceMotion && _lastTouched == object
                 ? _response.value
                 : 0,
@@ -383,10 +420,19 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
     if (_stop.action != WuduAction.wipe || done) return button;
     return GestureDetector(
       excludeFromSemantics: true,
-      onHorizontalDragStart: (_) => _wipeDistance = 0,
-      onHorizontalDragUpdate: (details) =>
-          _wipeDistance += details.primaryDelta!,
+      onHorizontalDragStart: (_) {
+        _wipeDistance = 0;
+        _wipeProgress.value = 0;
+      },
+      onHorizontalDragUpdate: (details) {
+        _wipeDistance += details.primaryDelta!;
+        if (!reduceMotion) {
+          _wipeProgress.value = (_wipeDistance / (unit * .36)).clamp(-1.0, 1.0);
+        }
+      },
+      onHorizontalDragCancel: () => _wipeProgress.value = 0,
       onHorizontalDragEnd: (_) {
+        _wipeProgress.value = 0;
         if (_wipeDistance.abs() >= unit * .36) {
           _touch(object);
         } else {

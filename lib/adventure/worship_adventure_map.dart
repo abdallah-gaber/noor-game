@@ -10,6 +10,7 @@ import '../progress/progress_store.dart';
 import '../progress/reward_store.dart';
 import 'worship_map_art.dart';
 import 'wudu_challenge.dart';
+import 'wudu_treasure.dart';
 
 const worshipMapPath = '/preview/adventure/ibadah';
 
@@ -19,11 +20,13 @@ class WorshipAdventureMap extends ConsumerStatefulWidget {
     required this.onExit,
     required this.onDiscovery,
     required this.onChallenge,
+    required this.onTreasures,
   });
 
   final VoidCallback onExit;
   final VoidCallback onDiscovery;
   final VoidCallback onChallenge;
+  final VoidCallback onTreasures;
 
   @override
   ConsumerState<WorshipAdventureMap> createState() =>
@@ -75,6 +78,9 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
                         completed: completed,
                         recommended: progress.hasValue && !completed,
                         status: status,
+                        treasure: progress.value == null
+                            ? WuduTreasureState.locked
+                            : wuduTreasureState(progress.requireValue),
                       ),
                     ),
                   );
@@ -93,6 +99,7 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
     required bool completed,
     required bool recommended,
     required String? status,
+    required WuduTreasureState treasure,
   }) {
     final w = size.width;
     final h = size.height;
@@ -223,6 +230,35 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
             ),
             onPressed: widget.onExit,
             icon: const BackButtonIcon(),
+          ),
+        ),
+        PositionedDirectional(
+          top: 13,
+          end: 13,
+          child: Semantics(
+            value: switch (treasure) {
+              WuduTreasureState.opened => 'جوهرة القطرة',
+              WuduTreasureState.ready => 'صندوق جاهز للفتح',
+              WuduTreasureState.locked => null,
+            },
+            child: IconButton.filled(
+              tooltip: 'كنوزي',
+              onPressed: widget.onTreasures,
+              style: IconButton.styleFrom(
+                minimumSize: const Size.square(48),
+                foregroundColor: const Color(0xFFFFE8B7),
+                backgroundColor: const Color(0xFF365C4D),
+              ),
+              icon: switch (treasure) {
+                WuduTreasureState.opened => const WuduGem(size: 27),
+                WuduTreasureState.ready => const Icon(
+                  Icons.inventory_2_rounded,
+                ),
+                WuduTreasureState.locked => const Icon(
+                  Icons.inventory_2_outlined,
+                ),
+              },
+            ),
           ),
         ),
         if (_visited case final visited?)

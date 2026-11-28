@@ -391,9 +391,13 @@
         {
           "id": "006-05",
           "title": "Treasures, audio and game feel",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-05.md",
+            "docs/qa/spec-006/wudu-treasure.png",
+            "docs/qa/spec-006/wudu-treasure-map.png"
+          ],
+          "note": "The W06 chest saves one preview gem, and the map and collection restore it. Added local motion and seven non-musical cues with reduced-motion and sound controls.",
           "priority": "P0"
         },
         {

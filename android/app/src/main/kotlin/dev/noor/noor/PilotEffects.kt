@@ -9,17 +9,33 @@ import android.util.Log
 import io.flutter.FlutterInjector
 
 internal class PilotEffects(private val context: Context) {
-    private val holdMillis = mapOf("tap" to 66L, "correct" to 230L, "retry" to 158L, "complete" to 336L)
+    private val debuggable = context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+    private val holdMillis = mapOf(
+        "tap" to 66L, "correct" to 230L, "retry" to 158L, "complete" to 336L,
+    ) + if (debuggable) mapOf(
+        "wudu_pickup" to 85L, "wudu_place" to 116L, "wudu_splash" to 244L,
+        "wudu_wipe" to 199L, "wudu_retry" to 172L, "wudu_finish" to 382L,
+        "wudu_reveal" to 472L,
+    ) else emptyMap()
+    private fun isLight(name: String) =
+        name == "tap" || name == "wudu_pickup" || name == "wudu_place"
     private val samples = mutableMapOf<String, Int>()
     private val ready = mutableSetOf<Int>()
     private var pool: SoundPool? = null
     private var stream = 0
+    private var activeName: String? = null
     private var protectUntil = 0L
     private var pending: String? = null
 
     fun play(name: String) {
         val duration = holdMillis[name] ?: return
-        if (name == "tap" && SystemClock.uptimeMillis() < protectUntil) return
+        val now = SystemClock.uptimeMillis()
+        val active = activeName
+        if (now < protectUntil && active != null) {
+            if (isLight(name) && !isLight(active)) return
+            if (name.startsWith("wudu_") && name == active) return
+        }
+        if (name.startsWith("wudu_") && isLight(name) && pending?.let { !isLight(it) } == true) return
         val player = pool ?: SoundPool.Builder()
             .setMaxStreams(1)
             .setAudioAttributes(
@@ -55,8 +71,11 @@ internal class PilotEffects(private val context: Context) {
         }
         stop()
         stream = player.play(sample, 1f, 1f, 1, 0, 1f)
-        if (name != "tap" && stream != 0) protectUntil = SystemClock.uptimeMillis() + duration
-        if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
+        if (stream != 0) {
+            activeName = name
+            protectUntil = SystemClock.uptimeMillis() + duration
+        }
+        if (debuggable) {
             Log.d("NoorAudio", "effect=$name streamStarted=${stream != 0}")
         }
     }
@@ -65,6 +84,7 @@ internal class PilotEffects(private val context: Context) {
         pending = null
         if (stream != 0) pool?.stop(stream)
         stream = 0
+        activeName = null
         protectUntil = 0L
     }
 

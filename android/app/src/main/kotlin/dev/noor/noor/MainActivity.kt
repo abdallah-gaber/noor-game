@@ -29,6 +29,10 @@ class MainActivity : FlutterActivity() {
                         if (!reader.isReading) player.play(call.arguments as? String ?: "")
                         result.success(null)
                     }
+                    "stopEffects" -> {
+                        player.stop()
+                        result.success(null)
+                    }
                     "stop" -> {
                         reader.stop()
                         result.success(null)

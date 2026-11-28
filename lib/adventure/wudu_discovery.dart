@@ -2,6 +2,8 @@ import '../challenges/arrangement.dart';
 import '../content/curriculum.dart';
 import '../content/packs/catalog.dart';
 
+const wuduMissionProgressId = 'adventure.W06';
+
 enum WuduAction { drop, touch, wipe, closeTap }
 
 enum WuduObject {
@@ -33,12 +35,14 @@ class WuduDiscovery {
     this.ordering,
     Iterable<WuduStop> stops,
     this.rinseLabels,
+    this.waterReminder,
   ) : stops = List.unmodifiable(stops);
 
   final String title;
   final Arrangement ordering;
   final List<WuduStop> stops;
   final Map<WuduObject, String> rinseLabels;
+  final String waterReminder;
 
   static WuduDiscovery? fromApproved(
     IntegratedCatalog catalog,
@@ -76,6 +80,7 @@ class WuduDiscovery {
     final labels = {for (final item in arrangement.items) item.id: item.label};
     final opening = labels['i1']!.split(' و');
     final water = catalog.records['W06.K3']!.text('text');
+    final waterReminder = water.split('. ').last;
     final stops = <String, List<WuduStop>>{
       'i1': [
         (
@@ -133,13 +138,14 @@ class WuduDiscovery {
           action: WuduAction.closeTap,
           objects: [WuduObject.tap],
           hint: 'أغلق الصنبور',
-          feedback: water.split('. ').last,
+          feedback: waterReminder,
         ),
       ],
       Map.unmodifiable({
         WuduObject.mouth: opening[1],
         WuduObject.nose: opening[2],
       }),
+      waterReminder,
     );
   }
 }

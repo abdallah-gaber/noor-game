@@ -41,6 +41,8 @@ PUBLIC_FILES = {
     "docs/qa/spec-006/006-03.md", "docs/qa/spec-006/challenge-assist.png",
     "docs/qa/spec-006/006-04.md", "docs/qa/spec-006/worship-map-initial.png",
     "docs/qa/spec-006/worship-map-completed.png",
+    "docs/qa/spec-006/006-05.md", "docs/qa/spec-006/wudu-treasure.png",
+    "docs/qa/spec-006/wudu-treasure-map.png",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
     "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",

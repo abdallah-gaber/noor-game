@@ -102,7 +102,13 @@ void main() {
       expect(_palmsArt(tester).washed, isTrue);
       expect(find.bySemanticsLabel(NoorMood.celebrating.label), findsOneWidget);
       expect(find.text('غسل الكفين'), findsOneWidget);
-      expect(effects, ['retry', 'retry', 'correct']);
+      expect(effects, [
+        'wudu_retry',
+        'wudu_pickup',
+        'wudu_retry',
+        'wudu_pickup',
+        'wudu_splash',
+      ]);
 
       final next = tester.getCenter(_next);
       await tester.tapAt(next);
@@ -133,6 +139,9 @@ void main() {
       final gesture = await tester.startGesture(center + const Offset(55, 0));
       await gesture.moveBy(const Offset(-23, 0));
       await gesture.moveBy(const Offset(-73, 0));
+      await tester.pump();
+      expect(_art(tester, WuduObject.head).wipeProgress, lessThan(0));
+      expect(_art(tester, WuduObject.head).done, isFalse);
       await gesture.up();
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 180));

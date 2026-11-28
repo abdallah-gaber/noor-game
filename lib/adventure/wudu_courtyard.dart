@@ -385,7 +385,23 @@ class PalmsPainter extends CustomPainter {
       paint.style = PaintingStyle.fill;
     }
     if (splash > 0 && splash < 1) {
-      final distance = 23 + Curves.easeOut.transform(splash) * 45;
+      final travel = Curves.easeOutCubic.transform(splash);
+      final distance = 23 + travel * 45;
+      canvas.drawArc(
+        Rect.fromCenter(
+          center: center.translate(0, 17),
+          width: 26 + 88 * travel,
+          height: 10 + 31 * travel,
+        ),
+        .04,
+        math.pi - .08,
+        false,
+        paint
+          ..color = const Color(0xFF78D9E2).withValues(alpha: .8 * (1 - splash))
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4,
+      );
+      paint.style = PaintingStyle.fill;
       for (var index = 0; index < 12; index++) {
         final angle = index * math.pi / 6;
         final offset = Offset(
