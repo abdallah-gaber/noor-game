@@ -379,9 +379,13 @@
         {
           "id": "006-04",
           "title": "Adventure map and mission navigation",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-04.md",
+            "docs/qa/spec-006/worship-map-initial.png",
+            "docs/qa/spec-006/worship-map-completed.png"
+          ],
+          "note": "The Worship map connects discovery, challenge and replay. Saved preview progress distinguishes assisted and independent completion. Verified at 2× portrait text and with Android emulator captures.",
           "priority": "P0"
         },
         {

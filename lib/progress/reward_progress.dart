@@ -12,10 +12,13 @@ class RewardProgress {
   const RewardProgress({
     this.starsByLesson = const {},
     this.knowledge = const {},
+    this.independentCompletions = const {},
   });
 
   final Map<String, int> starsByLesson;
   final Map<String, KnowledgePractice> knowledge;
+  // Lesson keys with all scored variants solved without hints in a completed round.
+  final Set<String> independentCompletions;
 
   int get xp => starsByLesson.length * 10;
   int get stars => starsByLesson.values.fold(0, (sum, stars) => sum + stars);
@@ -25,6 +28,7 @@ class RewardProgress {
 /// currently installed lesson revisions and answer definitions.
 class RewardHistory {
   final _stars = <String, int>{};
+  final _independentCompletions = <String>{};
   final _knowledge = <String, Map<String, _VariantPractice>>{};
 
   void include(String lessonId, String payload) {
@@ -60,10 +64,12 @@ class RewardHistory {
       ifAbsent: () => stars,
     );
 
+    final independent = <String>{};
     for (final attempt in attempts) {
       final correct = attempt['correct'];
       if (correct is! bool || attempt['assisted'] == true) continue;
       final variantId = attempt['variantId'] as String;
+      if (correct) independent.add(variantId);
       for (final knowledgeId
           in (attempt['knowledgeIds'] as List).cast<String>()) {
         final variants = _knowledge.putIfAbsent(knowledgeId, () => {});
@@ -77,10 +83,12 @@ class RewardHistory {
         );
       }
     }
+    if (independent.length == scored) _independentCompletions.add(lessonId);
   }
 
   RewardProgress summarize() => RewardProgress(
     starsByLesson: Map.unmodifiable(_stars),
+    independentCompletions: Set.unmodifiable(_independentCompletions),
     knowledge: Map.unmodifiable({
       for (final entry in _knowledge.entries)
         entry.key: (

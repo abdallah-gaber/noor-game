@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../adventure/worship_adventure_map.dart';
 import '../adventure/wudu_challenge.dart';
 import '../adventure/wudu_discovery.dart';
 import '../adventure/wudu_preview.dart';
@@ -235,24 +236,38 @@ GoRouter createNoorRouter({
                 showPreview && pilot == null ? null : '/',
             builder: (context, state) => PreviewScreen(showWudu: wudu != null),
             routes: [
-              if (wudu != null)
+              if (wudu != null) ...[
+                GoRoute(
+                  path: 'adventure/ibadah',
+                  builder: (context, state) => WorshipAdventureMap(
+                    onExit: () => context.go('/preview'),
+                    onDiscovery: () => context.go('/preview/adventure/w06'),
+                    onChallenge: () => context.go(
+                      '/preview/adventure/w06/challenge',
+                      extra: true,
+                    ),
+                  ),
+                ),
                 GoRoute(
                   path: 'adventure/w06',
                   builder: (context, state) => WuduPreview(
                     discovery: wudu,
-                    onExit: () => context.go('/preview'),
-                    onChallenge: () =>
-                        context.go('/preview/adventure/w06/challenge'),
+                    onExit: () => context.go(worshipMapPath),
+                    onChallenge: () => context.go(
+                      '/preview/adventure/w06/challenge',
+                      extra: true,
+                    ),
                   ),
                 ),
-              if (wudu != null)
                 GoRoute(
                   path: 'adventure/w06/challenge',
                   builder: (context, state) => WuduChallenge(
                     discovery: wudu,
-                    onExit: () => context.go('/preview'),
+                    onExit: () => context.go(worshipMapPath),
+                    replayCompletedOnEntry: state.extra == true,
                   ),
                 ),
+              ],
               GoRoute(
                 path: 'challenges/:id',
                 redirect: (context, state) =>

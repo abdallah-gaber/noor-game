@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../adventure/worship_adventure_map.dart';
 import '../challenges/debug_catalog.dart';
 
 import '../design_system/noor_layout.dart';
@@ -21,6 +22,11 @@ class PreviewScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showWudu) ...[
+              TextButton.icon(
+                onPressed: () => context.push(worshipMapPath),
+                icon: const Icon(Icons.map_outlined),
+                label: const Text('خريطة عالم العبادة'),
+              ),
               TextButton.icon(
                 onPressed: () => context.push('/preview/adventure/w06'),
                 icon: const Icon(Icons.water_drop_outlined),

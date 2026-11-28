@@ -207,20 +207,24 @@ void main() {
     },
   );
 
-  testWidgets('developer menu opens the approved prototype and exit returns', (
-    tester,
-  ) async {
-    await _start(tester, catalog: catalog, location: '/preview');
-    final link = find.text('معاينة مغامرة الوضوء');
-    await tester.tap(link);
-    await tester.pumpAndSettle();
-    expect(_scene, findsOneWidget);
+  testWidgets(
+    'developer shortcut opens the approved prototype and exit reaches the map',
+    (tester) async {
+      await _start(tester, catalog: catalog, location: '/preview');
+      final link = find.text('معاينة مغامرة الوضوء');
+      await tester.tap(link);
+      await tester.pumpAndSettle();
+      expect(_scene, findsOneWidget);
 
-    await tester.tap(find.byTooltip('العودة إلى المعاينة'));
-    await tester.pumpAndSettle();
-    expect(_scene, findsNothing);
-    expect(link, findsOneWidget);
-  });
+      await tester.tap(find.byTooltip('العودة إلى الخريطة'));
+      await tester.pumpAndSettle();
+      expect(_scene, findsNothing);
+      expect(find.bySemanticsLabel('نافورة الوضوء'), findsOneWidget);
+      await tester.tap(find.byTooltip('العودة إلى المعاينة'));
+      await tester.pumpAndSettle();
+      expect(link, findsOneWidget);
+    },
+  );
 
   testWidgets('disabled preview and unavailable catalog reject direct access', (
     tester,

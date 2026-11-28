@@ -23,6 +23,7 @@ class WuduChallenge extends ConsumerStatefulWidget {
     super.key,
     required this.discovery,
     required this.onExit,
+    this.replayCompletedOnEntry = false,
   });
 
   // Reserve a preview completion key so a draft lesson with ID W06 retains its
@@ -31,6 +32,7 @@ class WuduChallenge extends ConsumerStatefulWidget {
 
   final WuduDiscovery discovery;
   final VoidCallback onExit;
+  final bool replayCompletedOnEntry;
 
   @override
   ConsumerState<WuduChallenge> createState() => _WuduChallengeState();
@@ -63,22 +65,30 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
   @override
   void initState() {
     super.initState();
-    _open();
+    _open(replayCompleted: widget.replayCompletedOnEntry);
   }
 
-  Future<void> _open({String? replayOf}) async {
+  Future<void> _open({String? replayOf, bool replayCompleted = false}) async {
     try {
       final random = math.Random.secure();
       final id =
           '${DateTime.now().microsecondsSinceEpoch}-${random.nextInt(1 << 30)}';
-      final session = await ref
-          .read(gameStoreProvider)
-          .open(
-            _scope,
-            _progressId,
-            GameSession.start(id, _plan, random),
-            replayOf: replayOf,
-          );
+      final store = ref.read(gameStoreProvider);
+      final draft = GameSession.start(id, _plan, random);
+      var session = await store.open(
+        _scope,
+        _progressId,
+        draft,
+        replayOf: replayOf,
+      );
+      if (replayCompleted && session.finished && mounted) {
+        session = await store.open(
+          _scope,
+          _progressId,
+          draft,
+          replayOf: session.id,
+        );
+      }
       if (!mounted) return;
       setState(() {
         _showSession(session);
@@ -369,6 +379,12 @@ class _WuduChallengeState extends ConsumerState<WuduChallenge> {
           if (stars != null)
             _CourtyardCaption(label: 'أفضل النجوم · ${number(stars)}'),
           FilledButton.icon(
+            style: _controlStyle,
+            onPressed: _busy ? null : widget.onExit,
+            icon: const Icon(Icons.map_outlined),
+            label: const Text('إلى الخريطة'),
+          ),
+          FilledButton.tonalIcon(
             style: _controlStyle,
             onPressed: _busy ? null : () => _reopen(replayOf: session.id),
             icon: const Icon(Icons.refresh_rounded),

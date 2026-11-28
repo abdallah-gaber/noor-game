@@ -25,7 +25,7 @@ class WuduCourtyardFrame extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    tooltip: 'العودة إلى المعاينة',
+                    tooltip: 'العودة إلى الخريطة',
                     color: Colors.white,
                     onPressed: onExit,
                     icon: const BackButtonIcon(),
