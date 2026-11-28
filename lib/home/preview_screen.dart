@@ -20,12 +20,19 @@ class PreviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (showWudu)
+            if (showWudu) ...[
               TextButton.icon(
                 onPressed: () => context.push('/preview/adventure/w06'),
                 icon: const Icon(Icons.water_drop_outlined),
                 label: const Text('معاينة مغامرة الوضوء'),
               ),
+              TextButton.icon(
+                onPressed: () =>
+                    context.push('/preview/adventure/w06/challenge'),
+                icon: const Icon(Icons.extension_outlined),
+                label: const Text('معاينة تحدّي الوضوء'),
+              ),
+            ],
             const Text('محتوى تجريبي للمطوّر فقط: هذه عيّنة لواجهة التطبيق.'),
             Wrap(
               spacing: 8,

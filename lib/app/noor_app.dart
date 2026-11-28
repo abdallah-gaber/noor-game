@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../adventure/wudu_challenge.dart';
 import '../adventure/wudu_discovery.dart';
 import '../adventure/wudu_preview.dart';
 import '../challenges/arrangement.dart';
@@ -238,6 +239,16 @@ GoRouter createNoorRouter({
                 GoRoute(
                   path: 'adventure/w06',
                   builder: (context, state) => WuduPreview(
+                    discovery: wudu,
+                    onExit: () => context.go('/preview'),
+                    onChallenge: () =>
+                        context.go('/preview/adventure/w06/challenge'),
+                  ),
+                ),
+              if (wudu != null)
+                GoRoute(
+                  path: 'adventure/w06/challenge',
+                  builder: (context, state) => WuduChallenge(
                     discovery: wudu,
                     onExit: () => context.go('/preview'),
                   ),

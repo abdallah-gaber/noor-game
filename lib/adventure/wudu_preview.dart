@@ -7,14 +7,21 @@ import '../audio/pilot_effects.dart';
 import '../home/noor_lantern.dart';
 import '../settings/settings_controller.dart';
 import 'wudu_courtyard.dart';
+import 'wudu_courtyard_frame.dart';
 import 'wudu_discovery.dart';
 import 'wudu_discovery_art.dart';
 
 class WuduPreview extends ConsumerStatefulWidget {
-  const WuduPreview({super.key, required this.discovery, required this.onExit});
+  const WuduPreview({
+    super.key,
+    required this.discovery,
+    required this.onExit,
+    required this.onChallenge,
+  });
 
   final WuduDiscovery discovery;
   final VoidCallback onExit;
+  final VoidCallback onChallenge;
 
   @override
   ConsumerState<WuduPreview> createState() => _WuduPreviewState();
@@ -102,50 +109,12 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
   @override
   Widget build(BuildContext context) {
     ref.watch(settingsProvider);
-    return Scaffold(
-      backgroundColor: const Color(0xFF184843),
-      body: SafeArea(
-        minimum: const EdgeInsets.all(12),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1280),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      tooltip: 'العودة إلى المعاينة',
-                      color: Colors.white,
-                      onPressed: widget.onExit,
-                      icon: const BackButtonIcon(),
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.discovery.title,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Color(0xFFFFF1CB),
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
-                ),
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(26),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) =>
-                          _courtyard(context, constraints.biggest),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+    return WuduCourtyardFrame(
+      title: widget.discovery.title,
+      onExit: widget.onExit,
+      child: LayoutBuilder(
+        builder: (context, constraints) =>
+            _courtyard(context, constraints.biggest),
       ),
     );
   }
@@ -303,15 +272,37 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
         if (_ready)
           PositionedDirectional(
             key: ValueKey(_index),
+            start: 12,
             end: 12,
-            bottom: 12,
-            child: FilledButton.icon(
-              onPressed: _continue,
-              icon: Icon(
-                finish ? Icons.refresh_rounded : Icons.arrow_forward_rounded,
+            bottom: finish ? 49 : 12,
+            child: Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (finish) ...[
+                    IconButton.filledTonal(
+                      tooltip: 'أعد الاكتشاف',
+                      style: IconButton.styleFrom(
+                        minimumSize: const Size.square(48),
+                      ),
+                      onPressed: _continue,
+                      icon: const Icon(Icons.refresh_rounded),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Flexible(
+                    child: FilledButton.icon(
+                      onPressed: finish ? widget.onChallenge : _continue,
+                      icon: const Icon(Icons.arrow_forward_rounded),
+                      label: Text(finish ? 'جرّب التحدّي' : 'هيا نكمل'),
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              label: Text(finish ? 'العب مجددًا' : 'هيا نكمل'),
-              style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
             ),
           ),
       ],

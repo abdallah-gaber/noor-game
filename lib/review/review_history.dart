@@ -50,7 +50,7 @@ class ReviewHistory {
       final firstPass = attempt['review'] == false;
       if (firstPass) _lastSeen[variant] = ++_ordinal;
       final correct = attempt['correct'];
-      if (correct is! bool) continue;
+      if (correct is! bool || attempt['assisted'] == true) continue;
       if (firstPass) _latestVariant[variant] = correct;
       for (final id in (attempt['knowledgeIds'] as List).cast<String>()) {
         _knowledge

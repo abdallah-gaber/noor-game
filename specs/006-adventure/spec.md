@@ -15,3 +15,10 @@ Start with the [approved v0.2 direction](../../docs/design/noor-v0.2.md). The W0
 - Each stop requires its scene interaction before revealing the next arrow. A missed drop or incomplete gesture keeps earlier actions in place and adds a visual and Arabic hint. Replaying starts the discovery again.
 - Illustrated cues distinguish a splash from a wiping trail. Tapping works for every action, and reduced motion keeps the same feedback and completion gates.
 - The scene uses the approved W06.K1–K3 records and W06.E01. The preview fails closed if its approved bindings are unavailable. Discovery creates no assessment or progress records.
+
+## 006-03 acceptance
+
+- The end of guided discovery offers the courtyard challenge. The player arranges five shuffled illustrated pieces using drag or tap, then submits the full order for grading against W06.E01. The water-conservation stop stays in discovery.
+- A missed order preserves the attempt and offers an independent retry. After two misses, Noor highlights each next piece in turn. Assisted success completes the preview mission and stays distinct from independent correctness in saved evidence.
+- Reopening the debug challenge restores the compatible shuffle, submissions and feedback or result. Replay creates a fresh round with the same preview completion key. XP is granted once for that key and the best star rating is retained.
+- Discovery stays unscored. Preview progress, rewards and attempts use existing preview storage. The approved lesson experience and its saved history remain available as before.

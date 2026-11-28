@@ -368,9 +368,12 @@
         {
           "id": "006-03",
           "title": "Independent challenge and progress integration",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-03.md",
+            "docs/qa/spec-006/challenge-assist.png"
+          ],
+          "note": "W06.E01 ordering supports drag, tap, assisted retry, compatible restore and replay. SQLite verification confirmed one preview completion and zero approved writes.",
           "priority": "P0"
         },
         {

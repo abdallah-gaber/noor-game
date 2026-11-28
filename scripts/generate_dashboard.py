@@ -38,6 +38,7 @@ PUBLIC_FILES = {
     "docs/qa/spec-006/courtyard.png", "docs/qa/spec-006/splash.png",
     "docs/qa/spec-006/006-02.md", "docs/qa/spec-006/discovery-rinse.png",
     "docs/qa/spec-006/discovery-wipe.png", "docs/qa/spec-006/discovery-water.png",
+    "docs/qa/spec-006/006-03.md", "docs/qa/spec-006/challenge-assist.png",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
     "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",

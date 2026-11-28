@@ -24,8 +24,9 @@ const _route = '/preview/adventure/w06';
 final _scene = find.byType(WuduPreview);
 final _drop = find.bySemanticsLabel('قطرة الماء');
 final _palms = find.bySemanticsLabel('الكفّان');
-final _replay = find.widgetWithText(FilledButton, 'العب مجددًا');
+final _replay = find.byTooltip('أعد الاكتشاف');
 
+final _challenge = find.widgetWithText(FilledButton, 'جرّب التحدّي');
 final _next = find.widgetWithText(FilledButton, 'هيا نكمل');
 Finder _object(WuduObject object) => find.bySemanticsLabel(object.label);
 
@@ -188,8 +189,10 @@ void main() {
       await _complete(tester, [WuduObject.rightFoot, WuduObject.leftFoot]);
       expect(_courtyard(tester).flowing, isTrue);
       expect(_replay, findsNothing);
+      expect(_challenge, findsNothing);
 
       await _tapTarget(tester, _object(WuduObject.tap));
+      expect(_challenge, findsOneWidget);
       expect(_courtyard(tester).flowing, isFalse);
       expect(
         find.text(catalog.records['W06.K3']!.text('text').split('. ').last),

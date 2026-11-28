@@ -28,10 +28,15 @@ typedef WuduStop = ({
 });
 
 class WuduDiscovery {
-  WuduDiscovery._(this.title, Iterable<WuduStop> stops, this.rinseLabels)
-    : stops = List.unmodifiable(stops);
+  WuduDiscovery._(
+    this.title,
+    this.ordering,
+    Iterable<WuduStop> stops,
+    this.rinseLabels,
+  ) : stops = List.unmodifiable(stops);
 
   final String title;
+  final Arrangement ordering;
   final List<WuduStop> stops;
   final Map<WuduObject, String> rinseLabels;
 
@@ -121,6 +126,7 @@ class WuduDiscovery {
     };
     return WuduDiscovery._(
       lesson.title,
+      arrangement,
       [
         for (final id in arrangement.correctOrder) ...stops[id]!,
         (

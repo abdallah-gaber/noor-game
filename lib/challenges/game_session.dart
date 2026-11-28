@@ -13,19 +13,36 @@ class GamePlan {
     this.contentVersion,
     List<ChallengeDefinition> definitions, {
     this.compatibleDefinitionDigest,
+    this.allowAssistedRetries = false,
   }) : definitions = Map.unmodifiable({
          for (final item in definitions) item.id: item,
        }) {
     if (definitions.isEmpty || this.definitions.length != definitions.length) {
       throw const FormatException('Expected unique challenge variant IDs');
     }
+    if (allowAssistedRetries &&
+        (definitions.length != 1 ||
+            definitions.single is! Arrangement ||
+            (definitions.single as Arrangement).kind !=
+                ArrangementKind.ordering)) {
+      throw const FormatException(
+        'Assisted retry requires one ordering activity',
+      );
+    }
   }
 
   final String contentVersion;
   final String? compatibleDefinitionDigest;
+  final bool allowAssistedRetries;
   final Map<String, ChallengeDefinition> definitions;
 
-  late final String compatibility = compatibleDefinitionDigest != null
+  late final String compatibility = allowAssistedRetries
+      ? jsonEncode([
+          3,
+          contentVersion,
+          (definitions.values.single as Arrangement).toJson(),
+        ])
+      : compatibleDefinitionDigest != null
       ? jsonEncode([2, contentVersion, compatibleDefinitionDigest])
       : jsonEncode([
           1,
@@ -45,16 +62,18 @@ class GameAttempt {
     ChallengeDefinition definition,
     List<String> answer,
     this.correct,
-    this.review,
-  ) : variantId = definition.id,
-      knowledgeIds = definition.knowledgeIds,
-      answer = List.unmodifiable(answer);
+    this.review, {
+    this.assisted = false,
+  }) : variantId = definition.id,
+       knowledgeIds = definition.knowledgeIds,
+       answer = List.unmodifiable(answer);
 
   final String variantId;
   final List<String> knowledgeIds;
   final List<String> answer;
   final bool? correct;
   final bool review;
+  final bool assisted;
 
   Map<String, Object?> toJson() => {
     'variantId': variantId,
@@ -62,6 +81,7 @@ class GameAttempt {
     'answer': answer,
     'correct': correct,
     'review': review,
+    if (assisted) 'assisted': true,
   };
 }
 
@@ -84,7 +104,7 @@ class GameSession {
         Map.unmodifiable({
           for (final item in plan.definitions.values)
             item.id: List<String>.unmodifiable(
-              _options(item, random).map((option) => option.id),
+              _shuffledIds(item, plan, random),
             ),
         }),
         const [],
@@ -101,12 +121,28 @@ class GameSession {
 
   late final List<String> queue = List.unmodifiable([
     ...plan.definitions.keys,
-    if (attempts.length >= plan.definitions.length)
+    if (plan.allowAssistedRetries)
+      for (final attempt in attempts)
+        if (attempt.correct == false) attempt.variantId,
+    if (!plan.allowAssistedRetries &&
+        attempts.length >= plan.definitions.length)
       for (final attempt in attempts.take(plan.definitions.length))
         if (attempt.correct == false) attempt.variantId,
   ]);
 
   bool get finished => cursor == queue.length;
+
+  /// Prior to assistance the player gets two full, unprompted submissions.
+  bool get usesAssistance =>
+      plan.allowAssistedRetries && !finished && cursor >= 2;
+
+  List<String>? get assistedOrder {
+    final definition = current;
+    return usesAssistance && definition is Arrangement
+        ? definition.correctOrder
+        : null;
+  }
+
   ChallengeDefinition? get current =>
       finished ? null : plan.definitions[queue[cursor]];
   GameAttempt? get feedback =>
@@ -118,7 +154,7 @@ class GameSession {
       scored: first.where((attempt) => attempt.correct != null).length,
       firstCorrect: first.where((attempt) => attempt.correct == true).length,
       eventuallyCorrect: attempts
-          .where((attempt) => attempt.correct == true)
+          .where((attempt) => attempt.correct == true && !attempt.assisted)
           .map((attempt) => attempt.variantId)
           .toSet()
           .length,
@@ -162,6 +198,7 @@ class GameSession {
       answer,
       correct,
       cursor >= plan.definitions.length,
+      assisted: usesAssistance,
     );
     return GameSession._(
       id,
@@ -190,6 +227,7 @@ class GameSession {
     'attempts': attempts.map((attempt) => attempt.toJson()).toList(),
     'cursor': cursor,
     'revision': revision,
+    if (plan.allowAssistedRetries) 'retryUntilCorrect': true,
   });
 
   static GameSession restore(String payload, GamePlan plan) {
@@ -232,6 +270,20 @@ class GameSession {
       throw const FormatException('Invalid session revision');
     }
     return session;
+  }
+
+  static List<String> _shuffledIds(
+    ChallengeDefinition item,
+    GamePlan plan,
+    Random random,
+  ) {
+    final ids = _options(item, random).map((option) => option.id).toList();
+    if (plan.allowAssistedRetries &&
+        item is Arrangement &&
+        ids.indexed.every((entry) => item.correctOrder[entry.$1] == entry.$2)) {
+      ids.add(ids.removeAt(0));
+    }
+    return ids;
   }
 
   static List<AnswerOption> _options(

@@ -33,7 +33,10 @@ class RewardHistory {
         .cast<Map<String, dynamic>>();
     final required = (snapshot['orders'] as Map).length;
     final first = attempts.take(required);
-    final retries = first
+    final retrySources = snapshot['retryUntilCorrect'] == true
+        ? attempts
+        : first;
+    final retries = retrySources
         .where((attempt) => attempt['correct'] == false)
         .length;
     final fullLength = required + retries;
@@ -59,7 +62,7 @@ class RewardHistory {
 
     for (final attempt in attempts) {
       final correct = attempt['correct'];
-      if (correct is! bool) continue;
+      if (correct is! bool || attempt['assisted'] == true) continue;
       final variantId = attempt['variantId'] as String;
       for (final knowledgeId
           in (attempt['knowledgeIds'] as List).cast<String>()) {
