@@ -34,6 +34,8 @@ VIEWS = (
 # Publish individually reviewed evidence. Future assets require an explicit addition.
 PUBLIC_FILES = {
     "docs/product.md", "docs/architecture.md", "docs/curriculum/README.md",
+    "docs/design/noor-v0.2.md", "docs/qa/spec-006/006-01.md",
+    "docs/qa/spec-006/courtyard.png", "docs/qa/spec-006/splash.png",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
     "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",
@@ -45,7 +47,7 @@ PUBLIC_FILES = {
     "test/goldens/noor-expressions.png", "test/goldens/world-environments.png",
 }
 for phase, folder in enumerate(("foundation", "learning-worlds", "game-engine",
-                                "content-and-rewards", "release-and-playtest"), 1):
+                                "content-and-rewards", "release-and-playtest", "adventure"), 1):
     for name in ("spec", "plan", "tasks"):
         PUBLIC_FILES.add(f"specs/{phase:03d}-{folder}/{name}.md")
 for name in (
@@ -202,7 +204,20 @@ class Dashboard:
         all_tasks = [task for phase in self.progress["phases"] for task in phase["tasks"]]
         done = sum(task["status"] == "done" for task in all_tasks)
         active = [task["id"] for task in all_tasks if task["status"] in {"doing", "review"}]
-        overview = metrics([
+        baseline = self.progress.get("releaseBaseline")
+        redesign = self.progress.get("redesignMilestone")
+        milestones = ""
+        if baseline and redesign:
+            release_link = self.link(baseline["evidence"], baseline["label"])
+            direction_link = self.link(redesign["direction"], redesign["label"])
+            milestones = (
+                '<div class="columns">'
+                f'<article><h3>Release baseline</h3><div>{release_link} · '
+                f'<code>{escape(baseline["commit"])}</code></div></article>'
+                f'<article><h3>Redesign milestone</h3><div>{direction_link}</div></article>'
+                '</div>'
+            )
+        overview = milestones + metrics([
             ("Verified tasks", f"{done}/{len(all_tasks)}"),
             ("Active tasks", ", ".join(active) or "None"),
             ("Blocked tasks", count(sum(task["status"] == "blocked" for task in all_tasks))),

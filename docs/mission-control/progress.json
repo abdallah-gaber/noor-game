@@ -309,9 +309,11 @@
         {
           "id": "005-04",
           "title": "Run supervised child playtest and record observations",
-          "status": "review",
-          "evidence": ["docs/qa/spec-005/005-04-owner-playtest.md"],
-          "note": "Separate owner milestone. Anonymized observation guide prepared. No child observations collected.",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-005/005-04-owner-playtest.md"
+          ],
+          "note": "The owner reported that the child skipped reading, rushed toward calls to action and prioritized interaction. The findings informed the v0.2 redesign.",
           "priority": "P0"
         },
         {
@@ -331,6 +333,75 @@
           "priority": "P0"
         }
       ]
+    },
+    {
+      "id": "006",
+      "name": "Play First adventure",
+      "spec": "specs/006-adventure/spec.md",
+      "plan": "specs/006-adventure/plan.md",
+      "tasks": [
+        {
+          "id": "006-01",
+          "title": "Interactive visual prototype",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-01.md",
+            "docs/qa/spec-006/courtyard.png",
+            "docs/qa/spec-006/splash.png"
+          ],
+          "note": "W06 courtyard drag, tap and replay verified in a landscape Android emulator and focused Flutter tests.",
+          "priority": "P0"
+        },
+        {
+          "id": "006-02",
+          "title": "Discover and learn interactions",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "006-03",
+          "title": "Independent challenge and progress integration",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "006-04",
+          "title": "Adventure map and mission navigation",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "006-05",
+          "title": "Treasures, audio and game feel",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        },
+        {
+          "id": "006-06",
+          "title": "Integrated vertical slice delivery",
+          "status": "todo",
+          "evidence": [],
+          "note": "",
+          "priority": "P0"
+        }
+      ]
     }
-  ]
+  ],
+  "releaseBaseline": {
+    "label": "v0.1.1 · Android build 5",
+    "commit": "7e57c6b",
+    "evidence": "docs/qa/spec-005/005-05-branding.md"
+  },
+  "redesignMilestone": {
+    "label": "v0.2 · SPEC-006 W06 vertical slice",
+    "direction": "docs/design/noor-v0.2.md"
+  }
 }

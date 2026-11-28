@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../adventure/wudu_preview.dart';
 import '../challenges/arrangement.dart';
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
@@ -43,6 +44,12 @@ GoRouter createNoorRouter({
       loadCurriculum(enablePreview: enablePreview);
   final hasLearningTools =
       catalog != null || (showPreview && curriculum.isPreview);
+  // Use only the validated starter catalog for the W06 interaction.
+  final wudu = showPreview && pilot == null
+      ? curriculum.lesson(WorldId.ibadah, 'W06')
+      : null;
+  final showWudu =
+      catalog != null && (wudu?.knowledgeLabels.containsKey('W06.K1') ?? false);
   var adultConfirmed = false;
 
   Arrangement? pilotActivity(GoRouterState state) {
@@ -224,8 +231,16 @@ GoRouter createNoorRouter({
             path: 'preview',
             redirect: (context, state) =>
                 showPreview && pilot == null ? null : '/',
-            builder: (context, state) => const PreviewScreen(),
+            builder: (context, state) => PreviewScreen(showWudu: showWudu),
             routes: [
+              if (showWudu)
+                GoRoute(
+                  path: 'adventure/w06',
+                  builder: (context, state) => WuduPreview(
+                    title: wudu!.title,
+                    onExit: () => context.go('/preview'),
+                  ),
+                ),
               GoRoute(
                 path: 'challenges/:id',
                 redirect: (context, state) =>

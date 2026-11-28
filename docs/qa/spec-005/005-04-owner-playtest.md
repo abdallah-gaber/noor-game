@@ -1,6 +1,8 @@
 # 005-04 — Supervised owner playtest
 
-Owner milestone after release-candidate acceptance. No supervised child observations have been collected.
+The owner reported that the child tended to skip reading, rush toward calls to action and prioritize interaction. The owner approved moving the educational ideas into gameplay. [v0.2 product direction](../../design/noor-v0.2.md)
+
+## Playtest guide
 
 Use the six-lesson starter with an adult present. Let the child choose a world, open a lesson, read or inspect a step, try a challenge, encounter retry feedback, then choose whether to replay or try a review. Offer help when requested. Record what the child completed independently, where they needed help, any Arabic or layout friction, comfort with the effects, and whether they chose to continue. A different visit can cover the other worlds if the child wants to return.
 

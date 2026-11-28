@@ -10,6 +10,8 @@ Season One targets 60 micro-lessons, 180+ knowledge units and 600+ reviewed ques
 
 ## Play loop
 
+The owner approved the Play First, Learn Second direction for v0.2. The signed v0.1.1 starter still uses the loop below. [v0.2 design](design/noor-v0.2.md)
+
 Learn a small idea, practice, receive an explanation and revisit it later. Let children choose among worlds and available activities. Support mixed quizzes, adaptive and spaced review, and practice after all lessons are finished. Track mastery by knowledge unit. Vary prompts to test recall and application. Give children time to answer and retry without a penalty. Flashcards use unscored self-assessment.
 
 Use independently versioned offline packs and show What's New after a pack update. Offer optional knowledge treasures with verified bonus facts. Preserve earned history across updates. Show progress and reviewed sources in Parent Mode.

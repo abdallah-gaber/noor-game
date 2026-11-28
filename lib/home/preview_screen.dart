@@ -7,7 +7,9 @@ import '../design_system/noor_layout.dart';
 import 'noor_lantern.dart';
 
 class PreviewScreen extends StatelessWidget {
-  const PreviewScreen({super.key});
+  const PreviewScreen({super.key, this.showWudu = false});
+
+  final bool showWudu;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,12 @@ class PreviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (showWudu)
+              TextButton.icon(
+                onPressed: () => context.push('/preview/adventure/w06'),
+                icon: const Icon(Icons.water_drop_outlined),
+                label: const Text('معاينة مغامرة الوضوء'),
+              ),
             const Text('محتوى تجريبي للمطوّر فقط: هذه عيّنة لواجهة التطبيق.'),
             Wrap(
               spacing: 8,
