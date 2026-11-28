@@ -36,3 +36,9 @@ Start with the [approved v0.2 direction](../../docs/design/noor-v0.2.md). The W0
 - A chest marker on the Worship map opens the collection. The earned gem is visible there alongside the existing assisted or independent mission marker. Pending and already-opened chests restore from preview progress.
 - W06 uses distinct offline foley for pickup, placement, washing, wiping, retry, finishing and opening the chest. The native player uses one stream and honors the audio preference.
 - Animated feedback is short and local to the affected objects. Reduced motion keeps static feedback and the same controls. Production navigation, curriculum, grading and rewards retain their existing behavior.
+
+## 006-06 acceptance
+
+- The separately installed Android build opens directly on the Worship map and exposes the W06 journey and its sound setting. The bundled catalog and W06 bindings must pass the existing approval and integrity checks.
+- A fresh install has its own local adventure state. Discovery, independent or assisted challenge, treasure opening, relaunch and replay use that state. Android identifies the playtest and production as separate apps.
+- The release-mode APK is verified offline on Android. The full Flutter suite covers interaction gates, RTL, layout, motion and sound settings, persistence and production navigation. Physical-device checks are reported according to device availability.

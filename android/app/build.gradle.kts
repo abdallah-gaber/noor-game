@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -7,6 +9,15 @@ plugins {
 val releaseStore = providers.environmentVariable("NOOR_RELEASE_STORE_FILE")
 val releasePassword = providers.environmentVariable("NOOR_RELEASE_STORE_PASSWORD")
 val releaseAlias = providers.environmentVariable("NOOR_RELEASE_KEY_ALIAS")
+
+val adventurePlaytest = providers.gradleProperty("noorAdventurePlaytest").orNull == "true"
+val adventureEntrypoint = providers.gradleProperty("target").orNull
+    ?.replace('\\', '/')?.substringAfterLast('/') == "adventure_main.dart"
+val adventureMarker = Base64.getEncoder().encodeToString("NOOR_ADVENTURE_PLAYTEST=true".toByteArray())
+val defines = providers.gradleProperty("dart-defines").orNull?.split(",").orEmpty()
+require(adventurePlaytest == adventureEntrypoint && adventurePlaytest == (adventureMarker in defines)) {
+    "Build the separate Noor adventure with scripts/build_adventure_playtest.sh."
+}
 
 android {
     namespace = "dev.noor.noor"
@@ -52,8 +63,14 @@ android {
             }
         }
         release {
-            signingConfig = signingConfigs.getByName("noorRelease")
-            if (providers.gradleProperty("noorDeviceQa").orNull == "true") {
+            if (adventurePlaytest) {
+                applicationIdSuffix = ".adventure"
+                manifestPlaceholders["noorAppLabel"] = "نور — المغامرة"
+                signingConfig = signingConfigs.getByName("debug")
+            } else {
+                signingConfig = signingConfigs.getByName("noorRelease")
+            }
+            if (!adventurePlaytest && providers.gradleProperty("noorDeviceQa").orNull == "true") {
                 applicationIdSuffix = ".deviceqa"
                 manifestPlaceholders["noorAppLabel"] = "نور — اختبار الجهاز"
             }
@@ -64,9 +81,9 @@ android {
 val verifyNoorReleaseSigning = tasks.register("verifyNoorReleaseSigning") {
     doLast {
         require(
-            !releaseStore.orNull.isNullOrBlank() &&
+            adventurePlaytest || (!releaseStore.orNull.isNullOrBlank() &&
                 !releasePassword.orNull.isNullOrBlank() &&
-                !releaseAlias.orNull.isNullOrBlank(),
+                !releaseAlias.orNull.isNullOrBlank()),
         ) {
             "Set NOOR_RELEASE_STORE_FILE, NOOR_RELEASE_STORE_PASSWORD and NOOR_RELEASE_KEY_ALIAS."
         }
@@ -75,6 +92,9 @@ val verifyNoorReleaseSigning = tasks.register("verifyNoorReleaseSigning") {
 
 tasks.configureEach {
     if (name == "preReleaseBuild") dependsOn(verifyNoorReleaseSigning)
+    if (adventurePlaytest && name in setOf("preDebugBuild", "preProfileBuild")) {
+        doFirst { error("The Noor adventure playtest requires a release-mode APK.") }
+    }
 }
 
 kotlin {

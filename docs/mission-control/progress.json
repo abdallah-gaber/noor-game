@@ -403,9 +403,14 @@
         {
           "id": "006-06",
           "title": "Integrated vertical slice delivery",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-06.md",
+            "docs/qa/spec-006/playtest-map.png",
+            "docs/qa/spec-006/playtest-treasure.png",
+            "docs/qa/spec-006/playtest-portrait.png"
+          ],
+          "note": "Separate Android APK installed alongside Noor on the owner tablet. Offline emulator journey and 131 Flutter tests passed. Supervised child playtest, owner review and low-end hardware checks are pending.",
           "priority": "P0"
         }
       ]

@@ -4,11 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../adventure/worship_adventure_map.dart';
-import '../adventure/wudu_challenge.dart';
-import '../adventure/wudu_discovery.dart';
-import '../adventure/wudu_preview.dart';
-import '../adventure/wudu_treasure.dart';
+import '../adventure/adventure_routes.dart';
 import '../challenges/arrangement.dart';
 import '../challenges/challenge_preview.dart';
 import '../challenges/debug_catalog.dart';
@@ -48,11 +44,8 @@ GoRouter createNoorRouter({
       loadCurriculum(enablePreview: enablePreview);
   final hasLearningTools =
       catalog != null || (showPreview && curriculum.isPreview);
-  final wuduLesson = showPreview && pilot == null
-      ? curriculum.lesson(WorldId.ibadah, 'W06')
-      : null;
-  final wudu = catalog != null && wuduLesson != null
-      ? WuduDiscovery.fromApproved(catalog, wuduLesson)
+  final wudu = showPreview && pilot == null && catalog != null
+      ? approvedWudu(catalog, curriculum)
       : null;
   var adultConfirmed = false;
 
@@ -237,47 +230,7 @@ GoRouter createNoorRouter({
                 showPreview && pilot == null ? null : '/',
             builder: (context, state) => PreviewScreen(showWudu: wudu != null),
             routes: [
-              if (wudu != null) ...[
-                GoRoute(
-                  path: 'adventure/ibadah',
-                  builder: (context, state) => WorshipAdventureMap(
-                    onExit: () => context.go('/preview'),
-                    onTreasures: () => context.go(worshipTreasuresPath),
-                    onDiscovery: () => context.go('/preview/adventure/w06'),
-                    onChallenge: () => context.go(
-                      '/preview/adventure/w06/challenge',
-                      extra: true,
-                    ),
-                  ),
-                ),
-                GoRoute(
-                  path: 'adventure/ibadah/treasures',
-                  builder: (context, state) => WuduTreasures(
-                    waterReminder: wudu.waterReminder,
-                    onExit: () => context.go(worshipMapPath),
-                  ),
-                ),
-                GoRoute(
-                  path: 'adventure/w06',
-                  builder: (context, state) => WuduPreview(
-                    discovery: wudu,
-                    onExit: () => context.go(worshipMapPath),
-                    onChallenge: () => context.go(
-                      '/preview/adventure/w06/challenge',
-                      extra: true,
-                    ),
-                  ),
-                ),
-                GoRoute(
-                  path: 'adventure/w06/challenge',
-                  builder: (context, state) => WuduChallenge(
-                    discovery: wudu,
-                    onExit: () => context.go(worshipMapPath),
-                    onTreasure: () => context.go(worshipTreasuresPath),
-                    replayCompletedOnEntry: state.extra == true,
-                  ),
-                ),
-              ],
+              if (wudu != null) ...wuduAdventureRoutes(wudu, playtest: false),
               GoRoute(
                 path: 'challenges/:id',
                 redirect: (context, state) =>
@@ -301,14 +254,15 @@ GoRouter createNoorRouter({
 }
 
 class NoorApp extends StatelessWidget {
-  const NoorApp({super.key, required this.router});
+  const NoorApp({super.key, required this.router, this.title = 'نور'});
 
   final GoRouter router;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'نور',
+      title: title,
       locale: const Locale('ar'),
       supportedLocales: const [Locale('ar')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,

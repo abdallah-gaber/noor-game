@@ -8,6 +8,7 @@ import '../home/noor_lantern.dart';
 import '../progress/lesson_progress.dart';
 import '../progress/progress_store.dart';
 import '../progress/reward_store.dart';
+import '../settings/settings_controller.dart';
 import 'worship_map_art.dart';
 import 'wudu_challenge.dart';
 import 'wudu_treasure.dart';
@@ -23,7 +24,7 @@ class WorshipAdventureMap extends ConsumerStatefulWidget {
     required this.onTreasures,
   });
 
-  final VoidCallback onExit;
+  final VoidCallback? onExit;
   final VoidCallback onDiscovery;
   final VoidCallback onChallenge;
   final VoidCallback onTreasures;
@@ -221,16 +222,14 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
         PositionedDirectional(
           top: 13,
           start: 13,
-          child: IconButton.filled(
-            tooltip: 'العودة إلى المعاينة',
-            style: IconButton.styleFrom(
-              minimumSize: const Size.square(48),
-              foregroundColor: const Color(0xFFFFE8B7),
-              backgroundColor: const Color(0xFF365C4D),
-            ),
-            onPressed: widget.onExit,
-            icon: const BackButtonIcon(),
-          ),
+          child: widget.onExit == null
+              ? const _AdventureSound()
+              : IconButton.filled(
+                  tooltip: 'العودة إلى المعاينة',
+                  style: _mapButtonStyle,
+                  onPressed: widget.onExit,
+                  icon: const BackButtonIcon(),
+                ),
         ),
         PositionedDirectional(
           top: 13,
@@ -244,11 +243,7 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
             child: IconButton.filled(
               tooltip: 'كنوزي',
               onPressed: widget.onTreasures,
-              style: IconButton.styleFrom(
-                minimumSize: const Size.square(48),
-                foregroundColor: const Color(0xFFFFE8B7),
-                backgroundColor: const Color(0xFF365C4D),
-              ),
+              style: _mapButtonStyle,
               icon: switch (treasure) {
                 WuduTreasureState.opened => const WuduGem(size: 27),
                 WuduTreasureState.ready => const Icon(
@@ -278,6 +273,41 @@ class _WorshipAdventureMapState extends ConsumerState<WorshipAdventureMap> {
             ),
           ),
       ],
+    );
+  }
+}
+
+final _mapButtonStyle = IconButton.styleFrom(
+  minimumSize: const Size.square(48),
+  foregroundColor: const Color(0xFFFFE8B7),
+  backgroundColor: const Color(0xFF365C4D),
+);
+
+class _AdventureSound extends ConsumerWidget {
+  const _AdventureSound();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider).asData?.value;
+    final enabled = settings?.preferences.effects == true;
+    return IconButton.filled(
+      tooltip: enabled ? 'كتم الصوت' : 'تشغيل الصوت',
+      style: _mapButtonStyle,
+      icon: Icon(enabled ? Icons.volume_up_rounded : Icons.volume_off_rounded),
+      onPressed: settings == null || settings.saving
+          ? null
+          : () async {
+              try {
+                await ref
+                    .read(settingsProvider.notifier)
+                    .savePreferences(effects: !enabled);
+              } catch (_) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تعذّر حفظ إعداد الصوت.')),
+                );
+              }
+            },
     );
   }
 }

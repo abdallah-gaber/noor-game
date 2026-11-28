@@ -10,9 +10,10 @@ import io.flutter.FlutterInjector
 
 internal class PilotEffects(private val context: Context) {
     private val debuggable = context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+    private val adventurePlaytest = context.packageName == "dev.noor.noor.adventure"
     private val holdMillis = mapOf(
         "tap" to 66L, "correct" to 230L, "retry" to 158L, "complete" to 336L,
-    ) + if (debuggable) mapOf(
+    ) + if (debuggable || adventurePlaytest) mapOf(
         "wudu_pickup" to 85L, "wudu_place" to 116L, "wudu_splash" to 244L,
         "wudu_wipe" to 199L, "wudu_retry" to 172L, "wudu_finish" to 382L,
         "wudu_reveal" to 472L,
