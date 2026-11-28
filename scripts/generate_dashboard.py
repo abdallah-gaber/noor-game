@@ -36,6 +36,8 @@ PUBLIC_FILES = {
     "docs/product.md", "docs/architecture.md", "docs/curriculum/README.md",
     "docs/design/noor-v0.2.md", "docs/qa/spec-006/006-01.md",
     "docs/qa/spec-006/courtyard.png", "docs/qa/spec-006/splash.png",
+    "docs/qa/spec-006/006-02.md", "docs/qa/spec-006/discovery-rinse.png",
+    "docs/qa/spec-006/discovery-wipe.png", "docs/qa/spec-006/discovery-water.png",
     "docs/curriculum/roadmap.md", "docs/curriculum/season-one.json",
     "docs/curriculum/releases.json", "docs/mission-control/deployment.md",
     "docs/curriculum/pack-schema.md", "docs/curriculum/starter-release.md",

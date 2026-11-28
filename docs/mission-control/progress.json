@@ -355,9 +355,14 @@
         {
           "id": "006-02",
           "title": "Discover and learn interactions",
-          "status": "todo",
-          "evidence": [],
-          "note": "",
+          "status": "done",
+          "evidence": [
+            "docs/qa/spec-006/006-02.md",
+            "docs/qa/spec-006/discovery-rinse.png",
+            "docs/qa/spec-006/discovery-wipe.png",
+            "docs/qa/spec-006/discovery-water.png"
+          ],
+          "note": "Seven guided stops cover W06.K1–K3. Verified progression, accessible tap play, reduced motion and preview isolation. Tablet emulator captures show the connected gameplay.",
           "priority": "P0"
         },
         {

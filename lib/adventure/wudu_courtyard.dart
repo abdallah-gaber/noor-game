@@ -3,11 +3,17 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class CourtyardPainter extends CustomPainter {
-  const CourtyardPainter(this.drop, this.palms, this.unit);
+  const CourtyardPainter(
+    this.drop,
+    this.palms,
+    this.unit, {
+    this.flowing = false,
+  });
 
   final Offset drop;
   final Offset palms;
   final double unit;
+  final bool flowing;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -124,6 +130,17 @@ class CourtyardPainter extends CustomPainter {
       ),
       paint..color = const Color(0xFFE9A651),
     );
+    if (flowing) {
+      for (final (x, y) in [(19.0, 25.0), (16.0, 51.0), (24.0, 63.0)]) {
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(center: Offset(x, y), width: 6, height: 13),
+            const Radius.circular(3),
+          ),
+          paint..color = const Color(0xFFB8F9EF),
+        );
+      }
+    }
     _bowl(canvas, 72, 74, paint);
     canvas.restore();
 
@@ -213,7 +230,8 @@ class CourtyardPainter extends CustomPainter {
   bool shouldRepaint(CourtyardPainter oldDelegate) =>
       drop != oldDelegate.drop ||
       palms != oldDelegate.palms ||
-      unit != oldDelegate.unit;
+      unit != oldDelegate.unit ||
+      flowing != oldDelegate.flowing;
 }
 
 class DropArt extends StatelessWidget {

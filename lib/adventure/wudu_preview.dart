@@ -7,11 +7,13 @@ import '../audio/pilot_effects.dart';
 import '../home/noor_lantern.dart';
 import '../settings/settings_controller.dart';
 import 'wudu_courtyard.dart';
+import 'wudu_discovery.dart';
+import 'wudu_discovery_art.dart';
 
 class WuduPreview extends ConsumerStatefulWidget {
-  const WuduPreview({super.key, required this.title, required this.onExit});
+  const WuduPreview({super.key, required this.discovery, required this.onExit});
 
-  final String title;
+  final WuduDiscovery discovery;
   final VoidCallback onExit;
 
   @override
@@ -20,46 +22,86 @@ class WuduPreview extends ConsumerStatefulWidget {
 
 class _WuduPreviewState extends ConsumerState<WuduPreview>
     with SingleTickerProviderStateMixin {
-  late final _splash = AnimationController(
+  late final _response = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 850),
+    duration: const Duration(milliseconds: 750),
   );
-  bool _selected = false;
-  bool _washed = false;
+  final _touched = <WuduObject>{};
+  WuduObject? _lastTouched;
+  int _index = 0;
   int _reaction = 0;
+  bool _selected = false;
+  bool _hint = false;
+  double _wipeDistance = 0;
+
+  WuduStop get _stop => widget.discovery.stops[_index];
+  bool get _ready => _touched.length == _stop.objects.length;
+  bool get _last => _index == widget.discovery.stops.length - 1;
 
   void _play(PilotEffect effect) => ref.read(pilotEffectsProvider).play(effect);
 
-  void _wash() {
-    if (_washed) return;
-    setState(() {
-      _washed = true;
-      _selected = false;
-      _reaction++;
-    });
-    if (!MediaQuery.disableAnimationsOf(context)) _splash.forward(from: 0);
-    _play(PilotEffect.complete);
+  void _miss() {
+    if (!mounted || _ready) return;
+    setState(() => _hint = true);
+    _play(PilotEffect.retry);
   }
 
-  void _reset() {
-    _splash.reset();
+  void _touch(WuduObject object) {
+    if (!_stop.objects.contains(object) || _touched.contains(object)) return;
     setState(() {
-      _washed = false;
+      _touched.add(object);
+      _lastTouched = object;
       _selected = false;
+      _hint = false;
+      _reaction++;
     });
-    _play(PilotEffect.tap);
+    if (!MediaQuery.disableAnimationsOf(context)) {
+      _response.forward(from: 0);
+    }
+    _play(_ready && _last ? PilotEffect.complete : PilotEffect.correct);
+  }
+
+  void _continue() {
+    if (!_ready) return;
+    _response.reset();
+    setState(() {
+      _index = _last ? 0 : _index + 1;
+      _touched.clear();
+      _lastTouched = null;
+      _selected = false;
+      _hint = false;
+      _wipeDistance = 0;
+    });
+  }
+
+  String get _message {
+    if (_ready) return _stop.feedback;
+    if (_selected || (_hint && _stop.action == WuduAction.drop)) {
+      return _selected ? 'المس الكفّين' : 'اسحب القطرة إلى الكفّين';
+    }
+    if (_hint && _stop.action == WuduAction.wipe) {
+      return 'مرّر إصبعك من جانب إلى آخر، أو المس الرأس';
+    }
+    if (_touched.isNotEmpty) {
+      final remaining = _stop.objects.firstWhere(
+        (object) => !_touched.contains(object),
+      );
+      final cue = 'المس ${remaining.label}';
+      final rinseLabel = widget.discovery.rinseLabels[_lastTouched];
+      return rinseLabel == null ? cue : '$rinseLabel · $cue';
+    }
+    return _stop.hint;
   }
 
   @override
   void dispose() {
-    _splash.dispose();
+    _response.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     ref.watch(settingsProvider);
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return Scaffold(
       backgroundColor: const Color(0xFF184843),
       body: SafeArea(
@@ -79,7 +121,7 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
                     ),
                     Expanded(
                       child: Text(
-                        widget.title,
+                        widget.discovery.title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Color(0xFFFFF1CB),
@@ -95,182 +137,8 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(26),
                     child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final size = constraints.biggest;
-                        final wide = size.width >= 540;
-                        final scale = math.min(size.width, size.height);
-                        final unit = (scale * .23).clamp(64.0, 134.0);
-                        final drop = Offset(
-                          size.width * .25,
-                          size.height * (wide ? .47 : .39),
-                        );
-                        final palms = Offset(
-                          size.width * (wide ? .58 : .67),
-                          size.height * (wide ? .62 : .57),
-                        );
-                        final noor = Offset(
-                          size.width * (wide ? .84 : .28),
-                          size.height * (wide ? .68 : .83),
-                        );
-                        Widget at(Offset center, double extent, Widget child) =>
-                            Positioned(
-                              left: center.dx - extent / 2,
-                              top: center.dy - extent / 2,
-                              width: extent,
-                              height: extent,
-                              child: child,
-                            );
-
-                        final dropArt = DropArt(
-                          size: unit,
-                          selected: _selected,
-                        );
-                        return Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            RepaintBoundary(
-                              child: CustomPaint(
-                                painter: CourtyardPainter(drop, palms, unit),
-                              ),
-                            ),
-                            at(
-                              noor,
-                              unit * 1.18,
-                              NoorReaction(
-                                size: unit * 1.18,
-                                mood: _washed
-                                    ? NoorMood.celebrating
-                                    : NoorMood.happy,
-                                trigger: _reaction,
-                              ),
-                            ),
-                            at(
-                              palms,
-                              unit * 1.42,
-                              DragTarget<bool>(
-                                onWillAcceptWithDetails: (_) => !_washed,
-                                onAcceptWithDetails: (_) => _wash(),
-                                builder: (context, candidates, _) =>
-                                    _SceneButton(
-                                      label: 'الكفّان',
-                                      onTap: _washed
-                                          ? null
-                                          : () {
-                                              if (_selected) {
-                                                _wash();
-                                              } else {
-                                                setState(
-                                                  () => _selected = true,
-                                                );
-                                                _play(PilotEffect.tap);
-                                              }
-                                            },
-                                      child: AnimatedBuilder(
-                                        animation: _splash,
-                                        builder: (_, _) => CustomPaint(
-                                          painter: PalmsPainter(
-                                            active:
-                                                _selected ||
-                                                candidates.isNotEmpty,
-                                            washed: _washed,
-                                            splash: reduceMotion
-                                                ? 0
-                                                : _splash.value,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                              ),
-                            ),
-                            if (!_washed)
-                              at(
-                                drop,
-                                unit,
-                                Draggable<bool>(
-                                  data: true,
-                                  maxSimultaneousDrags: 1,
-                                  dragAnchorStrategy: pointerDragAnchorStrategy,
-                                  feedback: Transform.translate(
-                                    offset: Offset(-unit / 2, -unit / 2),
-                                    child: DropArt(size: unit, selected: true),
-                                  ),
-                                  childWhenDragging: Opacity(
-                                    opacity: .28,
-                                    child: dropArt,
-                                  ),
-                                  onDraggableCanceled: (_, _) {
-                                    if (mounted) _play(PilotEffect.retry);
-                                  },
-                                  child: _SceneButton(
-                                    label: 'قطرة الماء',
-                                    selected: _selected,
-                                    onTap: () {
-                                      setState(() => _selected = !_selected);
-                                      _play(PilotEffect.tap);
-                                    },
-                                    child: dropArt,
-                                  ),
-                                ),
-                              ),
-                            Positioned(
-                              top: 12,
-                              left: 12,
-                              right: 12,
-                              child: IgnorePointer(
-                                child: Center(
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF2CF),
-                                      borderRadius: BorderRadius.circular(32),
-                                      border: Border.all(
-                                        color: const Color(0xFFE9B681),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 8,
-                                      ),
-                                      child: Semantics(
-                                        liveRegion: true,
-                                        child: Text(
-                                          _washed
-                                              ? 'رائع!'
-                                              : _selected
-                                              ? 'المس الكفّين'
-                                              : 'اسحب القطرة أو المسها',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Color(0xFF234E49),
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 19,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            if (_washed)
-                              PositionedDirectional(
-                                end: 12,
-                                bottom: 12,
-                                child: FilledButton.icon(
-                                  onPressed: _reset,
-                                  icon: const Icon(Icons.refresh_rounded),
-                                  label: const Text('العب مجددًا'),
-                                  style: FilledButton.styleFrom(
-                                    minimumSize: const Size(48, 48),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );
-                      },
+                      builder: (context, constraints) =>
+                          _courtyard(context, constraints.biggest),
                     ),
                   ),
                 ),
@@ -279,6 +147,262 @@ class _WuduPreviewState extends ConsumerState<WuduPreview>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _courtyard(BuildContext context, Size size) {
+    final wide = size.width >= 540;
+    final unit = (math.min(size.width, size.height) * .23).clamp(64.0, 134.0);
+    final drop = Offset(size.width * .25, size.height * (wide ? .47 : .39));
+    final basin = Offset(
+      size.width * (wide ? .58 : .64),
+      size.height * (wide ? .62 : .56),
+    );
+    final noor = Offset(
+      size.width * (wide ? .84 : .26),
+      size.height * (wide ? .68 : .82),
+    );
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final atTap = _stop.action == WuduAction.closeTap;
+    final waterOff = atTap && _ready;
+    final finish = _ready && _last;
+
+    Widget at(Offset center, double extent, Widget child) => Positioned(
+      left: center.dx - extent / 2,
+      top: center.dy - extent / 2,
+      width: extent,
+      height: extent,
+      child: child,
+    );
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        RepaintBoundary(
+          child: CustomPaint(
+            painter: CourtyardPainter(
+              drop,
+              basin,
+              unit,
+              flowing: atTap && !waterOff,
+            ),
+          ),
+        ),
+        if (!_ready)
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            excludeFromSemantics: true,
+            onTap: _miss,
+          ),
+        at(
+          noor,
+          unit * 1.18,
+          NoorReaction(
+            size: unit * 1.18,
+            mood: _ready
+                ? NoorMood.celebrating
+                : _hint
+                ? NoorMood.encouraging
+                : NoorMood.happy,
+            trigger: _reaction,
+          ),
+        ),
+        if (_stop.action == WuduAction.drop) ...[
+          at(basin, unit * 1.42, _palms(reduceMotion)),
+          if (!_ready) at(drop, unit, _droplet(unit)),
+        ] else
+          for (final (index, object) in _stop.objects.indexed)
+            at(
+              atTap
+                  ? drop.translate(unit * .18, -unit * .25)
+                  : basin.translate(
+                      _stop.objects.length == 1
+                          ? 0
+                          : unit * (index == 0 ? .66 : -.66),
+                      0,
+                    ),
+              unit * (_stop.objects.length == 1 ? 1.42 : 1.18),
+              _object(object, reduceMotion, unit),
+            ),
+        Positioned(
+          top: 12,
+          left: 12,
+          right: 12,
+          child: IgnorePointer(
+            child: Center(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF2CF),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFFE9B681), width: 2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 7,
+                  ),
+                  child: Semantics(
+                    container: true,
+                    liveRegion: true,
+                    label: 'نور',
+                    child: Text(
+                      _message,
+                      textAlign: TextAlign.center,
+                      maxLines: _ready ? null : 3,
+                      overflow: _ready
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFF234E49),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 19,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        PositionedDirectional(
+          bottom: 12,
+          start: 12,
+          child: Semantics(
+            label: 'محطة ${_index + 1} من ${widget.discovery.stops.length}',
+            child: ExcludeSemantics(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF2CF),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 6,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var i = 0; i < widget.discovery.stops.length; i++)
+                        Icon(
+                          i < _index || (i == _index && _ready)
+                              ? Icons.check_rounded
+                              : i == _index
+                              ? Icons.circle
+                              : Icons.circle_outlined,
+                          color: const Color(0xFF23685B),
+                          size: 13,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (_ready)
+          PositionedDirectional(
+            key: ValueKey(_index),
+            end: 12,
+            bottom: 12,
+            child: FilledButton.icon(
+              onPressed: _continue,
+              icon: Icon(
+                finish ? Icons.refresh_rounded : Icons.arrow_forward_rounded,
+              ),
+              label: Text(finish ? 'العب مجددًا' : 'هيا نكمل'),
+              style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _palms(bool reduceMotion) => DragTarget<WuduObject>(
+    onWillAcceptWithDetails: (details) =>
+        !_ready && details.data == WuduObject.palms,
+    onAcceptWithDetails: (_) => _touch(WuduObject.palms),
+    builder: (context, candidates, _) => _SceneButton(
+      label: WuduObject.palms.label,
+      onTap: _ready
+          ? null
+          : () {
+              if (_selected) {
+                _touch(WuduObject.palms);
+              } else {
+                _miss();
+              }
+            },
+      child: AnimatedBuilder(
+        animation: _response,
+        builder: (_, _) => CustomPaint(
+          painter: PalmsPainter(
+            active: _selected || _hint || candidates.isNotEmpty,
+            washed: _ready,
+            splash: reduceMotion ? 0 : _response.value,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  Widget _droplet(double unit) {
+    final art = DropArt(size: unit, selected: _selected || _hint);
+    return Draggable<WuduObject>(
+      data: WuduObject.palms,
+      maxSimultaneousDrags: 1,
+      dragAnchorStrategy: pointerDragAnchorStrategy,
+      feedback: Transform.translate(
+        offset: Offset(-unit / 2, -unit / 2),
+        child: DropArt(size: unit, selected: true),
+      ),
+      childWhenDragging: Opacity(opacity: .28, child: art),
+      onDraggableCanceled: (_, _) => _miss(),
+      child: _SceneButton(
+        label: 'قطرة الماء',
+        selected: _selected,
+        onTap: () {
+          setState(() => _selected = !_selected);
+          _play(PilotEffect.tap);
+        },
+        child: art,
+      ),
+    );
+  }
+
+  Widget _object(WuduObject object, bool reduceMotion, double unit) {
+    final done = _touched.contains(object);
+    final button = _SceneButton(
+      label: object.label,
+      onTap: done ? null : () => _touch(object),
+      child: AnimatedBuilder(
+        animation: _response,
+        builder: (_, _) => CustomPaint(
+          painter: DiscoveryObjectPainter(
+            object: object,
+            done: done,
+            highlighted: !done && (_hint || _touched.isNotEmpty),
+            phase: !reduceMotion && _lastTouched == object
+                ? _response.value
+                : 0,
+          ),
+        ),
+      ),
+    );
+    if (_stop.action != WuduAction.wipe || done) return button;
+    return GestureDetector(
+      excludeFromSemantics: true,
+      onHorizontalDragStart: (_) => _wipeDistance = 0,
+      onHorizontalDragUpdate: (details) =>
+          _wipeDistance += details.primaryDelta!,
+      onHorizontalDragEnd: (_) {
+        if (_wipeDistance.abs() >= unit * .36) {
+          _touch(object);
+        } else {
+          _miss();
+        }
+      },
+      child: button,
     );
   }
 }
